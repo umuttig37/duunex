@@ -1,0 +1,60 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#FAF5FF"/>
+  
+  <!-- Profile cards layout -->
+  <rect x="60" y="50" width="120" height="160" rx="16" fill="white" stroke="#E9D5FF" stroke-width="2"/>
+  <rect x="220" y="50" width="120" height="160" rx="16" fill="white" stroke="#E9D5FF" stroke-width="2"/>
+  
+  <!-- Profile 1 (Selected) -->
+  <circle cx="120" cy="90" r="20" fill="#8B5CF6"/>
+  <text x="120" y="95" text-anchor="middle" fill="white" font-family="Arial" font-size="12" font-weight="bold">MP</text>
+  <rect x="75" y="115" width="90" height="6" rx="3" fill="#374151"/>
+  <rect x="75" y="125" width="70" height="4" rx="2" fill="#9CA3AF"/>
+  
+  <!-- Stars for profile 1 -->
+  <g transform="translate(85, 135)">
+    <polygon points="5,0 6,3 10,3 7,5 8,9 5,7 2,9 3,5 0,3 4,3" fill="#F59E0B"/>
+    <polygon points="15,0 16,3 20,3 17,5 18,9 15,7 12,9 13,5 10,3 14,3" fill="#F59E0B"/>
+    <polygon points="25,0 26,3 30,3 27,5 28,9 25,7 22,9 23,5 20,3 24,3" fill="#F59E0B"/>
+    <polygon points="35,0 36,3 40,3 37,5 38,9 35,7 32,9 33,5 30,3 34,3" fill="#F59E0B"/>
+    <polygon points="45,0 46,3 50,3 47,5 48,9 45,7 42,9 43,5 40,3 44,3" fill="#F59E0B"/>
+  </g>
+  
+  <text x="120" y="155" text-anchor="middle" fill="#8B5CF6" font-family="Arial" font-size="10">(28 arvostelua)</text>
+  <rect x="75" y="170" width="90" height="20" rx="10" fill="#8B5CF6"/>
+  <text x="120" y="183" text-anchor="middle" fill="white" font-family="Arial" font-size="10" font-weight="bold">Valitse</text>
+  
+  <!-- Selected indicator -->
+  <circle cx="165" cy="65" r="8" fill="#10B981"/>
+  <path d="M161 65L164 68L169 62" stroke="white" stroke-width="2" fill="none"/>
+  
+  <!-- Profile 2 -->
+  <circle cx="280" cy="90" r="20" fill="#6B7280"/>
+  <text x="280" y="95" text-anchor="middle" fill="white" font-family="Arial" font-size="12" font-weight="bold">JK</text>
+  <rect x="235" y="115" width="90" height="6" rx="3" fill="#374151"/>
+  <rect x="235" y="125" width="65" height="4" rx="2" fill="#9CA3AF"/>
+  
+  <!-- Stars for profile 2 -->
+  <g transform="translate(245, 135)">
+    <polygon points="5,0 6,3 10,3 7,5 8,9 5,7 2,9 3,5 0,3 4,3" fill="#F59E0B"/>
+    <polygon points="15,0 16,3 20,3 17,5 18,9 15,7 12,9 13,5 10,3 14,3" fill="#F59E0B"/>
+    <polygon points="25,0 26,3 30,3 27,5 28,9 25,7 22,9 23,5 20,3 24,3" fill="#F59E0B"/>
+    <polygon points="35,0 36,3 40,3 37,5 38,9 35,7 32,9 33,5 30,3 34,3" fill="#F59E0B"/>
+    <polygon points="45,0 46,3 50,3 47,5 48,9 45,7 42,9 43,5 40,3 44,3" fill="#D1D5DB"/>
+  </g>
+  
+  <text x="280" y="155" text-anchor="middle" fill="#6B7280" font-family="Arial" font-size="10">(15 arvostelua)</text>
+  <rect x="235" y="170" width="90" height="20" rx="10" fill="#F3F4F6" stroke="#D1D5DB"/>
+  <text x="280" y="183" text-anchor="middle" fill="#6B7280" font-family="Arial" font-size="10">Vertaile</text>
+  
+  <!-- Search/comparison icon -->
+  <circle cx="50" cy="150" r="25" fill="#8B5CF6" opacity="0.1"/>
+  <circle cx="45" cy="145" r="8" stroke="#8B5CF6" stroke-width="2" fill="none"/>
+  <path d="M51 151L58 158" stroke="#8B5CF6" stroke-width="2"/>
+  
+  <!-- Floating elements -->
+  <circle cx="30" cy="80" r="3" fill="#8B5CF6" opacity="0.3"/>
+  <circle cx="370" cy="100" r="2" fill="#10B981" opacity="0.3"/>
+  <circle cx="40" cy="250" r="2" fill="#F59E0B" opacity="0.3"/>
+</svg>

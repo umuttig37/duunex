@@ -1,0 +1,378 @@
+/* Modern Task Booking Flow Design System */
+/* Inspired by hero sections and HowItWorksSection styling */
+
+/* ================================
+   COLOR PALETTE (EMERALD-FOCUSED)
+   ================================ */
+:root {
+  /* Primary emerald colors from hero sections */
+  --emerald-50: #f0fdf4;
+  --emerald-100: #dcfce7;
+  --emerald-200: #bbf7d0;
+  --emerald-600: #059669;
+  --emerald-700: #047857;
+  --emerald-900: #064e3b;
+
+  /* Supporting colors */
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+
+  /* Neutral colors */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-900: #111827;
+
+  /* Semantic colors */
+  --success: var(--emerald-600);
+  --success-bg: var(--emerald-50);
+  --info: var(--blue-600);
+  --info-bg: var(--blue-50);
+  --warning: #f59e0b;
+  --warning-bg: #fef3c7;
+  --error: #ef4444;
+  --error-bg: #fef2f2;
+}
+
+/* ================================
+   TYPOGRAPHY SCALE
+   ================================ */
+.heading-1 {
+  @apply text-3xl md:text-4xl font-bold text-gray-900 leading-tight;
+}
+
+.heading-2 {
+  @apply text-2xl md:text-3xl font-bold text-gray-900 leading-tight;
+}
+
+.heading-3 {
+  @apply text-lg md:text-xl font-semibold text-emerald-900 leading-snug;
+}
+
+.heading-4 {
+  @apply text-base md:text-lg font-semibold text-gray-900 leading-snug;
+}
+
+/* Body text */
+.body-large {
+  @apply text-base md:text-lg text-gray-600 leading-relaxed;
+}
+
+.body-base {
+  @apply text-sm md:text-base text-gray-600 leading-relaxed;
+}
+
+.body-small {
+  @apply text-xs md:text-sm text-gray-500 leading-relaxed;
+}
+
+/* Special text styles */
+.text-accent {
+  @apply text-emerald-700 font-medium;
+}
+
+.text-muted {
+  @apply text-gray-500;
+}
+
+.text-success {
+  @apply text-emerald-700;
+}
+
+.text-info {
+  @apply text-blue-700;
+}
+
+/* ================================
+   SPACING SYSTEM
+   ================================ */
+.section-padding {
+  @apply px-4 py-8 md:py-12;
+}
+
+.card-padding {
+  @apply p-4 md:p-6;
+}
+
+.element-gap {
+  @apply space-y-4 md:space-y-6;
+}
+
+.compact-gap {
+  @apply space-y-2 md:space-y-3;
+}
+
+.large-gap {
+  @apply space-y-6 md:space-y-8;
+}
+
+/* ================================
+   BUTTON SYSTEM
+   ================================ */
+.btn-primary {
+  @apply h-12 px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  min-height: 48px; /* iOS accessibility standard */
+}
+
+.btn-secondary {
+  @apply h-12 px-6 rounded-full border-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50 font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  min-height: 48px;
+}
+
+.btn-outline {
+  @apply h-12 px-6 rounded-full border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  min-height: 48px;
+}
+
+.btn-ghost {
+  @apply h-12 px-6 rounded-full text-gray-600 hover:bg-gray-100 font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  min-height: 48px;
+}
+
+.btn-small {
+  @apply h-10 px-4 rounded-full text-sm font-medium transition-colors duration-200;
+  min-height: 40px;
+}
+
+/* ================================
+   CARD SYSTEM
+   ================================ */
+.card-base {
+  @apply bg-white rounded-2xl border border-gray-200 shadow-sm;
+}
+
+.card-elevated {
+  @apply bg-white rounded-2xl border border-gray-200 shadow-lg;
+}
+
+.card-interactive {
+  @apply bg-white rounded-2xl border-2 border-gray-200 hover:border-emerald-300 hover:shadow-md cursor-pointer transition-all duration-200;
+}
+
+.card-selected {
+  @apply bg-emerald-50 border-2 border-emerald-600 shadow-md;
+}
+
+.card-gradient {
+  @apply bg-gradient-to-br from-emerald-50 to-blue-50 border border-emerald-200;
+}
+
+/* ================================
+   STEP INDICATOR SYSTEM
+   ================================ */
+.step-indicator {
+  @apply flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full font-semibold text-sm md:text-base transition-all duration-200;
+}
+
+.step-indicator.active {
+  @apply bg-emerald-600 text-white shadow-md;
+}
+
+.step-indicator.completed {
+  @apply bg-emerald-100 text-emerald-700;
+}
+
+.step-indicator.inactive {
+  @apply bg-gray-100 text-gray-400;
+}
+
+.step-connector {
+  @apply w-full h-0.5 bg-gray-200;
+}
+
+.step-connector.completed {
+  @apply bg-emerald-300;
+}
+
+/* ================================
+   FORM ELEMENTS
+   ================================ */
+.form-input {
+  @apply w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-colors duration-200 text-gray-900 placeholder-gray-500;
+  min-height: 48px;
+}
+
+.form-input.error {
+  @apply border-red-300 focus:border-red-500 focus:ring-red-100;
+}
+
+.form-label {
+  @apply block text-sm font-semibold text-gray-900 mb-2;
+}
+
+.form-help {
+  @apply text-xs text-gray-500 mt-1;
+}
+
+.form-error {
+  @apply text-xs text-red-600 mt-1 font-medium;
+}
+
+/* ================================
+   BADGE SYSTEM
+   ================================ */
+.badge-base {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+}
+
+.badge-emerald {
+  @apply bg-emerald-100 text-emerald-700 border border-emerald-200;
+}
+
+.badge-blue {
+  @apply bg-blue-100 text-blue-700 border border-blue-200;
+}
+
+.badge-gray {
+  @apply bg-gray-100 text-gray-700 border border-gray-200;
+}
+
+.badge-success {
+  @apply bg-emerald-100 text-emerald-800;
+}
+
+.badge-info {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.badge-warning {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+/* ================================
+   UTILITY CLASSES
+   ================================ */
+.container-responsive {
+  @apply max-w-4xl mx-auto px-4;
+}
+
+.two-column {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8;
+}
+
+.three-column {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6;
+}
+
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+/* ================================
+   ANIMATION UTILITIES
+   ================================ */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+/* ================================
+   FOCUS MANAGEMENT
+   ================================ */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2;
+}
+
+.focus-ring-inset {
+  @apply focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-inset;
+}
+
+/* ================================
+   TOUCH TARGETS (MOBILE)
+   ================================ */
+.touch-target {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+.touch-target-large {
+  min-height: 56px;
+  min-width: 56px;
+}
+
+/* ================================
+   LOADING STATES
+   ================================ */
+.loading-spinner {
+  @apply animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full;
+}
+
+.loading-skeleton {
+  @apply animate-pulse bg-gray-200 rounded;
+}
+
+/* ================================
+   RESPONSIVE VISIBILITY
+   ================================ */
+.mobile-only {
+  @apply block md:hidden;
+}
+
+.desktop-only {
+  @apply hidden md:block;
+}
+
+.tablet-up {
+  @apply hidden sm:block;
+}
+
+/* ================================
+   HIGH CONTRAST MODE SUPPORT
+   ================================ */
+@media (prefers-contrast: high) {
+  .btn-primary {
+    @apply border-2 border-emerald-800;
+  }
+  
+  .card-interactive {
+    @apply border-gray-400;
+  }
+  
+  .card-selected {
+    @apply border-emerald-800;
+  }
+}

@@ -1,0 +1,50 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#F0FDF4"/>
+  
+  <!-- Notification cards -->
+  <rect x="80" y="60" width="240" height="50" rx="12" fill="white" stroke="#D1FAE5" stroke-width="2"/>
+  <rect x="80" y="120" width="240" height="50" rx="12" fill="white" stroke="#D1FAE5" stroke-width="2"/>
+  <rect x="80" y="180" width="240" height="50" rx="12" fill="white" stroke="#D1FAE5" stroke-width="2"/>
+  
+  <!-- Card content -->
+  <!-- Card 1 -->
+  <circle cx="105" cy="85" r="12" fill="#10B981"/>
+  <text x="102" y="89" text-anchor="middle" fill="white" font-family="Arial" font-size="10" font-weight="bold">1</text>
+  <rect x="125" y="75" width="80" height="6" rx="3" fill="#374151"/>
+  <rect x="125" y="87" width="60" height="4" rx="2" fill="#9CA3AF"/>
+  <rect x="125" y="95" width="40" height="4" rx="2" fill="#10B981"/>
+  <text x="295" y="88" text-anchor="middle" fill="#10B981" font-family="Arial" font-size="12" font-weight="bold">45€</text>
+  
+  <!-- Card 2 -->
+  <circle cx="105" cy="145" r="12" fill="#10B981"/>
+  <text x="102" y="149" text-anchor="middle" fill="white" font-family="Arial" font-size="10" font-weight="bold">2</text>
+  <rect x="125" y="135" width="75" height="6" rx="3" fill="#374151"/>
+  <rect x="125" y="147" width="55" height="4" rx="2" fill="#9CA3AF"/>
+  <rect x="125" y="155" width="35" height="4" rx="2" fill="#10B981"/>
+  <text x="295" y="148" text-anchor="middle" fill="#10B981" font-family="Arial" font-size="12" font-weight="bold">38€</text>
+  
+  <!-- Card 3 -->
+  <circle cx="105" cy="205" r="12" fill="#10B981"/>
+  <text x="102" y="209" text-anchor="middle" fill="white" font-family="Arial" font-size="10" font-weight="bold">3</text>
+  <rect x="125" y="195" width="70" height="6" rx="3" fill="#374151"/>
+  <rect x="125" y="207" width="50" height="4" rx="2" fill="#9CA3AF"/>
+  <rect x="125" y="215" width="45" height="4" rx="2" fill="#10B981"/>
+  <text x="295" y="208" text-anchor="middle" fill="#10B981" font-family="Arial" font-size="12" font-weight="bold">52€</text>
+  
+  <!-- Users icon -->
+  <circle cx="60" cy="150" r="25" fill="#10B981" opacity="0.1"/>
+  <circle cx="55" cy="145" r="6" fill="#10B981"/>
+  <circle cx="65" cy="145" r="6" fill="#10B981"/>
+  <path d="M45 165C45 160 50 155 55 155C60 155 65 160 65 165" fill="#10B981"/>
+  <path d="M55 165C55 160 60 155 65 155C70 155 75 160 75 165" fill="#10B981"/>
+  
+  <!-- Floating notification bell -->
+  <circle cx="350" cy="80" r="15" fill="#FEF3C7"/>
+  <path d="M345 75C345 72 347 70 350 70C353 70 355 72 355 75V80C357 80 357 82 355 82H345C343 82 343 80 345 80V75Z" fill="#F59E0B"/>
+  <circle cx="350" cy="85" r="2" fill="#F59E0B"/>
+  
+  <!-- Floating elements -->
+  <circle cx="50" cy="50" r="3" fill="#10B981" opacity="0.3"/>
+  <circle cx="350" cy="250" r="2" fill="#3B82F6" opacity="0.3"/>
+</svg>

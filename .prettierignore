@@ -1,0 +1,37 @@
+# Dependencies
+node_modules
+
+# Production builds
+.next
+out
+dist
+
+# Environment variables
+.env*
+
+# Logs
+*.log
+
+# Database
+*.db
+*.sqlite
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/settings.json
+
+# Supabase
+supabase/.branches
+supabase/.temp
+
+# Playwright
+test-results
+playwright-report
+
+# Misc
+*.pdf
+package-lock.json
+*.csv 

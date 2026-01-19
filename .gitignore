@@ -1,0 +1,66 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+/test-results
+/playwright-report
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# local env files
+.env*.local
+.env
+.test.env
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# turbo
+.turbo
+
+# genkit
+.genkit/log/**
+.genkit/trace/**
+
+# AI tool configs (personal preferences)
+.claude/
+.cursor/
+.kiro/
+
+# Documentation archives
+docs/archive/
+
+# SQL archives
+sql/archive/
+
+# Context/reference files (optional - uncomment if not needed)
+# context/
+
+# Log files
+*.log
+!**/logs/.gitkeep
+
+.idea/
