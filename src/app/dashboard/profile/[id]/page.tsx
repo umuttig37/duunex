@@ -1,7 +1,7 @@
 import DashboardLayout from '@/components/shared/layout/dashboard_layout';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { updateProfileAction } from '../actions';
+import { updateProfileAction, updateUserPreferencesAction } from '../actions';
 import UnifiedProfileClient from './unified-profile-client';
 
 export default async function ProfilePage({
@@ -115,6 +115,7 @@ export default async function ProfilePage({
         currentCategories={currentCategories}
         taskerDetails={taskerDetails}
         updateProfileAction={updateProfileAction}
+        updateUserPreferencesAction={updateUserPreferencesAction}
         activeTab={(resolvedSearchParams.tab as string) || 'general'}
       />
     </DashboardLayout>

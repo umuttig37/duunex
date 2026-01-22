@@ -36,12 +36,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .from('profiles')
           .select('*')
           .eq('id', authUser.id)
-          .single();
+          .maybeSingle();
         
         if (!profileError && profileData) {
           setProfile(profileData);
         } else {
-          console.error('AuthProvider: Error fetching profile:', profileError);
+          console.warn('AuthProvider: Profile does not exist for user:', authUser.id, profileError);
           setProfile(null);
         }
       } else {

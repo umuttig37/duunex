@@ -270,7 +270,7 @@ export default function NearbyTaskersPage() {
 
   const handleSwitchToOpenPosting = () => {
     // Redirect back to task edit page with open posting mode
-    router.push(`/dashboard/tasks/${taskDetails?.id}/edit?mode=open`);
+    router.push(`/dashboard/tasks/edit/${taskDetails?.id}?mode=open`);
   };
 
   if (isLoading) {

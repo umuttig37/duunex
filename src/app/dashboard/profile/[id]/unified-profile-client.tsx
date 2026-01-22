@@ -13,8 +13,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/shared/use-toast';
 import type { Database } from '@/lib/supabase/database.types';
+import PlacesInput from '@/components/ui/places-input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Autocomplete, LoadScriptNext } from '@react-google-maps/api';
 import { ArrowLeft, Bell, CreditCard, Edit, Eye, Lock, MapPin, Settings, Shield, Upload, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -37,8 +37,7 @@ const profileSchema = z.object({
 
 type ProfileFormData = z.infer<typeof profileSchema>;
 
-const libraries: ("places")[] = ["places"];
-const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+// Address autocomplete now uses Nominatim (OpenStreetMap) via PlacesInput component
 
 interface UnifiedProfileClientProps {
   viewedProfile: Database['public']['Tables']['profiles']['Row'];
@@ -52,6 +51,14 @@ interface UnifiedProfileClientProps {
     service_radius_meters: number;
   } | null;
   updateProfileAction: (formData: FormData) => Promise<{ success: boolean; message: string }>;
+  updateUserPreferencesAction: (preferences: {
+    email_notifications?: boolean;
+    push_notifications?: boolean;
+    marketing_messages?: boolean;
+    public_profile?: boolean;
+    show_location?: boolean;
+    show_contact_info?: boolean;
+  }) => Promise<{ success: boolean; message: string }>;
   activeTab: string;
 }
 
@@ -64,16 +71,22 @@ export default function UnifiedProfileClient({
   currentCategories,
   taskerDetails,
   updateProfileAction,
+  updateUserPreferencesAction,
   activeTab: initialActiveTab
 }: UnifiedProfileClientProps) {
   const [isSubmitting, startTransition] = useTransition();
   const [avatarPreview, setAvatarPreview] = useState<string | null>(viewedProfile.avatar_url);
   const [selectedCategories, setSelectedCategories] = useState<string[]>(currentCategories);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-  // Google Places Autocomplete state
-  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+
+  // Settings state - initialize from viewedProfile with type safety
+  const [emailNotifications, setEmailNotifications] = useState((viewedProfile as any).email_notifications ?? true);
+  const [pushNotifications, setPushNotifications] = useState((viewedProfile as any).push_notifications ?? true);
+  const [marketingMessages, setMarketingMessages] = useState((viewedProfile as any).marketing_messages ?? false);
+  const [publicProfile, setPublicProfile] = useState((viewedProfile as any).public_profile ?? true);
+  const [showLocation, setShowLocation] = useState((viewedProfile as any).show_location ?? true);
+  const [showContactInfo, setShowContactInfo] = useState((viewedProfile as any).show_contact_info ?? true);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -122,39 +135,12 @@ export default function UnifiedProfileClient({
     }
   };
 
-  const onPlaceChanged = () => {
-    if (autocomplete !== null) {
-      const place = autocomplete.getPlace();
-      if (place.geometry) {
-        const lat = place.geometry.location?.lat();
-        const lng = place.geometry.location?.lng();
-        if (lat && lng) {
-          setCoordinates({ lat, lng });
-        }
-      }
-
-      if (place.formatted_address) {
-        form.setValue('address', place.formatted_address);
-      }
-
-      const cityComponent = place.address_components?.find(
-        (component) => component.types.includes('locality') || component.types.includes('administrative_area_level_1')
-      );
-      if (cityComponent) {
-        form.setValue('city', cityComponent.long_name);
-      }
-
-      const zipComponent = place.address_components?.find(
-        (component) => component.types.includes('postal_code')
-      );
-      if (zipComponent) {
-        form.setValue('zipcode', zipComponent.long_name);
-      }
+  // Handle address selection from PlacesInput (Nominatim)
+  const handleAddressChange = (value: string, coords?: { lat: number; lng: number }) => {
+    form.setValue('address', value);
+    if (coords) {
+      setCoordinates(coords);
     }
-  };
-
-  const onLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
-    setAutocomplete(autocompleteInstance);
   };
 
   const onSubmit = async (data: ProfileFormData) => {
@@ -235,6 +221,119 @@ export default function UnifiedProfileClient({
     );
   };
 
+  const handleNotificationChange = async (type: 'email' | 'push' | 'marketing', value: boolean) => {
+    const labels = {
+      email: 'Sähköposti-ilmoitukset',
+      push: 'Push-ilmoitukset',
+      marketing: 'Marketing-viestit'
+    };
+
+    const preferenceKeys = {
+      email: 'email_notifications' as const,
+      push: 'push_notifications' as const,
+      marketing: 'marketing_messages' as const
+    };
+
+    // Update local state immediately for responsive UI
+    switch (type) {
+      case 'email':
+        setEmailNotifications(value);
+        break;
+      case 'push':
+        setPushNotifications(value);
+        break;
+      case 'marketing':
+        setMarketingMessages(value);
+        break;
+    }
+
+    // Save to database
+    const result = await updateUserPreferencesAction({
+      [preferenceKeys[type]]: value
+    });
+
+    if (result.success) {
+      toast({
+        title: "Asetus päivitetty",
+        description: `${labels[type]} ${value ? 'käytössä' : 'pois käytöstä'}`,
+      });
+    } else {
+      // Revert state on error
+      switch (type) {
+        case 'email':
+          setEmailNotifications(!value);
+          break;
+        case 'push':
+          setPushNotifications(!value);
+          break;
+        case 'marketing':
+          setMarketingMessages(!value);
+          break;
+      }
+      toast({
+        title: "Virhe",
+        description: result.message || 'Asetuksen tallennus epäonnistui',
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handlePrivacyChange = async (type: 'profile' | 'location' | 'contact', value: boolean) => {
+    const labels = {
+      profile: 'Julkinen profiili',
+      location: 'Sijainnin näyttäminen',
+      contact: 'Kontaktitietojen näyttäminen'
+    };
+
+    const preferenceKeys = {
+      profile: 'public_profile' as const,
+      location: 'show_location' as const,
+      contact: 'show_contact_info' as const
+    };
+
+    switch (type) {
+      case 'profile':
+        setPublicProfile(value);
+        break;
+      case 'location':
+        setShowLocation(value);
+        break;
+      case 'contact':
+        setShowContactInfo(value);
+        break;
+    }
+
+    // Save to database
+    const result = await updateUserPreferencesAction({
+      [preferenceKeys[type]]: value
+    });
+
+    if (result.success) {
+      toast({
+        title: "Yksityisyysasetus päivitetty",
+        description: `${labels[type]} ${value ? 'käytössä' : 'pois käytöstä'}`,
+      });
+    } else {
+      // Revert state on error
+      switch (type) {
+        case 'profile':
+          setPublicProfile(!value);
+          break;
+        case 'location':
+          setShowLocation(!value);
+          break;
+        case 'contact':
+          setShowContactInfo(!value);
+          break;
+      }
+      toast({
+        title: "Virhe",
+        description: result.message || 'Asetuksen tallennus epäonnistui',
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -274,8 +373,7 @@ export default function UnifiedProfileClient({
               </DialogDescription>
             </DialogHeader>
 
-            <LoadScriptNext googleMapsApiKey={googleMapsApiKey} libraries={libraries}>
-              <Form {...form}>
+            <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   {/* Avatar Section */}
                   <div className="flex items-center gap-4">
@@ -401,9 +499,12 @@ export default function UnifiedProfileClient({
                         <FormItem>
                           <FormLabel>Osoite</FormLabel>
                           <FormControl>
-                            <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
-                              <Input {...field} disabled={isSubmitting} />
-                            </Autocomplete>
+                            <PlacesInput
+                              value={field.value || ''}
+                              onChange={handleAddressChange}
+                              placeholder="Aloita kirjoittamaan osoitetta"
+                              disabled={isSubmitting}
+                            />
                           </FormControl>
                           <FormDescription>
                             Aloita kirjoittamaan osoitetta ja valitse ehdotuksista
@@ -536,7 +637,6 @@ export default function UnifiedProfileClient({
                   </div>
                 </form>
               </Form>
-            </LoadScriptNext>
           </DialogContent>
         </Dialog>
       </div>
@@ -758,7 +858,7 @@ export default function UnifiedProfileClient({
                 {isOwnProfile && (
                   <div className="pt-2">
                     <Button variant="outline" asChild className="w-full">
-                      <Link href="/auth/reset-password">
+                      <Link href="/auth/change-password">
                         <Lock className="h-4 w-4 mr-2" />
                         Vaihda salasana
                       </Link>
@@ -786,21 +886,30 @@ export default function UnifiedProfileClient({
                       <p className="text-sm font-medium">Sähköposti-ilmoitukset</p>
                       <p className="text-xs text-gray-600">Uudet viestit ja tehtävät</p>
                     </div>
-                    <Checkbox defaultChecked />
+                    <Checkbox 
+                      checked={emailNotifications}
+                      onCheckedChange={(checked) => handleNotificationChange('email', checked as boolean)}
+                    />
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium">Push-ilmoitukset</p>
                       <p className="text-xs text-gray-600">Kiireelliset päivitykset</p>
                     </div>
-                    <Checkbox defaultChecked />
+                    <Checkbox 
+                      checked={pushNotifications}
+                      onCheckedChange={(checked) => handleNotificationChange('push', checked as boolean)}
+                    />
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium">Marketing-viestit</p>
                       <p className="text-xs text-gray-600">Uudet ominaisuudet ja tarjoukset</p>
                     </div>
-                    <Checkbox />
+                    <Checkbox 
+                      checked={marketingMessages}
+                      onCheckedChange={(checked) => handleNotificationChange('marketing', checked as boolean)}
+                    />
                   </div>
                 </div>
               </CardContent>
@@ -824,28 +933,37 @@ export default function UnifiedProfileClient({
                       <p className="text-sm font-medium">Julkinen profiili</p>
                       <p className="text-xs text-gray-600">Näytä profiili muille käyttäjille</p>
                     </div>
-                    <Checkbox defaultChecked />
+                    <Checkbox 
+                      checked={publicProfile}
+                      onCheckedChange={(checked) => handlePrivacyChange('profile', checked as boolean)}
+                    />
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium">Näytä sijainti</p>
                       <p className="text-xs text-gray-600">Salli sijainnin näyttäminen tehtävissä</p>
                     </div>
-                    <Checkbox defaultChecked />
+                    <Checkbox 
+                      checked={showLocation}
+                      onCheckedChange={(checked) => handlePrivacyChange('location', checked as boolean)}
+                    />
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium">Kontaktitiedot</p>
                       <p className="text-xs text-gray-600">Näytä yhteystiedot asiakkaille</p>
                     </div>
-                    <Checkbox defaultChecked />
+                    <Checkbox 
+                      checked={showContactInfo}
+                      onCheckedChange={(checked) => handlePrivacyChange('contact', checked as boolean)}
+                    />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Account Management */}
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5" />
@@ -866,7 +984,7 @@ export default function UnifiedProfileClient({
                   </Button>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </TabsContent>
       </Tabs>

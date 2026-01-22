@@ -84,7 +84,7 @@ export default function TasksPage() {
           .select(
             `
             *,
-            profile:profiles!tasks_user_id_profiles_fkey(first_name, last_name, email),
+            profile:profiles!tasks_user_id_fkey(first_name, last_name, email),
             assigned_tasker_profile:profiles!tasks_assigned_tasker_id_fkey(first_name, last_name, email)
           `
           )

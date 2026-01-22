@@ -3,9 +3,8 @@
 import type { DashboardTask } from '@/app/dashboard/page';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { createClient } from '@/lib/supabase/client';
-import { GoogleMap, InfoWindowF, LoadScriptNext, MarkerF } from '@react-google-maps/api';
 import {
   Calendar,
   Clock,
@@ -26,129 +25,34 @@ import {
   getPriorityBadge
 } from './enhanced-map-markers';
 
+// Leaflet imports
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+
+// Fix for default marker icon issue in Leaflet with Webpack/Next.js
+const DefaultIcon = L.icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+});
+L.Marker.prototype.options.icon = DefaultIcon;
+
 const getContainerStyle = (isMobile: boolean) => ({
   width: '100%',
   height: isMobile ? '400px' : '600px',
   minHeight: '300px'
 });
 
-// Dark mode friendly map styles
-const mapStyles = [
-  {
-    featureType: 'all',
-    elementType: 'geometry',
-    stylers: [{ color: '#f5f5f5' }]
-  },
-  {
-    featureType: 'all',
-    elementType: 'labels.icon',
-    stylers: [{ visibility: 'off' }]
-  },
-  {
-    featureType: 'all',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#616161' }]
-  },
-  {
-    featureType: 'all',
-    elementType: 'labels.text.stroke',
-    stylers: [{ color: '#f5f5f5' }]
-  },
-  {
-    featureType: 'administrative.land_parcel',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#bdbdbd' }]
-  },
-  {
-    featureType: 'poi',
-    elementType: 'geometry',
-    stylers: [{ color: '#eeeeee' }]
-  },
-  {
-    featureType: 'poi',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#757575' }]
-  },
-  {
-    featureType: 'poi.park',
-    elementType: 'geometry',
-    stylers: [{ color: '#e5e5e5' }]
-  },
-  {
-    featureType: 'poi.park',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#9e9e9e' }]
-  },
-  {
-    featureType: 'road',
-    elementType: 'geometry',
-    stylers: [{ color: '#ffffff' }]
-  },
-  {
-    featureType: 'road.arterial',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#757575' }]
-  },
-  {
-    featureType: 'road.highway',
-    elementType: 'geometry',
-    stylers: [{ color: '#dadada' }]
-  },
-  {
-    featureType: 'road.highway',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#616161' }]
-  },
-  {
-    featureType: 'road.local',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#9e9e9e' }]
-  },
-  {
-    featureType: 'transit.line',
-    elementType: 'geometry',
-    stylers: [{ color: '#e5e5e5' }]
-  },
-  {
-    featureType: 'transit.station',
-    elementType: 'geometry',
-    stylers: [{ color: '#eeeeee' }]
-  },
-  {
-    featureType: 'water',
-    elementType: 'geometry',
-    stylers: [{ color: '#c9c9c9' }]
-  },
-  {
-    featureType: 'water',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#9e9e9e' }]
-  }
-];
-
 // Helsinki coordinates as default center
-const defaultCenter = {
-  lat: 60.1699,
-  lng: 24.9384
-};
+const defaultCenter: [number, number] = [60.1699, 24.9384];
 
-const FINLAND_BOUNDS = {
-  north: 70.19,
-  south: 58.80,
-  west: 19.00,
-  east: 31.98,
-};
-
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
-
-interface TaskerCategory {
-  category_id: string;
-  categories: {
-    id: string;
-    name_fi: string;
-    name_en: string;
-  };
-}
+// Finland bounds for limiting the map view
+const FINLAND_BOUNDS: L.LatLngBoundsExpression = [
+  [58.80, 19.00], // Southwest
+  [70.19, 31.98]  // Northeast
+];
 
 interface EnhancedOpenTasksMapProps {
   openTasks: DashboardTask[];
@@ -160,58 +64,84 @@ interface EnhancedOpenTasksMapProps {
   className?: string;
 }
 
-// Helper to parse PostGIS point string
-const parseCoordinates = (pgPoint: string | null | undefined): { lat: number; lng: number } | null => {
-  if (!pgPoint || !pgPoint.startsWith('POINT(')) return null;
-  try {
-    const coordString = pgPoint.substring(pgPoint.indexOf('(') + 1, pgPoint.indexOf(')'));
-    const parts = coordString.split(' ');
-    const lng = parseFloat(parts[0]);
-    const lat = parseFloat(parts[1]);
-    if (isNaN(lat) || isNaN(lng)) return null;
-    return { lat, lng };
-  } catch (error) {
-    console.error("Error parsing coordinates:", pgPoint, error);
-    return null;
-  }
+// Create custom divIcon for markers based on marker type
+const createCustomIcon = (markerType: { 
+  color: string; 
+  bgColor: string; 
+  borderColor: string; 
+  icon: string;
+  priority: number;
+}): L.DivIcon => {
+  const showPriorityDot = markerType.priority <= 2;
+  
+  return L.divIcon({
+    className: 'custom-marker-icon',
+    html: `
+      <div style="
+        position: relative;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <div style="
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background-color: ${markerType.bgColor};
+          border: 3px solid ${markerType.borderColor};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+          font-size: 14px;
+        ">${markerType.icon}</div>
+        ${showPriorityDot ? `
+          <div style="
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: ${markerType.color};
+            border: 2px solid white;
+          "></div>
+        ` : ''}
+      </div>
+    `,
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36]
+  });
 };
 
-// Enhanced marker clustering with offset handling
-const addOffsetToOverlappingMarkers = (
-  tasks: (DashboardTask & { position: { lat: number; lng: number } })[]
-): (DashboardTask & { position: { lat: number; lng: number } })[] => {
-  const OFFSET_DISTANCE = 0.002;
-  const processedTasks = [...tasks];
-
-  const positionGroups = new Map<string, (DashboardTask & { position: { lat: number; lng: number } })[]>();
-
-  processedTasks.forEach(task => {
-    const key = `${task.position.lat.toFixed(6)},${task.position.lng.toFixed(6)}`;
-    if (!positionGroups.has(key)) {
-      positionGroups.set(key, []);
+// Map controller component for zoom and navigation
+function MapController({ 
+  validTasks, 
+  mapRef 
+}: { 
+  validTasks: { position: [number, number] }[];
+  mapRef: React.MutableRefObject<L.Map | null>;
+}) {
+  const map = useMap();
+  
+  useEffect(() => {
+    mapRef.current = map;
+    
+    if (validTasks.length > 0) {
+      const bounds = L.latLngBounds(validTasks.map(t => t.position));
+      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+      
+      if (validTasks.length === 1) {
+        map.setView(validTasks[0].position, 14);
+      }
     }
-    positionGroups.get(key)!.push(task);
-  });
-
-  positionGroups.forEach((group) => {
-    if (group.length > 1) {
-      group.forEach((task, index) => {
-        if (index > 0) {
-          const angle = (2 * Math.PI * index) / group.length;
-          const offsetLat = OFFSET_DISTANCE * Math.cos(angle);
-          const offsetLng = OFFSET_DISTANCE * Math.sin(angle);
-
-          task.position = {
-            lat: task.position.lat + offsetLat,
-            lng: task.position.lng + offsetLng
-          };
-        }
-      });
-    }
-  });
-
-  return processedTasks;
-};
+  }, [map, validTasks, mapRef]);
+  
+  return null;
+}
 
 function EnhancedOpenTasksMapComponent({
   openTasks: allTasks,
@@ -222,19 +152,14 @@ function EnhancedOpenTasksMapComponent({
   filterByTaskerCategories = true,
   className = ''
 }: EnhancedOpenTasksMapProps) {
-  const [selectedTask, setSelectedTask] = useState<(DashboardTask & { position: { lat: number; lng: number } }) | null>(null);
-  const [zoom, setZoom] = useState(11);
-  const [center, setCenter] = useState({ lat: 60.1695, lng: 24.9354 });
   const [layersVisible, setLayersVisible] = useState(true);
-  const [showInfoCard, setShowInfoCard] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
   const [fetchedTaskerCategories, setFetchedTaskerCategories] = useState<string[]>([]);
   
   // Use prop categories if available, otherwise fetch them
   const taskerCategories = propTaskerCategories || fetchedTaskerCategories;
 
-  const mapRef = useRef<google.maps.Map | null>(null);
-  const markerIconCache = useRef<Map<string, string>>(new Map());
+  const mapRef = useRef<L.Map | null>(null);
+  const markerIconCache = useRef<Map<string, L.DivIcon>>(new Map());
 
   // Fetch tasker's categories for filtering only if not provided as prop
   useEffect(() => {
@@ -291,16 +216,16 @@ function EnhancedOpenTasksMapComponent({
       .filter(task => task.latitude && task.longitude)
       .map(task => ({
         ...task,
-        position: {
-          lat: parseFloat(String(task.latitude)),
-          lng: parseFloat(String(task.longitude))
-        }
+        position: [
+          parseFloat(String(task.latitude)),
+          parseFloat(String(task.longitude))
+        ] as [number, number]
       }))
       .filter(task =>
         task.position &&
-        !isNaN(task.position.lat) &&
-        !isNaN(task.position.lng)
-      ) as (DashboardTask & { position: { lat: number; lng: number } })[];
+        !isNaN(task.position[0]) &&
+        !isNaN(task.position[1])
+      );
   }, [allTasks, filterByTaskerCategories, taskerCategories]);
 
   // Memoize unique marker types calculation
@@ -310,75 +235,42 @@ function EnhancedOpenTasksMapComponent({
       .sort((a, b) => a.priority - b.priority);
   }, [validTasks, taskerCategories]);
 
-  const onMarkerClick = useCallback((task: DashboardTask & { position: { lat: number; lng: number } }) => {
-    setSelectedTask(task);
-  }, []);
-
-  const onInfoWindowClose = useCallback(() => {
-    setSelectedTask(null);
-  }, []);
-
-  const handleMapLoad = useCallback((map: google.maps.Map) => {
-    mapRef.current = map;
-    setIsLoading(false);
-
-    if (validTasks.length > 0) {
-      const bounds = new window.google.maps.LatLngBounds();
-      validTasks.forEach(task => task.position && bounds.extend(task.position));
-      map.fitBounds(bounds);
-
-      const listener = window.google.maps.event.addListener(map, "idle", () => {
-        let currentZoom = map.getZoom();
-        if (currentZoom && currentZoom > 15) {
-          map.setZoom(15);
-        }
-        if (validTasks.length === 1 && validTasks[0].position) {
-          map.setCenter(validTasks[0].position);
-          if (!currentZoom || currentZoom > 15) map.setZoom(14);
-        }
-        window.google.maps.event.removeListener(listener);
-      });
-    } else {
-      map.setCenter(defaultCenter);
-      map.setZoom(zoom);
+  // Get cached or create new marker icon
+  const getMarkerIcon = useCallback((markerType: ReturnType<typeof getMarkerType>): L.DivIcon => {
+    const cacheKey = `${markerType.name}-${markerType.color}-${markerType.bgColor}-${markerType.borderColor}-${markerType.priority}`;
+    
+    if (markerIconCache.current.has(cacheKey)) {
+      return markerIconCache.current.get(cacheKey)!;
     }
-  }, [validTasks, zoom]);
+    
+    const icon = createCustomIcon(markerType);
+    markerIconCache.current.set(cacheKey, icon);
+    return icon;
+  }, []);
 
   // Map controls
   const zoomIn = useCallback(() => {
     if (mapRef.current) {
-      const currentZoom = mapRef.current.getZoom() || 10;
+      const currentZoom = mapRef.current.getZoom();
       mapRef.current.setZoom(Math.min(currentZoom + 1, 18));
     }
   }, []);
 
   const zoomOut = useCallback(() => {
     if (mapRef.current) {
-      const currentZoom = mapRef.current.getZoom() || 10;
+      const currentZoom = mapRef.current.getZoom();
       mapRef.current.setZoom(Math.max(currentZoom - 1, 5));
     }
   }, []);
 
   const centerOnTasks = useCallback(() => {
     if (mapRef.current && validTasks.length > 0) {
-      const bounds = new window.google.maps.LatLngBounds();
-      validTasks.forEach(task => task.position && bounds.extend(task.position));
-      mapRef.current.fitBounds(bounds);
+      const bounds = L.latLngBounds(validTasks.map(t => t.position));
+      mapRef.current.fitBounds(bounds, { padding: [50, 50] });
     }
   }, [validTasks]);
 
-  if (!GOOGLE_MAPS_API_KEY) {
-    return (
-      <Card className={`border-destructive ${className}`}>
-        <CardContent className="p-8 text-center">
-          <div className="text-red-500 text-lg font-medium">Google Maps API-avain puuttuu</div>
-          <p className="text-gray-600 mt-2">Karttaa ei voi näyttää ilman API-avainta.</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (validTasks.length === 0 && allTasks.length > 0) {
+  if (validTasks.length === 0 && allTasks && allTasks.length > 0) {
     return (
       <Card className={className}>
         <CardContent className="p-8 text-center">
@@ -392,134 +284,46 @@ function EnhancedOpenTasksMapComponent({
     );
   }
 
-  // Helper to safely access google.maps only when available in the browser
-  const getGmaps = () => {
-    if (typeof window === 'undefined') return null;
-    const g = (window as any).google;
-    return g && g.maps ? g.maps : null;
-  };
-
   return (
     <Card className={`overflow-hidden ${className}`}>
       <div className="relative">
-        <LoadScriptNext googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={['places']}>
-          <GoogleMap
-            mapContainerStyle={getContainerStyle(isMobile)}
-            center={center}
-            zoom={zoom}
-            onLoad={handleMapLoad}
-            options={{
-              restriction: {
-                latLngBounds: FINLAND_BOUNDS,
-                strictBounds: true,
-              },
-              minZoom: 5,
-              maxZoom: 18,
-              gestureHandling: "cooperative",
-              styles: mapStyles,
-              disableDefaultUI: true, // Disable default controls to use custom ones
-              zoomControl: false,
-              mapTypeControl: false,
-              streetViewControl: false,
-              fullscreenControl: false,
-            }}
-          >
-            {validTasks.map((task) => {
-              const markerType = getMarkerType(task, taskerCategories);
+        <MapContainer
+          center={defaultCenter}
+          zoom={11}
+          style={getContainerStyle(isMobile)}
+          scrollWheelZoom={true}
+          maxBounds={FINLAND_BOUNDS}
+          minZoom={5}
+          maxZoom={18}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          
+          <MapController validTasks={validTasks} mapRef={mapRef} />
+          
+          {validTasks.map((task) => {
+            const markerType = getMarkerType(task, taskerCategories);
+            const icon = getMarkerIcon(markerType);
 
-              // Create custom marker icon using canvas with caching for better performance
-              const createMarkerIcon = (type: typeof markerType): string | null => {
-                // Guard against SSR - only create canvas markers on client-side
-                if (typeof window === 'undefined' || typeof document === 'undefined') {
-                  return null;
-                }
-
-                // Create cache key based on marker type properties
-                const cacheKey = `${type.name}-${type.color}-${type.bgColor}-${type.borderColor}-${type.priority}`;
-
-                // Return cached icon if available
-                if (markerIconCache.current.has(cacheKey)) {
-                  return markerIconCache.current.get(cacheKey)!;
-                }
-
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d')!;
-                canvas.width = 50;
-                canvas.height = 60;
-
-                // Draw shadow
-                ctx.fillStyle = 'rgba(0,0,0,0.2)';
-                ctx.beginPath();
-                ctx.arc(25, 45, 20, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Draw main circle
-                ctx.fillStyle = type.bgColor;
-                ctx.strokeStyle = type.borderColor;
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.arc(25, 25, 18, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.stroke();
-
-                // Draw icon text
-                ctx.fillStyle = type.color;
-                ctx.font = '16px Arial';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(type.icon, 25, 25);
-
-                // Draw priority indicator
-                if (type.priority <= 2) {
-                  ctx.fillStyle = type.color;
-                  ctx.beginPath();
-                  ctx.arc(38, 12, 5, 0, Math.PI * 2);
-                  ctx.fill();
-                }
-
-                const iconUrl = canvas.toDataURL();
-
-                // Cache the icon for future use
-                markerIconCache.current.set(cacheKey, iconUrl);
-
-                return iconUrl;
-              };
-
-              const customIconUrl = createMarkerIcon(markerType);
-
-              return (
-                <MarkerF
-                  key={task.id}
-                  position={task.position!}
-                  onClick={() => onMarkerClick(task)}
-                  title={`${task.title} - ${markerType.name}`}
-                  icon={customIconUrl ? {
-                    url: customIconUrl,
-                    scaledSize: getGmaps() ? new (getGmaps() as any).Size(40, 48) : undefined,
-                    anchor: getGmaps() ? new (getGmaps() as any).Point(20, 40) : undefined,
-                  } : undefined}
-                  zIndex={markerType.priority <= 2 ? 1000 : 100}
-                />
-              );
-            })}
-
-            {selectedTask && selectedTask.position && (
-              <InfoWindowF
-                position={selectedTask.position}
-                onCloseClick={onInfoWindowClose}
-                options={{ pixelOffset: getGmaps() ? new (getGmaps() as any).Size(0, -40) : undefined }}
+            return (
+              <Marker
+                key={task.id}
+                position={task.position}
+                icon={icon}
               >
-                <Card className={`border-none shadow-lg ${isMobile ? 'max-w-xs' : 'max-w-sm'}`}>
-                  <CardHeader className={isMobile ? "pb-2 px-3 pt-3" : "pb-3"}>
-                    <div className="flex items-start justify-between gap-3">
+                <Popup maxWidth={isMobile ? 280 : 350} closeButton={true}>
+                  <div className={`${isMobile ? 'p-1' : 'p-2'}`}>
+                    <div className="flex items-start justify-between gap-3 mb-3">
                       <div className="flex-1 min-w-0">
-                        <CardTitle className={`${isMobile ? 'text-sm' : 'text-base'} font-semibold line-clamp-2 mb-2`}>
-                          {selectedTask.title}
-                        </CardTitle>
+                        <h3 className={`${isMobile ? 'text-sm' : 'text-base'} font-semibold line-clamp-2 mb-2`}>
+                          {task.title}
+                        </h3>
                         <div className="flex items-center gap-2 flex-wrap">
-                          {selectedTask.categories?.name_fi && (
+                          {task.categories?.name_fi && (
                             <Badge variant="secondary" className="text-xs">
-                              {selectedTask.categories.name_fi}
+                              {task.categories.name_fi}
                             </Badge>
                           )}
                           {!isMobile && (
@@ -527,33 +331,32 @@ function EnhancedOpenTasksMapComponent({
                               variant="outline"
                               className="text-xs"
                               style={{
-                                borderColor: getMarkerType(selectedTask, taskerCategories).color,
-                                color: getMarkerType(selectedTask, taskerCategories).color
+                                borderColor: markerType.color,
+                                color: markerType.color
                               }}
                             >
-                              {getPriorityBadge(getMarkerType(selectedTask, taskerCategories))}
+                              {getPriorityBadge(markerType)}
                             </Badge>
                           )}
                         </div>
                       </div>
                     </div>
-                  </CardHeader>
-                  <CardContent className={`space-y-3 ${isMobile ? 'px-3 pb-3' : ''}`}>
-                    <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-700 line-clamp-2`}>
-                      {selectedTask.description}
+                    
+                    <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-700 line-clamp-2 mb-3`}>
+                      {task.description}
                     </p>
 
-                    <div className={`grid ${isMobile ? 'grid-cols-1 gap-1.5' : 'grid-cols-2 gap-3'} text-xs text-gray-600`}>
+                    <div className={`grid ${isMobile ? 'grid-cols-1 gap-1.5' : 'grid-cols-2 gap-3'} text-xs text-gray-600 mb-3`}>
                       <div className="flex items-center gap-1.5">
                         <Euro className="h-3 w-3" />
-                        <span>{selectedTask.budget ? `${selectedTask.budget}€` : 'Ei budjetia'}</span>
+                        <span>{task.budget ? `${task.budget}€` : 'Ei budjetia'}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Clock className="h-3 w-3" />
                         <span>
-                          {selectedTask.scheduled_date
+                          {task.scheduled_date
                             ? (() => {
-                              const d = new Date(selectedTask.scheduled_date as unknown as string);
+                              const d = new Date(task.scheduled_date as unknown as string);
                               const diffH = (d.getTime() - Date.now()) / (1000 * 60 * 60);
                               if (!isNaN(diffH) && diffH <= 72) return 'Kiireellinen';
                               if (!isNaN(diffH) && diffH <= 168) return 'Normaali';
@@ -566,13 +369,13 @@ function EnhancedOpenTasksMapComponent({
                         <>
                           <div className="flex items-center gap-1.5">
                             <User className="h-3 w-3" />
-                            <span>{selectedTask.offers_count || 0} tarjousta</span>
+                            <span>{task.offers_count || 0} tarjousta</span>
                           </div>
                           <div className="flex items-center gap-1.5">
                             <Calendar className="h-3 w-3" />
                             <span>
-                              {selectedTask.scheduled_date
-                                ? new Date(selectedTask.scheduled_date).toLocaleDateString('fi-FI')
+                              {task.scheduled_date
+                                ? new Date(task.scheduled_date).toLocaleDateString('fi-FI')
                                 : 'Joustavasti'
                               }
                             </span>
@@ -581,16 +384,16 @@ function EnhancedOpenTasksMapComponent({
                       )}
                     </div>
 
-                    {selectedTask.location_text && (
-                      <div className="flex items-center gap-1.5 text-xs text-gray-600">
+                    {task.location_text && (
+                      <div className="flex items-center gap-1.5 text-xs text-gray-600 mb-3">
                         <MapPin className="h-3 w-3 flex-shrink-0" />
-                        <span className="line-clamp-1">{selectedTask.location_text}</span>
+                        <span className="line-clamp-1">{task.location_text}</span>
                       </div>
                     )}
 
                     <Button size="sm" asChild className="w-full">
                       <Link
-                        href={`/dashboard/tasks/${selectedTask.id}`}
+                        href={`/dashboard/tasks/${task.id}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -598,18 +401,17 @@ function EnhancedOpenTasksMapComponent({
                         <ExternalLink className="ml-2 h-3 w-3" />
                       </Link>
                     </Button>
-                  </CardContent>
-                </Card>
-              </InfoWindowF>
-            )}
-          </GoogleMap>
-        </LoadScriptNext>
+                  </div>
+                </Popup>
+              </Marker>
+            );
+          })}
+        </MapContainer>
 
         {/* Custom Map Controls Overlay */}
-        {/* mapLoaded && ( */}
         <>
           {/* Zoom Controls */}
-          <div className={`absolute ${isMobile ? 'top-2 right-2' : 'top-4 right-4'} flex flex-col gap-1 z-10`}>
+          <div className={`absolute ${isMobile ? 'top-2 right-2' : 'top-4 right-4'} flex flex-col gap-1 z-[1000]`}>
             <Button
               variant="outline"
               size={isMobile ? "sm" : "icon"}
@@ -649,7 +451,7 @@ function EnhancedOpenTasksMapComponent({
           </div>
 
           {/* Map Statistics */}
-          <div className={`absolute ${isMobile ? 'top-2 left-2 p-2' : 'top-4 left-4 p-3'} bg-white/95 backdrop-blur-sm rounded-lg border shadow-sm z-10`}>
+          <div className={`absolute ${isMobile ? 'top-2 left-2 p-2' : 'top-4 left-4 p-3'} bg-white/95 backdrop-blur-sm rounded-lg border shadow-sm z-[1000]`}>
             <div className={`flex items-center gap-2 ${isMobile ? 'text-xs' : 'text-sm'}`}>
               <div className={`${isMobile ? 'w-2 h-2' : 'w-3 h-3'} rounded-full bg-emerald-500`}></div>
               <span className="font-medium">
@@ -667,7 +469,7 @@ function EnhancedOpenTasksMapComponent({
           {layersVisible && visibleMarkerTypes.length > 0 && !isMobile && (
             <MapLegend
               visibleTypes={visibleMarkerTypes}
-              className="absolute bottom-4 left-4 z-10 max-w-xs"
+              className="absolute bottom-4 left-4 z-[1000] max-w-xs"
             />
           )}
 
@@ -676,7 +478,7 @@ function EnhancedOpenTasksMapComponent({
             <Button
               variant="outline"
               size="sm"
-              className={`absolute bottom-2 left-2 bg-white/95 backdrop-blur-sm border shadow-sm hover:bg-white/100 z-10 ${layersVisible ? 'bg-emerald-50 border-emerald-200' : ''}`}
+              className={`absolute bottom-2 left-2 bg-white/95 backdrop-blur-sm border shadow-sm hover:bg-white/100 z-[1000] ${layersVisible ? 'bg-emerald-50 border-emerald-200' : ''}`}
               onClick={() => setLayersVisible(!layersVisible)}
             >
               <Layers className="h-3 w-3 mr-1" />
@@ -686,7 +488,7 @@ function EnhancedOpenTasksMapComponent({
 
           {/* Mobile Legend Overlay */}
           {layersVisible && visibleMarkerTypes.length > 0 && isMobile && (
-            <div className="absolute inset-x-2 bottom-12 z-20">
+            <div className="absolute inset-x-2 bottom-12 z-[1001]">
               <MapLegend
                 visibleTypes={visibleMarkerTypes}
                 className="w-full"
@@ -694,10 +496,9 @@ function EnhancedOpenTasksMapComponent({
             </div>
           )}
         </>
-        {/* ) */}
       </div>
     </Card>
   );
-};
+}
 
 export default memo(EnhancedOpenTasksMapComponent);

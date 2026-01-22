@@ -177,7 +177,7 @@ export default async function DashboardPage() {
         `
         *,
         categories (name_fi, icon_url),
-        user_profile:profiles!tasks_user_id_profiles_fkey (
+        user_profile:profiles!tasks_user_id_fkey (
           id,
           first_name,
           last_name,

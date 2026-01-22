@@ -27,15 +27,17 @@ export function useUnreadMessages() {
 
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.rpc('get_unread_message_count', {
-        user_id_param: user.id,
-      });
+      const { count, error } = await supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('receiver_profile_id', user.id)
+        .eq('is_read', false);
 
       if (error) {
         console.error('Error fetching unread message count:', error);
         setUnreadCount(0);
       } else {
-        setUnreadCount(data || 0);
+        setUnreadCount(count || 0);
       }
     } catch (error) {
       console.error('Exception fetching unread message count:', error);

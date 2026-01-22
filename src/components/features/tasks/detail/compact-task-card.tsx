@@ -27,6 +27,7 @@ import {
   AlertTriangle,
   Calendar,
   CheckCircle,
+  Clock,
   Edit,
   Euro,
   Eye,
@@ -116,6 +117,11 @@ const CompactTaskCard: React.FC<CompactTaskCardProps> = ({
       pending_approval: {
         text: 'Odottaa hyväksyntää',
         icon: Eye,
+        color: 'text-yellow-500',
+      },
+      pending_review: {
+        text: 'Odottaa tarkistusta',
+        icon: Clock,
         color: 'text-yellow-500',
       },
       paid: { text: 'Työn alla', icon: Wrench, color: 'text-green-500' },
@@ -341,7 +347,8 @@ const CompactTaskCard: React.FC<CompactTaskCardProps> = ({
           {isTaskOwner &&
             task.status === 'completed' &&
             !task.user_review &&
-            task.assigned_tasker_id && (
+            task.assigned_tasker_id &&
+            task.assigned_tasker_profile && (
               <Dialog
                 open={isReviewDialogOpen}
                 onOpenChange={setIsReviewDialogOpen}

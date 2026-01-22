@@ -621,13 +621,19 @@ export type Database = {
           city: string | null
           created_at: string
           email: string | null
+          email_notifications: boolean | null
           first_name: string | null
           id: string
           is_verified: boolean
           last_name: string | null
           location: unknown | null
+          marketing_messages: boolean | null
           phone_number: string | null
+          public_profile: boolean | null
+          push_notifications: boolean | null
           role: string
+          show_contact_info: boolean | null
+          show_location: boolean | null
           suspended: boolean | null
           updated_at: string | null
           zipcode: string | null
@@ -639,13 +645,19 @@ export type Database = {
           city?: string | null
           created_at?: string
           email?: string | null
+          email_notifications?: boolean | null
           first_name?: string | null
           id: string
           is_verified?: boolean
           last_name?: string | null
           location?: unknown | null
+          marketing_messages?: boolean | null
           phone_number?: string | null
+          public_profile?: boolean | null
+          push_notifications?: boolean | null
           role: string
+          show_contact_info?: boolean | null
+          show_location?: boolean | null
           suspended?: boolean | null
           updated_at?: string | null
           zipcode?: string | null
@@ -657,13 +669,19 @@ export type Database = {
           city?: string | null
           created_at?: string
           email?: string | null
+          email_notifications?: boolean | null
           first_name?: string | null
           id?: string
           is_verified?: boolean
           last_name?: string | null
           location?: unknown | null
+          marketing_messages?: boolean | null
           phone_number?: string | null
+          public_profile?: boolean | null
+          push_notifications?: boolean | null
           role?: string
+          show_contact_info?: boolean | null
+          show_location?: boolean | null
           suspended?: boolean | null
           updated_at?: string | null
           zipcode?: string | null
@@ -1343,7 +1361,7 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tasks_user_id_profiles_fkey"
+            foreignKeyName: "tasks_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -1536,7 +1554,7 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tasks_user_id_profiles_fkey"
+            foreignKeyName: "tasks_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -1608,7 +1626,7 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tasks_user_id_profiles_fkey"
+            foreignKeyName: "tasks_user_id_fkey"
             columns: ["task_owner_id"]
             isOneToOne: false
             referencedRelation: "profiles"

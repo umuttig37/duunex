@@ -208,3 +208,44 @@ body {
     font-size: 16px !important;
   }
 }
+
+/* Leaflet custom marker styles */
+.custom-marker-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Leaflet popup styles */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 0;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  min-width: 200px;
+}
+
+.leaflet-popup-tip {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Override default leaflet z-index for better overlay positioning */
+.leaflet-pane {
+  z-index: 400;
+}
+
+.leaflet-control {
+  z-index: 800;
+}
+
+/* Improve marker hover effects */
+.leaflet-marker-icon {
+  transition: transform 0.15s ease-out;
+}
+
+.leaflet-marker-icon:hover {
+  transform: scale(1.1);
+  z-index: 1000 !important;
+}

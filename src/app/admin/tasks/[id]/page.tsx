@@ -128,7 +128,7 @@ export default async function AdminTaskDetailPage({
       `
       *,
       categories:category_id(name_fi, name),
-      publisher:profiles!tasks_user_id_profiles_fkey(first_name, last_name, avatar_url, email),
+      publisher:profiles!tasks_user_id_fkey(first_name, last_name, avatar_url, email),
       task_attachments(id, file_url, file_type),
       assigned_tasker_profile:profiles!tasks_assigned_tasker_id_fkey(first_name, last_name, avatar_url, email, bio)
     `

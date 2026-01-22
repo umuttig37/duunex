@@ -71,6 +71,14 @@ const profileUpdateSchema = z.object({
   // Add tasker-specific fields
   service_radius_km: z.string().optional().or(z.literal('')),
   hourly_rate: z.string().optional().or(z.literal('')),
+  // Add notification preferences
+  email_notifications: z.string().optional().or(z.literal('')),
+  push_notifications: z.string().optional().or(z.literal('')),
+  marketing_messages: z.string().optional().or(z.literal('')),
+  // Add privacy preferences
+  public_profile: z.string().optional().or(z.literal('')),
+  show_location: z.string().optional().or(z.literal('')),
+  show_contact_info: z.string().optional().or(z.literal('')),
 });
 
 // Define schema for avatar file validation (optional but good practice)
@@ -116,6 +124,14 @@ export async function updateProfileAction(formData: FormData) {
       // Extract tasker-specific fields
       service_radius_km: formData.get('service_radius_km') || '',
       hourly_rate: formData.get('hourly_rate') || '',
+      // Extract notification preferences
+      email_notifications: formData.get('email_notifications') || '',
+      push_notifications: formData.get('push_notifications') || '',
+      marketing_messages: formData.get('marketing_messages') || '',
+      // Extract privacy preferences
+      public_profile: formData.get('public_profile') || '',
+      show_location: formData.get('show_location') || '',
+      show_contact_info: formData.get('show_contact_info') || '',
   };
 
   // Validate the basic data including location strings
@@ -143,6 +159,14 @@ export async function updateProfileAction(formData: FormData) {
     address: validatedFields.data.address || null,
     city: validatedFields.data.city || null,
     zipcode: validatedFields.data.zipcode || null,
+    // Add notification preferences (convert string to boolean)
+    email_notifications: validatedFields.data.email_notifications === 'true',
+    push_notifications: validatedFields.data.push_notifications === 'true',
+    marketing_messages: validatedFields.data.marketing_messages === 'true',
+    // Add privacy preferences (convert string to boolean)
+    public_profile: validatedFields.data.public_profile === 'true',
+    show_location: validatedFields.data.show_location === 'true',
+    show_contact_info: validatedFields.data.show_contact_info === 'true',
   };
 
   // --- Handle Location Update ---
@@ -437,6 +461,40 @@ export async function updateProfileAction(formData: FormData) {
   revalidatePath('/dashboard');
 
   return { success: true, message: 'Profiili päivitetty onnistuneesti!' };
+}
+
+// Separate action for updating user preferences (faster, no file uploads)
+export async function updateUserPreferencesAction(preferences: {
+  email_notifications?: boolean;
+  push_notifications?: boolean;
+  marketing_messages?: boolean;
+  public_profile?: boolean;
+  show_location?: boolean;
+  show_contact_info?: boolean;
+}) {
+  const supabase = await createClient();
+
+  // Get current user
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
+    return { success: false, message: 'Autentikointivirhe. Kirjaudu sisään uudelleen.' };
+  }
+
+  // Update only the preference fields
+  const { error: updateError } = await supabase
+    .from('profiles')
+    .update(preferences)
+    .eq('id', user.id);
+
+  if (updateError) {
+    console.error('Error updating preferences:', updateError);
+    return { success: false, message: 'Asetusten päivitys epäonnistui.' };
+  }
+
+  // Revalidate profile page
+  revalidatePath(`/dashboard/profile/${user.id}`);
+
+  return { success: true, message: 'Asetukset päivitetty onnistuneesti!' };
 }
 
 export async function logoutAction() {

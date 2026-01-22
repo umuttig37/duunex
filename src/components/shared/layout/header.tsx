@@ -177,7 +177,7 @@ export function Header() {
               <DropdownMenuItem asChild>
                 <Link href={userRole === 'admin' ? '/admin' : '/dashboard'}>
                   <UserCircle className="mr-2 h-4 w-4" />
-                  <span>Dashboard</span>
+                  <span>Hallintapaneeli</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>

@@ -35,7 +35,7 @@ export default async function CategoryTasksPage({ params }: CategoryTasksPagePro
     .select(`
       *,
       categories (name_fi, icon_url),
-      publisher:profiles!tasks_user_id_profiles_fkey (
+      publisher:profiles!tasks_user_id_fkey (
         first_name,
         last_name,
         avatar_url

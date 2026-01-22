@@ -74,7 +74,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, showEdit, showStatus, showAct
                 </Button>
                 {showEdit && (
                     <Button asChild className="flex-1 min-w-fit">
-                        <Link href={`/dashboard/tasks/${task.id}/edit`}>
+                        <Link href={`/dashboard/tasks/edit/${task.id}`}>
                             <span className="hidden sm:inline">Muokkaa</span>
                             <span className="sm:hidden">Edit</span>
                         </Link>

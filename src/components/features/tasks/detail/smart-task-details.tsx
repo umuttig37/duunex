@@ -19,11 +19,12 @@ interface TaskFormData {
   location_text: string;
   latitude?: number | null;
   longitude?: number | null;
-  service_radius_km: number;
+  service_radius_km?: number | null;
   budget: number | null;
   scheduled_date: Date | null;
   scheduled_time_slot: 'morning' | 'afternoon' | 'evening' | 'flexible' | null;
   image_urls: string[];
+  image_files?: File[]; // Store actual File objects for upload later
   dynamic_answers: Record<string, any>;
 }
 
@@ -40,7 +41,7 @@ interface DynamicQuestion {
 
 interface SmartTaskDetailsProps {
   category: CategoryWithIcon;
-  formData: Partial<TaskFormData>;
+  formData: TaskFormData;
   onFieldChange: (field: keyof TaskFormData, value: any) => void;
   onDynamicAnswerChange: (questionId: string, value: any) => void;
   templateData?: {
@@ -196,25 +197,31 @@ export default function SmartTaskDetails({
 }: SmartTaskDetailsProps) {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const [uploading, setUploading] = useState(false);
 
   // Get dynamic questions (from template or category default)
   const dynamicQuestions = templateData?.questions || getMockQuestions(category.slug);
   const budgetRange = getBudgetRange(category.slug);
   const imageSuggestions = getCategoryImageSuggestions(category.slug);
 
-  // Image preview management - use formData.image_urls instead of blob URLs
+  // Image preview management - create blob URLs for preview
   useEffect(() => {
-    // Use the actual image URLs from formData
-    const urls = formData.image_urls || [];
-    setImagePreviews(urls);
-  }, [formData.image_urls]);
+    // Create blob URLs for preview from File objects
+    const files = formData.image_files || [];
+    const newPreviews = files.map(file => URL.createObjectURL(file));
+    setImagePreviews(newPreviews);
+    
+    // Cleanup old blob URLs
+    return () => {
+      newPreviews.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [formData.image_files]);
 
-  const handleImageUpload = async (files: FileList | null) => {
+  const handleImageUpload = (files: FileList | null) => {
     if (!files || files.length === 0) return;
 
     const newFiles = Array.from(files);
-    const totalFiles = imageFiles.length + newFiles.length;
+    const currentFiles = formData.image_files || [];
+    const totalFiles = currentFiles.length + newFiles.length;
 
     if (totalFiles > 3) {
       alert('Voit ladata enintään 3 kuvaa');
@@ -233,54 +240,18 @@ export default function SmartTaskDetails({
       }
     }
 
-    setUploading(true);
-    try {
-      // Import Supabase client
-      const { createClient } = await import('@/lib/supabase/client');
-      const supabase = createClient();
-
-      const uploadedUrls: string[] = [];
-
-      for (const file of newFiles) {
-        // Generate unique filename
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
-        const filePath = fileName;
-
-        // Upload to Supabase Storage
-        const { error: uploadError } = await supabase.storage
-          .from('task-images')
-          .upload(filePath, file);
-
-        if (uploadError) {
-          console.error('Upload error:', uploadError);
-          throw new Error(`Kuvan ${file.name} lataus epäonnistui`);
-        }
-
-        // Get public URL
-        const { data: { publicUrl } } = supabase.storage
-          .from('task-images')
-          .getPublicUrl(filePath);
-
-        uploadedUrls.push(publicUrl);
-      }
-
-      setImageFiles(prev => [...prev, ...newFiles]);
-      onFieldChange('image_urls', [...(formData.image_urls || []), ...uploadedUrls]);
-    } catch (error) {
-      console.error('Image upload error:', error);
-      alert(error instanceof Error ? error.message : 'Kuvien lataus epäonnistui');
-    } finally {
-      setUploading(false);
-    }
+    // Just store the File objects, don't upload yet
+    const allFiles = [...currentFiles, ...newFiles];
+    setImageFiles(allFiles);
+    onFieldChange('image_files', allFiles);
   };
 
   const removeImage = (index: number) => {
-    const newFiles = imageFiles.filter((_, i) => i !== index);
-    const newUrls = (formData.image_urls || []).filter((_, i) => i !== index);
-
+    const currentFiles = formData.image_files || [];
+    const newFiles = currentFiles.filter((_, i) => i !== index);
+    
     setImageFiles(newFiles);
-    onFieldChange('image_urls', newUrls);
+    onFieldChange('image_files', newFiles);
   };
 
   const renderDynamicQuestion = (question: DynamicQuestion) => {
@@ -442,36 +413,6 @@ export default function SmartTaskDetails({
                   </p>
                 )}
               </div>
-
-              {/* Service Radius Configuration */}
-              <div className="space-y-3 pt-4 border-t border-gray-100">
-                <h3 className="heading-4">Tekijöiden hakusäde</h3>
-                <div>
-                  <div className="flex items-center space-x-4">
-                    <input
-                      type="range"
-                      min="1"
-                      max="50"
-                      step="1"
-                      value={formData.service_radius_km || 5}
-                      onChange={(e) => onFieldChange('service_radius_km', Number(e.target.value))}
-                      className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                    />
-                    <div className="min-w-[60px] text-right">
-                      <span className="font-medium text-gray-800">
-                        {formData.service_radius_km || 5} km
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>1 km</span>
-                    <span>50 km</span>
-                  </div>
-                  <p className="text-xs text-gray-600 mt-2">
-                    Etäisyys kotiosoitteestasi, jolta tekijöitä etsitään
-                  </p>
-                </div>
-              </div>
             </div>
           </ModernCard>
 
@@ -495,7 +436,7 @@ export default function SmartTaskDetails({
               {/* Upload Area */}
               <div className={cn(
                 "border-2 border-dashed rounded-xl p-6 text-center transition-colors",
-                uploading || imageFiles.length >= 3
+                imageFiles.length >= 3
                   ? "border-gray-300 bg-gray-50 opacity-50"
                   : "border-emerald-300 bg-white hover:border-emerald-400 cursor-pointer"
               )}>
@@ -506,19 +447,19 @@ export default function SmartTaskDetails({
                   onChange={(e) => handleImageUpload(e.target.files)}
                   className="hidden"
                   id="image-upload"
-                  disabled={uploading || imageFiles.length >= 3}
+                  disabled={imageFiles.length >= 3}
                 />
 
                 <label
                   htmlFor="image-upload"
                   className={cn(
                     "cursor-pointer block",
-                    (uploading || imageFiles.length >= 3) && "cursor-not-allowed"
+                    imageFiles.length >= 3 && "cursor-not-allowed"
                   )}
                 >
                   <Upload className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
                   <p className="font-medium text-gray-800 mb-1">
-                    {uploading ? 'Ladataan...' : 'Klikkaa tai raahaa kuvia'}
+                    Klikkaa tai raahaa kuvia
                   </p>
                   <p className="text-xs text-gray-600">
                     {imageFiles.length}/3 kuvaa • PNG, JPG • Max 5MB

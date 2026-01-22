@@ -111,7 +111,7 @@ function ModeOption({ mode, selected, onSelect }: ModeOptionProps) {
 
           {/* Selection indicator */}
           <div className={cn(
-            "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
+            "w-6 h-6 min-w-6 rounded-full border-2 flex items-center justify-center transition-colors",
             selected
               ? data.color === 'emerald'
                 ? "bg-emerald-600 border-emerald-600"

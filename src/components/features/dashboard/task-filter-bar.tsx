@@ -67,6 +67,7 @@ interface TaskFilterBarProps {
 
 const statusOptions = [
   { value: 'all', label: 'Kaikki tehtävät' },
+  { value: 'pending_review', label: 'Odottaa tarkistusta' },
   { value: 'in-progress', label: 'Meneillään' },
   { value: 'open', label: 'Avoimet' },
   { value: 'paid', label: 'Maksetut' },

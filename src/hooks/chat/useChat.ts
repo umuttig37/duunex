@@ -15,8 +15,6 @@ export interface ConversationParticipant extends UserProfile {}
 export interface ChatMessage extends Message {
   sender: UserProfile;
   receiver: UserProfile;
-  image_url?: string | null;
-  message_type?: 'text' | 'image';
 }
 
 export interface Conversation {
@@ -56,11 +54,19 @@ export function useChat(options: UseChatOptions = {}) {
     return () => clearTimeout(timer);
   }, [searchQuery]);
   const [filterType, setFilterType] = useState<'all' | 'unread' | 'pinned' | 'active' | 'completed'>('all');
-  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'connecting' | 'disconnected'>('disconnected');
+  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'connecting' | 'disconnected'>('connecting');
   const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
   const subscriptionRef = useRef<any>(null);
   const presenceChannelRef = useRef<any>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const connectionStatusRef = useRef<'connected' | 'connecting' | 'disconnected'>('connecting');
+  const retryTriggerRef = useRef(0);
+  const [retryTrigger, setRetryTrigger] = useState(0);
+  
+  // Keep ref in sync with state
+  useEffect(() => {
+    connectionStatusRef.current = connectionStatus;
+  }, [connectionStatus]);
 
   // Helper function to determine conversation section based on task status
   const getConversationSection = (taskStatus: string): 'active' | 'completed' | 'archived' => {
@@ -196,19 +202,41 @@ export function useChat(options: UseChatOptions = {}) {
   useEffect(() => {
     if (!user?.id) return;
 
+    // Clear any pending reconnect timeout
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
+
+    // Cleanup previous subscription if exists
+    if (subscriptionRef.current) {
+      supabase.removeChannel(subscriptionRef.current);
+      subscriptionRef.current = null;
+    }
+
     setConnectionStatus('connecting');
     
-    // Add timeout to prevent infinite connecting state
+    // Use unique channel name to avoid conflicts on retry
+    const channelName = `messages_channel_${user.id}_${retryTriggerRef.current}`;
+    
+    // Add timeout to prevent infinite connecting state - use ref to check current status
     const connectionTimeout = setTimeout(() => {
-      if (connectionStatus === 'connecting') {
-        console.warn('Connection timeout - setting to disconnected');
+      if (connectionStatusRef.current === 'connecting') {
+        console.warn('Connection timeout - will auto-retry');
         setConnectionStatus('disconnected');
+        
+        // Auto-retry after timeout
+        reconnectTimeoutRef.current = setTimeout(() => {
+          console.log('Auto-retrying after timeout...');
+          retryTriggerRef.current += 1;
+          setRetryTrigger(prev => prev + 1);
+        }, 2000);
       }
-    }, 10000); // 10 second timeout
+    }, 5000); // 5 second timeout
 
     // Subscribe to messages table changes
     const subscription = supabase
-      .channel('messages_channel')
+      .channel(channelName)
       .on(
         'postgres_changes',
         {
@@ -274,19 +302,22 @@ export function useChat(options: UseChatOptions = {}) {
       )
       .subscribe((status) => {
         console.log('Messages subscription status:', status);
-        clearTimeout(connectionTimeout); // Clear timeout on any status update
         
         if (status === 'SUBSCRIBED') {
+          clearTimeout(connectionTimeout); // Only clear timeout on successful connection
           setConnectionStatus('connected');
-        } else if (status === 'CHANNEL_ERROR' || status === 'CLOSED') {
+        } else if (status === 'CHANNEL_ERROR' || status === 'CLOSED' || status === 'TIMED_OUT') {
+          clearTimeout(connectionTimeout);
           setConnectionStatus('disconnected');
-          // Attempt to reconnect after 5 seconds with exponential backoff
-          setTimeout(() => {
-            setConnectionStatus('connecting');
-          }, 5000);
-        } else if (status === 'TIMED_OUT') {
-          setConnectionStatus('disconnected');
+          
+          // Auto-retry connection after 3 seconds
+          reconnectTimeoutRef.current = setTimeout(() => {
+            console.log('Auto-retrying connection...');
+            retryTriggerRef.current += 1;
+            setRetryTrigger(prev => prev + 1);
+          }, 3000);
         }
+        // For other statuses like 'JOINING', keep 'connecting' state
       });
 
     subscriptionRef.current = subscription;
@@ -294,12 +325,17 @@ export function useChat(options: UseChatOptions = {}) {
     // Cleanup subscription on unmount
     return () => {
       clearTimeout(connectionTimeout);
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+        reconnectTimeoutRef.current = null;
+      }
       if (subscriptionRef.current) {
-        subscriptionRef.current.unsubscribe();
+        supabase.removeChannel(subscriptionRef.current);
         subscriptionRef.current = null;
       }
     };
-  }, [user?.id, options.conversationId, queryClient, supabase]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, options.conversationId, queryClient, supabase, retryTrigger]);
 
   // Send message mutation
   const sendMessageMutation = useMutation({
@@ -439,14 +475,17 @@ export function useChat(options: UseChatOptions = {}) {
     markAsReadMutation.mutate(options.conversationId);
   }, [options.conversationId, markAsReadMutation]);
 
-  // Retry connection helper
+  // Retry connection helper - triggers useEffect re-run by updating state
   const retryConnection = useCallback(() => {
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
     }
-    setConnectionStatus('connecting');
     
-    // Force reconnection by invalidating queries
+    // Increment retry trigger to force useEffect re-run and create new channel
+    retryTriggerRef.current += 1;
+    setRetryTrigger(prev => prev + 1);
+    
+    // Also refetch conversations data
     queryClient.invalidateQueries({ 
       queryKey: ['conversations', user?.id],
       refetchType: 'active'

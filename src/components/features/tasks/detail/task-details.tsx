@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { createClient } from '@/lib/supabase/client';
 import type { Tables } from '@/lib/supabase/database.types';
 import type { NewTaskBookingFormData } from '@/types/forms/task-booking';
-import { Autocomplete, LoadScriptNext } from '@react-google-maps/api';
+import PlacesInput from '@/components/ui/places-input';
 import { Loader2 } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useState } from 'react';
@@ -40,7 +40,7 @@ interface TaskDetailsProps {
   } | null;
 }
 
-const libraries: 'places'[] = ['places'];
+// Address autocomplete now uses Nominatim (OpenStreetMap) via PlacesInput component
 
 function getCategoryDisplayName(category: CategoryRow | null): string {
   if (!category) return 'Valitse kategoria ensin';
@@ -60,9 +60,6 @@ export default function TaskDetails({
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
   const supabase = createClient();
 
-  const [autocomplete, setAutocomplete] =
-    useState<google.maps.places.Autocomplete | null>(null);
-  const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -125,28 +122,13 @@ export default function TaskDetails({
     });
   };
 
-  const onAutocompleteLoad = (
-    autocompleteInstance: google.maps.places.Autocomplete
-  ) => {
-    setAutocomplete(autocompleteInstance);
-  };
-
-  const onPlaceChanged = () => {
-    if (autocomplete !== null) {
-      const place = autocomplete.getPlace();
-
-      const formattedAddress = place.formatted_address || '';
-      const lat = place.geometry?.location?.lat();
-      const lng = place.geometry?.location?.lng();
-
-      updateFormData({
-        location_text: formattedAddress,
-        latitude: lat !== undefined ? lat : null,
-        longitude: lng !== undefined ? lng : null,
-      });
-    } else {
-      console.log('Autocomplete is not loaded yet!');
-    }
+  // Handle address selection from PlacesInput (Nominatim)
+  const handleLocationChange = (value: string, coordinates?: { lat: number; lng: number }) => {
+    updateFormData({
+      location_text: value,
+      latitude: coordinates?.lat ?? null,
+      longitude: coordinates?.lng ?? null,
+    });
   };
 
   // Render template questions if template data is available
@@ -1058,47 +1040,11 @@ export default function TaskDetails({
             </span>
             Missä tehtävä suoritetaan? *
           </Label>
-          <LoadScriptNext
-            googleMapsApiKey={googleMapsApiKey}
-            libraries={libraries}
-            loadingElement={
-              <div className="text-center p-4 text-sm text-gray-500 bg-gray-50 rounded-lg">
-                Ladataan karttapalvelua...
-              </div>
-            }
-          >
-            <Autocomplete
-              onLoad={onAutocompleteLoad}
-              onPlaceChanged={onPlaceChanged}
-              options={{
-                componentRestrictions: { country: 'fi' }, // Restrict to Finland
-                fields: [
-                  'address_components',
-                  'geometry',
-                  'name',
-                  'formatted_address',
-                ],
-              }}
-            >
-              <Input
-                id="addressInput"
-                type="text"
-                placeholder="Kirjoita osoite tai paikka (esim. Mannerheimintie 1, Helsinki)"
-                defaultValue={formData.location_text}
-                onChange={(e) => {
-                  if (!autocomplete?.getPlace()) {
-                    updateFormData({
-                      location_text: e.target.value,
-                      latitude: null,
-                      longitude: null,
-                    });
-                  }
-                }}
-                required
-                className="w-full border-gray-300 focus:border-green-400 focus:ring-green-400 rounded-lg text-gray-700 placeholder:text-gray-400"
-              />
-            </Autocomplete>
-          </LoadScriptNext>
+          <PlacesInput
+            value={formData.location_text || ''}
+            onChange={handleLocationChange}
+            placeholder="Kirjoita osoite tai paikka (esim. Mannerheimintie 1, Helsinki)"
+          />
           {formData.latitude && formData.longitude && (
             <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded-lg">
               <p className="text-xs text-green-700 flex items-center">

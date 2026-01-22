@@ -3,7 +3,7 @@
 
 import { categoryIconMap } from "@/constants/categories-with-icons"
 import { createClient } from '@/lib/supabase/client'
-import { Autocomplete, LoadScriptNext } from "@react-google-maps/api"
+import PlacesInput from "@/components/ui/places-input"
 import { Briefcase, Check, ChevronLeft, ChevronRight, Clock, Euro, FileText, MapPin, Upload, User } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useRef, useState, type ChangeEvent } from "react"
@@ -23,8 +23,7 @@ const isValidNextImageSrc = (src: string | null | undefined): src is string => {
 
 const supabase = createClient()
 
-const libraries: ("places")[] = ["places"]
-const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""
+// Address autocomplete now uses Nominatim (OpenStreetMap) via PlacesInput component
 
 // Form steps
 const STEPS = [
@@ -151,7 +150,6 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
   }, [formData.profilePicturePreview, formData.portfolioPreviews]);
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
 
   const handleAvailabilityChange = (newAvailability: AvailabilitySlot[]) => {
     setFormData(prev => ({ ...prev, availability: newAvailability }))
@@ -271,54 +269,20 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
     }));
   };
 
-  const onAutocompleteLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
-    console.log("Autocomplete loaded:", autocompleteInstance);
-    setAutocomplete(autocompleteInstance);
-  };
-
-  const onPlaceChanged = () => {
-    if (autocomplete !== null) {
-      const place = autocomplete.getPlace();
-      console.log("Place changed:", place);
-
-      // Check if place has geometry (coordinates)
-      if (!place.geometry) {
-        alert("Valitse osoite ehdotuksista dropdown-valikosta. Jos osoitettasi ei löydy, yritä yleisempää osoitetta (esim. vain kaupunki).");
-        return;
-      }
-
-      const formattedAddress = place.formatted_address || "";
-      const lat = place.geometry?.location?.lat() ?? null;
-      const lng = place.geometry?.location?.lng() ?? null;
-      let city = '';
-      let zipcode = '';
-
-      // Try to extract city and zipcode, but don't require them
-      place.address_components?.forEach(component => {
-        if (component.types.includes('locality') || component.types.includes('administrative_area_level_3')) {
-          city = component.long_name;
-        }
-        if (component.types.includes('postal_code')) {
-          zipcode = component.long_name;
-        }
-      });
-
-      // Provide fallback validation
-      if (!lat || !lng) {
-        alert("Koordinaatteja ei voitu määrittää tälle osoitteelle. Yritä tarkempaa osoitetta.");
-        return;
-      }
-
+  // Handle address selection from PlacesInput (Nominatim)
+  const handlePlacesInputChange = (value: string, coordinates?: { lat: number; lng: number }) => {
+    if (coordinates) {
+      // Address selected with coordinates
       handleAddressSelected({
-        address: formattedAddress,
-        lat: lat,
-        lng: lng,
-        city: city || "Ei määritetty", // Provide fallback
-        zipcode: zipcode || "Ei määritetty", // Provide fallback
+        address: value,
+        lat: coordinates.lat,
+        lng: coordinates.lng,
+        city: "Ei määritetty", // Nominatim doesn't parse these separately
+        zipcode: "Ei määritetty",
       });
-
     } else {
-      console.log('Autocomplete is not loaded yet!');
+      // Just text input, no coordinates yet
+      setFormData(prev => ({ ...prev, address: value }));
     }
   };
 
@@ -598,37 +562,16 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
       case 2:
         return (
           <div className="space-y-4">
-            <LoadScriptNext
-              googleMapsApiKey={googleMapsApiKey}
-              libraries={libraries}
-              loadingElement={<div className="text-center p-2">Ladataan karttapalvelua...</div>}
-            >
-              <div>
-                <label htmlFor="addressInput" className="block text-sm font-medium text-gray-700 mb-1">
-                  Syötä osoitteesi *
-                </label>
-                <Autocomplete
-                  onLoad={onAutocompleteLoad}
-                  onPlaceChanged={onPlaceChanged}
-                  options={{
-                    componentRestrictions: { country: "fi" },
-                    fields: ["address_components", "geometry", "formatted_address"],
-                  }}
-                >
-                  <input
-                    id="addressInput"
-                    type="text"
-                    placeholder="Esim. Mannerheimintie 1, Helsinki"
-                    defaultValue={formData.address}
-                    onChange={(e) => {
-                      setFormData(prev => ({ ...prev, address: e.target.value }));
-                    }}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
-                  />
-                </Autocomplete>
-              </div>
-            </LoadScriptNext>
+            <div>
+              <label htmlFor="addressInput" className="block text-sm font-medium text-gray-700 mb-1">
+                Syötä osoitteesi *
+              </label>
+              <PlacesInput
+                value={formData.address}
+                onChange={handlePlacesInputChange}
+                placeholder="Esim. Mannerheimintie 1, Helsinki"
+              />
+            </div>
 
             {formData.address && (
               <div className="mt-2 p-3 text-sm bg-gray-100 rounded-md border border-gray-200">

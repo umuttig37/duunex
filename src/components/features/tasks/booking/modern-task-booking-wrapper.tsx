@@ -12,10 +12,13 @@ interface TaskFormData {
   location_text: string;
   latitude?: number | null;
   longitude?: number | null;
+  // @deprecated - No longer used for task creation. Service radius is configured by taskers in their profile.
+  service_radius_km?: number | null;
   budget: number | null;
   scheduled_date: Date | null;
   scheduled_time_slot: 'morning' | 'afternoon' | 'evening' | 'flexible' | null;
   image_urls: string[];
+  image_files?: File[]; // Store actual File objects for upload later
   dynamic_answers: Record<string, any>;
 }
 
@@ -206,6 +209,7 @@ export default function ModernTaskBookingWrapper() {
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       
       if (userError || !user) {
+        setIsSubmitting(false);
         handleAuthRequired();
         return;
       }
@@ -278,26 +282,36 @@ export default function ModernTaskBookingWrapper() {
         throw new Error('Tehtävän luonnissa tapahtui virhe');
       }
 
-      // Handle image uploads if any
-      if (data.formData.image_urls.length > 0) {
+      // Handle image uploads if any File objects
+      const imageFiles = data.formData.image_files || [];
+      if (imageFiles.length > 0) {
         console.log('Uploading images to Supabase Storage...');
         
         try {
           const uploadedUrls: string[] = [];
           
-          for (const imageUrl of data.formData.image_urls) {
-            // Check if this is a blob URL (File object) that needs to be uploaded
-            if (imageUrl.startsWith('blob:')) {
-              // This should not happen in the current implementation since we're using URLs
-              // but let's handle it for completeness
-              console.warn('Blob URL detected, skipping:', imageUrl);
-              continue;
+          for (const file of imageFiles) {
+            // Generate unique filename
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
+            const filePath = fileName;
+
+            // Upload to Supabase Storage
+            const { error: uploadError } = await supabase.storage
+              .from('task-images')
+              .upload(filePath, file);
+
+            if (uploadError) {
+              console.error('Upload error:', uploadError);
+              throw new Error(`Kuvan ${file.name} lataus epäonnistui`);
             }
-            
-            // If it's already a valid Supabase URL, add it directly
-            if (imageUrl.includes('supabase') || imageUrl.startsWith('http')) {
-              uploadedUrls.push(imageUrl);
-            }
+
+            // Get public URL
+            const { data: { publicUrl } } = supabase.storage
+              .from('task-images')
+              .getPublicUrl(filePath);
+
+            uploadedUrls.push(publicUrl);
           }
           
           // Insert task attachments into database
@@ -378,7 +392,7 @@ export default function ModernTaskBookingWrapper() {
           category: data.category.slug,
           lat: data.formData.latitude?.toString() || '',
           lng: data.formData.longitude?.toString() || '',
-          radius: data.formData.service_radius_km?.toString() || '5'
+          radius: '20'
         }).toString();
         
         router.push(`/dashboard/taskers/nearby?${queryParams}`);

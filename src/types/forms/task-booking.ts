@@ -20,6 +20,7 @@ export interface NewTaskBookingFormData {
   tasker: TaskerProfile | null;
   postingType: 'open' | 'direct';
   budget?: number | null;
+  // @deprecated - No longer used for task creation. Service radius is configured by taskers in their profile.
   service_radius_km?: number;
   additionalDetails: {
     items?: string;

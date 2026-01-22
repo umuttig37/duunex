@@ -102,11 +102,11 @@ export default function DashboardClientContent({
           .from('tasker_applications')
           .select('status, submitted_at, review_notes')
           .eq('profile_id', user.id)
-          .single();
+          .maybeSingle();
 
         if (error) {
           console.error('Error fetching tasker application:', error);
-        } else {
+        } else if (data) {
           setTaskerApplication(data);
         }
       };
@@ -145,18 +145,20 @@ export default function DashboardClientContent({
   return (
     <>
       <header className="mb-6 sm:mb-8">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
-          {getHeaderText()}
-        </h1>
-        <p className="text-gray-600 mt-1 text-sm sm:text-base">
-          Tervetuloa takaisin, {user.first_name || 'Käyttäjä'}!
-        </p>
+        <div className="bg-emerald-50 rounded-2xl p-6 sm:p-8 border border-emerald-100/50 shadow-sm">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-emerald-600 h-12 ">
+            {getHeaderText()}
+          </h1>
+          <p className="text-slate-600 mt-2 text-base sm:text-lg">
+            Tervetuloa takaisin, <span className="font-semibold text-slate-800">{user.first_name || 'Käyttäjä'}</span>!
+          </p>
+        </div>
       </header>
 
       {notification && (
-        <Alert className="mb-6 border-blue-200 bg-blue-50">
-          <Clock className="h-4 w-4 text-blue-600" />
-          <AlertDescription className="text-blue-800">
+        <Alert className="mb-6 border-indigo-200 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl shadow-sm">
+          <Clock className="h-5 w-5 text-indigo-600" />
+          <AlertDescription className="text-slate-700 font-medium">
             {notification.message}
           </AlertDescription>
         </Alert>
@@ -164,41 +166,41 @@ export default function DashboardClientContent({
 
       {/* Unverified Tasker Warning */}
       {user.role === 'tasker' && !user.is_verified && taskerApplication && (
-        <Alert className="mb-6 border-amber-200 bg-amber-50">
+        <Alert className="mb-6 border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl shadow-sm">
           <AlertTriangle className="h-5 w-5 text-amber-600" />
           <div>
-            <div className="font-semibold text-amber-800 mb-2">
+            <div className="font-bold text-amber-900 mb-2 text-lg">
               {taskerApplication.status === 'pending' && 'Hakemuksesi käsittelyssä'}
               {taskerApplication.status === 'under_review' && 'Tarkistamme hakemustasi'}
               {taskerApplication.status === 'rejected' && 'Hakemus hylätty'}
             </div>
-            <AlertDescription className="text-amber-700">
+            <AlertDescription className="text-slate-700">
               {taskerApplication.status === 'pending' && (
                 <>
                   Tekijähakemuksesi on käsittelyssä. Tarkistamme hakemuksesi 1-2 arkipäivässä.
                   <br />
-                  <span className="text-sm">Et voi vielä hakea tehtäviä tai vastaanottaa tehtävätarjouksia.</span>
+                  <span className="text-sm text-slate-600 mt-1 inline-block">Et voi vielä hakea tehtäviä tai vastaanottaa tehtävätarjouksia.</span>
                 </>
               )}
               {taskerApplication.status === 'under_review' && (
                 <>
                   Tarkistamme hakemustasi ja otamme yhteyttä pian.
                   <br />
-                  <span className="text-sm">Et voi vielä hakea tehtäviä tai vastaanottaa tehtävätarjouksia.</span>
+                  <span className="text-sm text-slate-600 mt-1 inline-block">Et voi vielä hakea tehtäviä tai vastaanottaa tehtävätarjouksia.</span>
                 </>
               )}
               {taskerApplication.status === 'rejected' && taskerApplication.review_notes && (
                 <>
                   Valitettavasti hakemuksesi hylättiin. Syy: {taskerApplication.review_notes}
                   <br />
-                  <span className="text-sm">Voit ottaa yhteyttä tukeen saadaksesi lisätietoja.</span>
+                  <span className="text-sm text-slate-600 mt-1 inline-block">Voit ottaa yhteyttä tukeen saadaksesi lisätietoja.</span>
                 </>
               )}
               {taskerApplication.status === 'rejected' && !taskerApplication.review_notes && (
                 <>
                   Valitettavasti hakemuksesi hylättiin.
                   <br />
-                  <span className="text-sm">Ota yhteyttä tukeen saadaksesi lisätietoja.</span>
+                  <span className="text-sm text-slate-600 mt-1 inline-block">Ota yhteyttä tukeen saadaksesi lisätietoja.</span>
                 </>
               )}
             </AlertDescription>
@@ -208,16 +210,16 @@ export default function DashboardClientContent({
 
       {/* Warning for verified taskers who might be temporarily restricted */}
       {user.role === 'tasker' && user.is_verified && taskerApplication?.status === 'suspended' && (
-        <Alert className="mb-6 border-red-200 bg-red-50">
+        <Alert className="mb-6 border-red-200 bg-gradient-to-r from-red-50 to-rose-50 rounded-xl shadow-sm">
           <Shield className="h-5 w-5 text-red-600" />
           <div>
-            <div className="font-semibold text-red-800 mb-2">Tilisi on tilapäisesti rajoitettu</div>
-            <AlertDescription className="text-red-700">
+            <div className="font-bold text-red-900 mb-2 text-lg">Tilisi on tilapäisesti rajoitettu</div>
+            <AlertDescription className="text-slate-700">
               Tekijätilisi on tilapäisesti rajoitettu. Ota yhteyttä asiakaspalveluun saadaksesi lisätietoja.
               {taskerApplication.review_notes && (
                 <>
                   <br />
-                  <span className="text-sm">Syy: {taskerApplication.review_notes}</span>
+                  <span className="text-sm text-slate-600 mt-1 inline-block">Syy: {taskerApplication.review_notes}</span>
                 </>
               )}
             </AlertDescription>
@@ -226,78 +228,105 @@ export default function DashboardClientContent({
       )}
 
       {user.role === 'tasker' && (
-        <div className="mb-4 sm:mb-6 border-b pb-3 sm:pb-4">
-          <div className="flex space-x-1 sm:space-x-2 overflow-x-auto scrollbar-hide">
-            <Button
-              variant={currentView === 'tyopoyta' ? 'default' : 'outline'}
-              onClick={() => handleTaskerViewChange('tyopoyta')}
-              className="flex items-center whitespace-nowrap text-xs sm:text-sm px-2 sm:px-4 py-1.5 sm:py-2 min-w-fit"
-            >
-              <Briefcase className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden xs:inline">Työpöytä</span>
-              <span className="xs:hidden">Työ</span>
-            </Button>
-            <Button
-              variant={currentView === 'kartta' ? 'default' : 'outline'}
-              onClick={() => handleTaskerViewChange('kartta')}
-              className="flex items-center whitespace-nowrap border-2 border-blue-300 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 hover:from-blue-100 hover:to-indigo-100 shadow-sm text-xs sm:text-sm px-2 sm:px-4 py-1.5 sm:py-2 min-w-fit"
-            >
-              <MapPin className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden xs:inline">Tehtäväkartta</span>
-              <span className="xs:hidden">Kartta</span>
-            </Button>
-            <Button
-              variant={currentView === 'active' ? 'default' : 'outline'}
-              onClick={() => handleTaskerViewChange('active')}
-              className="flex items-center whitespace-nowrap text-xs sm:text-sm px-2 sm:px-4 py-1.5 sm:py-2 min-w-fit"
-            >
-              <ListChecks className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden xs:inline">Aktiiviset Tehtävät</span>
-              <span className="xs:hidden">Aktv</span>
-            </Button>
-            <Button
-              variant={currentView === 'events' ? 'default' : 'outline'}
-              onClick={() => handleTaskerViewChange('events')}
-              className="flex items-center whitespace-nowrap text-xs sm:text-sm px-2 sm:px-4 py-1.5 sm:py-2 min-w-fit"
-            >
-              <Receipt className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden xs:inline">Tapahtumat</span>
-              <span className="xs:hidden">Tapahtumat</span>
-            </Button>
-            <Button
-              variant={currentView === 'history' ? 'default' : 'outline'}
-              onClick={() => handleTaskerViewChange('history')}
-              className="flex items-center whitespace-nowrap text-xs sm:text-sm px-2 sm:px-4 py-1.5 sm:py-2 min-w-fit"
-            >
-              <History className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden xs:inline">Työhistoria</span>
-              <span className="xs:hidden">Hist</span>
-            </Button>
+        <div className="mb-6 sm:mb-8">
+          <div className="bg-white rounded-xl p-2 shadow-sm border border-slate-200/50 overflow-x-auto scrollbar-hide">
+            <div className="flex space-x-2 min-w-fit">
+              <Button
+                variant={currentView === 'tyopoyta' ? 'default' : 'ghost'}
+                onClick={() => handleTaskerViewChange('tyopoyta')}
+                className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
+                  currentView === 'tyopoyta' 
+                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                }`}
+              >
+                <Briefcase className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                <span>Työpöytä</span>
+              </Button>
+              <Button
+                variant={currentView === 'kartta' ? 'default' : 'ghost'}
+                onClick={() => handleTaskerViewChange('kartta')}
+                className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
+                  currentView === 'kartta' 
+                    ? 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-md hover:from-indigo-600 hover:to-blue-600' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                }`}
+              >
+                <MapPin className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                <span>Tehtäväkartta</span>
+              </Button>
+              <Button
+                variant={currentView === 'active' ? 'default' : 'ghost'}
+                onClick={() => handleTaskerViewChange('active')}
+                className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
+                  currentView === 'active' 
+                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                }`}
+              >
+                <ListChecks className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="hidden sm:inline">Aktiiviset</span>
+                <span className="sm:hidden">Aktv</span>
+              </Button>
+              <Button
+                variant={currentView === 'events' ? 'default' : 'ghost'}
+                onClick={() => handleTaskerViewChange('events')}
+                className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
+                  currentView === 'events' 
+                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                }`}
+              >
+                <Receipt className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                <span>Tapahtumat</span>
+              </Button>
+              <Button
+                variant={currentView === 'history' ? 'default' : 'ghost'}
+                onClick={() => handleTaskerViewChange('history')}
+                className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
+                  currentView === 'history' 
+                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                }`}
+              >
+                <History className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="hidden sm:inline">Historia</span>
+                <span className="sm:hidden">Hist</span>
+              </Button>
+            </div>
           </div>
         </div>
       )}
 
       {user.role === 'user' && (
-        <div className="mb-4 sm:mb-6 border-b pb-3 sm:pb-4">
-          <div className="flex space-x-1 sm:space-x-2 overflow-x-auto scrollbar-hide">
-            <Button
-              variant={currentView === 'tasks' ? 'default' : 'outline'}
-              onClick={() => handleUserViewChange('tasks')}
-              className="flex items-center whitespace-nowrap text-xs sm:text-sm px-2 sm:px-4 py-1.5 sm:py-2 min-w-fit"
-            >
-              <ListChecks className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden xs:inline">Omat tehtävät</span>
-              <span className="xs:hidden">Tehtävät</span>
-            </Button>
-            <Button
-              variant={currentView === 'events' ? 'default' : 'outline'}
-              onClick={() => handleUserViewChange('events')}
-              className="flex items-center whitespace-nowrap text-xs sm:text-sm px-2 sm:px-4 py-1.5 sm:py-2 min-w-fit"
-            >
-              <Receipt className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden xs:inline">Tapahtumat</span>
-              <span className="xs:hidden">Tapahtumat</span>
-            </Button>
+        <div className="mb-6 sm:mb-8">
+          <div className="bg-white rounded-xl p-2 shadow-sm border border-slate-200/50 overflow-x-auto scrollbar-hide">
+            <div className="flex space-x-2 min-w-fit">
+              <Button
+                variant={currentView === 'tasks' ? 'default' : 'ghost'}
+                onClick={() => handleUserViewChange('tasks')}
+                className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
+                  currentView === 'tasks' 
+                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                }`}
+              >
+                <ListChecks className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                <span>Omat tehtävät</span>
+              </Button>
+              <Button
+                variant={currentView === 'events' ? 'default' : 'ghost'}
+                onClick={() => handleUserViewChange('events')}
+                className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
+                  currentView === 'events' 
+                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                }`}
+              >
+                <Receipt className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                <span>Tapahtumat</span>
+              </Button>
+            </div>
           </div>
         </div>
       )}

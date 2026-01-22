@@ -90,17 +90,20 @@ export default function TaskerNotifications({ taskerId, className }: TaskerNotif
             id,
             title,
             updated_at,
-            accepted_offer:task_offers!accepted_offer_id (
-              offered_price
+            task_offers!inner (
+              offered_price,
+              status
             )
           `)
           .eq('assigned_tasker_id', taskerId)
           .eq('status', 'assigned')
+          .eq('task_offers.status', 'accepted')
           .order('updated_at', { ascending: false });
 
         if (tasksAwaitingPayment && tasksAwaitingPayment.length > 0) {
           if (tasksAwaitingPayment.length === 1) {
             const task = tasksAwaitingPayment[0];
+            const acceptedOffer = Array.isArray(task.task_offers) ? task.task_offers[0] : task.task_offers;
             notifications.push({
               id: `payment-pending-${task.id}`,
               type: 'payment',
@@ -112,14 +115,15 @@ export default function TaskerNotifications({ taskerId, className }: TaskerNotif
               timestamp: task.updated_at,
               data: {
                 taskId: task.id,
-                amount: task.accepted_offer?.[0]?.offered_price
+                amount: acceptedOffer?.offered_price
               },
               dismissible: false
             });
           } else {
-            const totalAmount = tasksAwaitingPayment.reduce((sum, task) => 
-              sum + (task.accepted_offer?.[0]?.offered_price || 0), 0
-            );
+            const totalAmount = tasksAwaitingPayment.reduce((sum, task) => {
+              const acceptedOffer = Array.isArray(task.task_offers) ? task.task_offers[0] : task.task_offers;
+              return sum + (acceptedOffer?.offered_price || 0);
+            }, 0);
             notifications.push({
               id: 'payment-pending-multiple',
               type: 'payment',

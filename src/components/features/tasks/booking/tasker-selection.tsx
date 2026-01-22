@@ -184,7 +184,7 @@ export default function TaskerSelection({
                 avatar_url: taskerRpcResult.avatar_url,
                 bio: taskerRpcResult.bio,
                 role: 'tasker', // Default role for RPC results
-                is_verified: taskerRpcResult.is_verified || false,
+                is_verified: !!taskerRpcResult.verified_at, // Convert timestamp to boolean
                 hourly_rate:
                   taskerRpcResult.hourly_rate !== null
                     ? Number(taskerRpcResult.hourly_rate)
@@ -459,7 +459,15 @@ export default function TaskerSelection({
         <TaskerProfileDialog
           open={isProfileDialogOpen}
           onOpenChange={setIsProfileDialogOpen}
-          tasker={selectedProfileTasker}
+          tasker={{
+            ...selectedProfileTasker,
+            first_name: selectedProfileTasker.first_name || 'Käyttäjä',
+            last_name: selectedProfileTasker.last_name || undefined,
+            bio: selectedProfileTasker.bio || undefined,
+            avatar_url: selectedProfileTasker.avatar_url || undefined,
+            is_verified: selectedProfileTasker.is_verified ?? false,
+            created_at: selectedProfileTasker.created_at || new Date().toISOString(),
+          }}
           reviews={taskerReviews}
           loadingReviews={loadingReviews}
         />

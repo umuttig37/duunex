@@ -28,10 +28,13 @@ interface TaskFormData {
   location_text: string;
   latitude?: number | null;
   longitude?: number | null;
+  // @deprecated - No longer used for task creation. Service radius is configured by taskers in their profile.
+  service_radius_km?: number | null;
   budget: number | null;
   scheduled_date: Date | null;
   scheduled_time_slot: 'morning' | 'afternoon' | 'evening' | 'flexible' | null;
   image_urls: string[];
+  image_files?: File[]; // Store actual File objects for upload later
   dynamic_answers: Record<string, any>;
 }
 
@@ -164,6 +167,7 @@ export default function ModernTaskBookingFlow({
     scheduled_date: null,
     scheduled_time_slot: null,
     image_urls: [],
+    image_files: [],
     dynamic_answers: {},
     ...initialData,
   });
@@ -186,11 +190,14 @@ export default function ModernTaskBookingFlow({
       ? { id: selectedCategory.id, slug: selectedCategory.slug, name_fi: selectedCategory.name_fi }
       : null;
 
+    // Exclude image_files from formData since File objects can't be serialized
+    const { image_files, ...serializableFormData } = formData;
+
     const data = {
       selectedCategory: minimalCategory,
       selectedTemplate,
       publishingMode,
-      formData,
+      formData: serializableFormData,
       currentStep,
     };
     console.log('💾 Auto-saving data:', data); // Debug log
@@ -387,7 +394,7 @@ export default function ModernTaskBookingFlow({
     } finally {
       setIsLoading(false);
     }
-  }, [selectedCategory, formData, publishingMode, selectedTemplate, handleStepValidation, onComplete, isAuthenticated, onAuthRequired]);
+  }, [selectedCategory, formData, publishingMode, selectedTemplate, handleStepValidation, onComplete, isAuthenticated, onAuthRequired, isTasker]);
 
   const handleCancel = useCallback(() => {
     // Clear saved data
@@ -408,7 +415,7 @@ export default function ModernTaskBookingFlow({
       budget: formData.budget || undefined,
       date: formData.scheduled_date || undefined,
       timeSlot: formData.scheduled_time_slot || undefined,
-      imageCount: formData.image_urls?.length || 0,
+      imageCount: formData.image_files?.length || 0,
     };
   }, [selectedCategory, formData]);
 
@@ -440,9 +447,9 @@ export default function ModernTaskBookingFlow({
             <div className="flex items-center ml-2">
               <button
                 onClick={handleCancel}
-                className="btn-ghost btn-small flex items-center gap-2"
+                className="px-4 py-2 flex items-center gap-2 font-semibold text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors border border-red-200 hover:border-red-300"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
                 <span className="hidden sm:inline">Peruuta</span>
               </button>
             </div>
@@ -526,12 +533,13 @@ export default function ModernTaskBookingFlow({
               setSelectedCategory(category);
               setValidationErrors([]);
 
-              // Force immediate save to localStorage
+              // Force immediate save to localStorage (exclude image_files)
+              const { image_files, ...serializableFormData } = formData;
               const data = {
                 selectedCategory: { id: category.id, slug: category.slug, name_fi: category.name_fi },
                 selectedTemplate,
                 publishingMode,
-                formData,
+                formData: serializableFormData,
                 currentStep,
               };
               localStorage.setItem('modern-task-booking-data', JSON.stringify(data));
@@ -549,14 +557,15 @@ export default function ModernTaskBookingFlow({
 
               setFormData(updatedFormData);
 
-              // Force immediate save to localStorage with the updated form data
+              // Force immediate save to localStorage with the updated form data (exclude image_files)
+              const { image_files, ...serializableFormData } = updatedFormData;
               const data = {
                 selectedCategory: selectedCategory
                   ? { id: selectedCategory.id, slug: selectedCategory.slug, name_fi: selectedCategory.name_fi }
                   : null,
                 selectedTemplate: template,
                 publishingMode,
-                formData: updatedFormData,
+                formData: serializableFormData,
                 currentStep: 'details' as const,
               };
               localStorage.setItem('modern-task-booking-data', JSON.stringify(data));

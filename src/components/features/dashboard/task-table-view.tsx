@@ -64,6 +64,12 @@ const getStatusConfig = (status: string) => {
       color: 'text-blue-600', 
       bgColor: 'bg-blue-50' 
     },
+    pending_review: {
+      text: 'Odottaa tarkistusta',
+      icon: Clock,
+      color: 'text-yellow-600',
+      bgColor: 'bg-yellow-50',
+    },
     pending_approval: {
       text: 'Odottaa hyväksyntää',
       icon: Clock,

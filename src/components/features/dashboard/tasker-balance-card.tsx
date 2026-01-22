@@ -40,9 +40,9 @@ export default function TaskerBalanceCard({ userId }: TaskerBalanceCardProps) {
         .from('tasker_balance')
         .select('*')
         .eq('tasker_id', userId)
-        .single();
+        .maybeSingle();
 
-      if (balanceError && balanceError.code !== 'PGRST116') {
+      if (balanceError) {
         console.error('Error fetching balance:', balanceError);
       } else if (balanceData) {
         setBalance(balanceData);
@@ -91,9 +91,9 @@ export default function TaskerBalanceCard({ userId }: TaskerBalanceCardProps) {
         .from('bank_account_info')
         .select('id')
         .eq('tasker_id', userId)
-        .single();
+        .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') {
+      if (error) {
         console.error('Error fetching bank account status:', error);
       } else if (data) {
         setHasVerifiedBankAccount(true); // Bank account exists = can withdraw

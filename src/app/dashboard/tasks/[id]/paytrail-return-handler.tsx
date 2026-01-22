@@ -48,7 +48,7 @@ export default function PaytrailReturnHandler({
             `
             *,
             categories:category_id(name_fi, name),
-            publisher:profiles!tasks_user_id_profiles_fkey(first_name, last_name, avatar_url),
+            publisher:profiles!tasks_user_id_fkey(first_name, last_name, avatar_url),
             task_attachments(id, file_url, file_type),
             assignedTasker:profiles!tasks_assigned_tasker_id_fkey(id, first_name, last_name, avatar_url, bio)
           `

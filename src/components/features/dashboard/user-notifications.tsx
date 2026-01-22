@@ -101,8 +101,9 @@ export default function UserNotifications({ userId, className }: UserNotificatio
             id,
             title,
             updated_at,
-            accepted_offer:task_offers!accepted_offer_id (
+            task_offers!inner (
               offered_price,
+              status,
               tasker:profiles!tasker_id (
                 first_name,
                 last_name
@@ -111,22 +112,24 @@ export default function UserNotifications({ userId, className }: UserNotificatio
           `)
           .eq('user_id', userId)
           .eq('status', 'assigned')
+          .eq('task_offers.status', 'accepted')
           .order('updated_at', { ascending: false });
 
         if (tasksNeedingPayment && tasksNeedingPayment.length > 0) {
           tasksNeedingPayment.forEach(task => {
+            const acceptedOffer = Array.isArray(task.task_offers) ? task.task_offers[0] : task.task_offers;
             notifications.push({
               id: `payment-needed-${task.id}`,
               type: 'payment',
               priority: 'high',
               title: 'Maksu vaaditaan',
-              message: `Hyväksyit ${task.accepted_offer?.[0]?.tasker?.first_name || 'tekijän'} tarjouksen. Maksa aloittaaksesi työn.`,
+              message: `Hyväksyit ${acceptedOffer?.tasker?.first_name || 'tekijän'} tarjouksen. Maksa aloittaaksesi työn.`,
               actionText: 'Maksa nyt',
               actionUrl: `/dashboard/tasks/${task.id}`,
               timestamp: task.updated_at,
               data: {
                 taskId: task.id,
-                amount: task.accepted_offer?.[0]?.offered_price
+                amount: acceptedOffer?.offered_price
               },
               dismissible: false
             });
@@ -144,8 +147,9 @@ export default function UserNotifications({ userId, className }: UserNotificatio
               first_name,
               last_name
             ),
-            accepted_offer:task_offers!accepted_offer_id (
-              offered_price
+            task_offers!left (
+              offered_price,
+              status
             )
           `)
           .eq('user_id', userId)
@@ -160,6 +164,9 @@ export default function UserNotifications({ userId, className }: UserNotificatio
           recentlyPaidTasks
             .filter(task => new Date(task.updated_at) >= cutoff)
             .forEach(task => {
+              const acceptedOffer = Array.isArray(task.task_offers) 
+                ? task.task_offers.find((offer: any) => offer.status === 'accepted')
+                : null;
               notifications.push({
                 id: `payment-received-${task.id}`,
                 type: 'payment',
@@ -171,7 +178,7 @@ export default function UserNotifications({ userId, className }: UserNotificatio
                 timestamp: task.updated_at,
                 data: {
                   taskId: task.id,
-                  amount: task.accepted_offer?.[0]?.offered_price
+                  amount: acceptedOffer?.offered_price
                 },
                 dismissible: true
               });
