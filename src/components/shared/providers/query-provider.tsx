@@ -32,12 +32,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // If user exists, fetch their profile including role
       if (authUser) {
-        const { data: profileData, error: profileError } = await supabase
+        let { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', authUser.id)
           .maybeSingle();
-        
+
+        // If profile missing (e.g. OAuth user, trigger didn't run), create it from user_metadata
+        if (profileError || !profileData) {
+          const meta = authUser.user_metadata || {};
+          const fullName = (meta.full_name ?? meta.name ?? '') as string;
+          const firstName = (meta.given_name ?? (fullName ? fullName.split(' ')[0] : '') ?? '') as string;
+          const lastName = (meta.family_name ?? (fullName ? fullName.split(' ').slice(1).join(' ') : '') ?? '') as string;
+          const { error: upsertErr } = await supabase.from('profiles').upsert(
+            {
+              id: authUser.id,
+              email: authUser.email ?? (meta.email as string | undefined) ?? null,
+              first_name: firstName || null,
+              last_name: lastName || null,
+              avatar_url: (meta.avatar_url ?? meta.picture) as string | undefined ?? null,
+              role: 'user',
+            },
+            { onConflict: 'id' }
+          );
+          if (!upsertErr) {
+            const res = await supabase.from('profiles').select('*').eq('id', authUser.id).maybeSingle();
+            profileData = res.data;
+            profileError = res.error;
+          }
+        }
+
         if (!profileError && profileData) {
           setProfile(profileData);
         } else {
