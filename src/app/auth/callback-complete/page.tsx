@@ -35,21 +35,44 @@ export default function AuthCallbackClientPage() {
       }
 
       // Session exists, now fetch profile to check role
-      const { data: profile, error: profileError } = await supabase
+      let profile: { role?: string } | null = null;
+      let profileError: unknown = null;
+      let result = await supabase
         .from('profiles')
         .select('role')
         .eq('id', session.user.id)
-        .single();
+        .maybeSingle();
+      profile = result.data;
+      profileError = result.error;
 
-      if (profileError) {
-        console.error("AuthCallbackPage: Error fetching profile for role check", profileError);
-        // Decide on fallback behavior if profile fetch fails but session exists
-        if (!anErrorOccurred) {
+      // If profile missing (e.g. OAuth user), try to create it from user_metadata
+      if (profileError || !profile) {
+        const meta = session.user.user_metadata || {};
+        const fullName = (meta.full_name ?? meta.name ?? '') as string;
+        const firstName = (meta.given_name ?? (fullName ? fullName.split(' ')[0] : '') ?? '') as string;
+        const lastName = (meta.family_name ?? (fullName ? fullName.split(' ').slice(1).join(' ') : '') ?? '') as string;
+        const { error: upsertErr } = await supabase.from('profiles').upsert(
+          {
+            id: session.user.id,
+            email: session.user.email ?? (meta.email as string | undefined) ?? null,
+            first_name: firstName || null,
+            last_name: lastName || null,
+            avatar_url: (meta.avatar_url ?? meta.picture) as string | undefined ?? null,
+            role: 'user',
+          },
+          { onConflict: 'id' }
+        );
+        if (!upsertErr) {
+          profile = { role: 'user' };
+        } else {
+          console.error("AuthCallbackPage: Error fetching/creating profile", profileError, upsertErr);
+          if (!anErrorOccurred) {
             anErrorOccurred = true;
             setError('Profiilin lataus epäonnistui. Yritä kirjautua uudelleen.');
             setTimeout(() => router.replace('/login'), 3000);
+          }
+          return;
         }
-        return;
       }
 
       if (profile?.role === 'admin') {

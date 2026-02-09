@@ -33,11 +33,27 @@ export async function GET(request: NextRequest) {
       }
     );
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    
-    if (!error) {
+    const { data: sessionData, error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (!error && sessionData?.session) {
+      // Ensure profile exists for OAuth users (trigger may not run or RLS can block it)
+      const user = sessionData.session.user;
+      const meta = user.user_metadata || {};
+      const fullName = (meta.full_name ?? meta.name ?? '') as string;
+      const firstName = (meta.given_name ?? (fullName ? fullName.split(' ')[0] : '') ?? '') as string;
+      const lastName = (meta.family_name ?? (fullName ? fullName.split(' ').slice(1).join(' ') : '') ?? '') as string;
+      await supabase.from('profiles').upsert(
+        {
+          id: user.id,
+          email: user.email ?? (meta.email as string | undefined) ?? null,
+          first_name: firstName || null,
+          last_name: lastName || null,
+          avatar_url: (meta.avatar_url ?? meta.picture) as string | undefined ?? null,
+          role: 'user',
+        },
+        { onConflict: 'id' }
+      );
       // Successful exchange, Supabase server has set HttpOnly session cookies.
-      // Redirect to the client-side page to handle localStorage redirect.
       return NextResponse.redirect(`${requestUrl.origin}/auth/callback-complete`);
     }
     console.error('Auth callback error exchanging code:', error);
