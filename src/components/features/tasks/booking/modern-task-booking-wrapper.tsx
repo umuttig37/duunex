@@ -52,7 +52,7 @@ export default function ModernTaskBookingWrapper() {
       const catId = searchParams.get('categoryId');
       const catSlug = searchParams.get('category');
       const templateId = searchParams.get('template');
-      
+
       if (catId || catSlug) {
         const selected = categoriesWithIcons.find(
           (c) => c.id === catId || c.slug === catSlug
@@ -94,12 +94,12 @@ export default function ModernTaskBookingWrapper() {
             if (!error && template) {
               const raw = localStorage.getItem('modern-task-booking-data');
               const data = raw ? JSON.parse(raw) : {};
-              
+
               // Find matching category from our constants
               const categorySlug = template.categories?.slug;
-              const selectedCategory = categorySlug ? 
+              const selectedCategory = categorySlug ?
                 categoriesWithIcons.find(c => c.slug === categorySlug) : null;
-              
+
               const next = {
                 ...data,
                 selectedTemplate: {
@@ -109,10 +109,10 @@ export default function ModernTaskBookingWrapper() {
                   questions: Array.isArray(template.questions) ? template.questions : [],
                 },
                 ...(selectedCategory && {
-                  selectedCategory: { 
-                    id: selectedCategory.id, 
-                    slug: selectedCategory.slug, 
-                    name_fi: selectedCategory.name_fi 
+                  selectedCategory: {
+                    id: selectedCategory.id,
+                    slug: selectedCategory.slug,
+                    name_fi: selectedCategory.name_fi
                   }
                 }),
                 currentStep: selectedCategory ? 'details' : 'category',
@@ -133,7 +133,7 @@ export default function ModernTaskBookingWrapper() {
     const checkAuth = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setIsAuthenticated(!!user);
-      
+
       if (user) {
         // Fetch role from profiles table instead of user_metadata
         const { data: profile } = await supabase
@@ -141,13 +141,13 @@ export default function ModernTaskBookingWrapper() {
           .select('role')
           .eq('id', user.id)
           .single();
-        
+
         const role = profile?.role;
         setUserRole((role === 'tasker' || role === 'admin' || role === 'user') ? (role as any) : 'user');
       } else {
         setUserRole(null);
       }
-      
+
       setIsAuthChecked(true);
     };
 
@@ -156,7 +156,7 @@ export default function ModernTaskBookingWrapper() {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setIsAuthenticated(!!session?.user);
-      
+
       if (session?.user) {
         // Fetch role from profiles table instead of user_metadata
         const { data: profile } = await supabase
@@ -164,13 +164,13 @@ export default function ModernTaskBookingWrapper() {
           .select('role')
           .eq('id', session.user.id)
           .single();
-        
+
         const role = profile?.role;
         setUserRole((role === 'tasker' || role === 'admin' || role === 'user') ? (role as any) : 'user');
       } else {
         setUserRole(null);
       }
-      
+
       // If user just logged in and we have saved booking data, they can continue
       if (event === 'SIGNED_IN' && localStorage.getItem('modern-task-booking-data')) {
         // User will automatically continue with their saved progress
@@ -184,7 +184,7 @@ export default function ModernTaskBookingWrapper() {
     // Save current URL for return after auth
     const currentUrl = window.location.pathname + window.location.search;
     localStorage.setItem('postLoginRedirect', currentUrl);
-    
+
     // Redirect to login with return parameter
     router.push(`/login?redirect=${encodeURIComponent(currentUrl)}`);
   };
@@ -203,11 +203,11 @@ export default function ModernTaskBookingWrapper() {
     }
 
     setIsSubmitting(true);
-    
+
     try {
       // Get current user (we know they're authenticated)
       const { data: { user }, error: userError } = await supabase.auth.getUser();
-      
+
       if (userError || !user) {
         setIsSubmitting(false);
         handleAuthRequired();
@@ -224,27 +224,25 @@ export default function ModernTaskBookingWrapper() {
 
       // Resolve real category UUID from slug/name (constants use slug as id)
       let categoryId: string | null = null;
-      try {
-        const { data: catBySlug } = await supabase
+      const { data: catBySlug } = await supabase
+        .from('categories')
+        .select('id, slug, name_fi')
+        .eq('slug', data.category.slug)
+        .maybeSingle();
+      if (catBySlug?.id) categoryId = catBySlug.id as unknown as string;
+      if (!categoryId) {
+        const { data: catByName } = await supabase
           .from('categories')
           .select('id, slug, name_fi')
-          .eq('slug', data.category.slug)
-          .single();
-        if (catBySlug?.id) categoryId = catBySlug.id as unknown as string;
-      } catch (e) {
-        // ignore, try by name below
+          .eq('name_fi', data.category.name_fi)
+          .maybeSingle();
+        if (catByName?.id) categoryId = catByName.id as unknown as string;
       }
       if (!categoryId) {
-        try {
-          const { data: catByName } = await supabase
-            .from('categories')
-            .select('id, slug, name_fi')
-            .eq('name_fi', data.category.name_fi)
-            .single();
-          if (catByName?.id) categoryId = catByName.id as unknown as string;
-        } catch (e) {
-          // leave null
-        }
+        console.error('Category not found in database:', data.category.slug, data.category.name_fi);
+        throw new Error(
+          'Valittua kategoriaa ei löydy tietokannasta. Varmista että kategoriat on lisätty (seed) tai ota yhteyttä tukeen.'
+        );
       }
 
       // Prepare task data for database (match existing schema)
@@ -286,10 +284,10 @@ export default function ModernTaskBookingWrapper() {
       const imageFiles = data.formData.image_files || [];
       if (imageFiles.length > 0) {
         console.log('Uploading images to Supabase Storage...');
-        
+
         try {
           const uploadedUrls: string[] = [];
-          
+
           for (const file of imageFiles) {
             // Generate unique filename
             const fileExt = file.name.split('.').pop();
@@ -313,7 +311,7 @@ export default function ModernTaskBookingWrapper() {
 
             uploadedUrls.push(publicUrl);
           }
-          
+
           // Insert task attachments into database
           if (uploadedUrls.length > 0) {
             const attachments = uploadedUrls.map(url => ({
@@ -321,16 +319,16 @@ export default function ModernTaskBookingWrapper() {
               file_url: url,
               file_type: 'image',
             }));
-            
+
             const { error: attachmentError } = await supabase
               .from('task_attachments')
               .insert(attachments);
-              
+
             if (attachmentError) {
               console.error('Error saving task attachments:', attachmentError);
               throw new Error('Kuvien tallentaminen epäonnistui');
             }
-            
+
             console.log(`Successfully saved ${attachments.length} task attachments`);
           }
         } catch (error) {
@@ -394,7 +392,7 @@ export default function ModernTaskBookingWrapper() {
           lng: data.formData.longitude?.toString() || '',
           radius: '20'
         }).toString();
-        
+
         router.push(`/dashboard/taskers/nearby?${queryParams}`);
       }
 

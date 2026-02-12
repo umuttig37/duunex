@@ -28,7 +28,7 @@ async function getCategoryTemplates(categorySlug: string, limit: number) {
       .from('categories')
       .select('id, name_fi, slug')
       .eq('slug', normalizedSlug)
-      .single();
+      .maybeSingle();
 
     if (categoryError || !category) {
       console.log(`❌ Category not found for slug: ${normalizedSlug}`, categoryError);
@@ -310,7 +310,7 @@ export async function GET(request: NextRequest) {
       const nameB = b.name.toLowerCase();
       const exactMatchA = nameA.includes(query) ? 1 : 0;
       const exactMatchB = nameB.includes(query) ? 1 : 0;
-      
+
       return exactMatchB - exactMatchA;
     });
 

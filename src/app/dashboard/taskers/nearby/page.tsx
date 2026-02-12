@@ -3,6 +3,7 @@
 import type { CategoryRow } from '@/components/features/tasks/booking/category-selection';
 import type { TaskerDisplayProfile } from '@/components/features/tasks/booking/tasker-selection';
 import TaskerSelection from '@/components/features/tasks/booking/tasker-selection';
+import { categoriesWithIcons } from '@/constants/categories-with-icons';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -65,16 +66,30 @@ export default function NearbyTaskersPage() {
           throw new Error('Tehtävän tietojen haku epäonnistui');
         }
 
-        if (task && task.categories) {
-          setTaskDetails({
-            id: task.id,
-            title: task.title,
-            description: task.description,
-            category: task.categories as CategoryRow,
-            latitude: parseFloat(lat || '0'),
-            longitude: parseFloat(lng || '0'),
-            budget: task.budget
-          });
+        if (task) {
+          // Use category from join, or fallback from URL slug when DB category is missing (e.g. prod seed not run)
+          let category: CategoryRow | null = (task.categories as CategoryRow) ?? null;
+          if (!category && categorySlug) {
+            const fromConstants = categoriesWithIcons.find(c => c.slug === categorySlug);
+            if (fromConstants) {
+              category = {
+                id: fromConstants.id,
+                name_fi: fromConstants.name_fi,
+                slug: fromConstants.slug,
+              } as CategoryRow;
+            }
+          }
+          if (category) {
+            setTaskDetails({
+              id: task.id,
+              title: task.title,
+              description: task.description,
+              category,
+              latitude: parseFloat(lat || '0'),
+              longitude: parseFloat(lng || '0'),
+              budget: task.budget
+            });
+          }
         }
       } catch (error) {
         console.error('Error fetching task details:', error);
@@ -85,7 +100,7 @@ export default function NearbyTaskersPage() {
     };
 
     fetchTaskDetails();
-  }, [taskId, lat, lng]);
+  }, [taskId, categorySlug, lat, lng]);
 
   const handleSelectTasker = (tasker: TaskerDisplayProfile) => {
     setSelectedTasker(tasker);
