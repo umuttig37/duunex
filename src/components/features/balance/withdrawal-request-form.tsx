@@ -200,7 +200,7 @@ export default function WithdrawalRequestForm({ userId }: WithdrawalRequestFormP
           <CardTitle>Nostettavissa oleva saldo</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold text-emerald-600 mb-2">
+          <div className="text-3xl font-bold text-primary mb-2">
             {formatCurrency(availableBalance)}
           </div>
           <p className="text-sm text-gray-600 mb-3">

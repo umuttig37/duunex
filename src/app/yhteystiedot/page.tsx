@@ -82,21 +82,21 @@ export default function YhteystiedotPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <Mail className="h-5 w-5 text-emerald-600" />
+                    <Mail className="h-5 w-5 text-primary" />
                     <div>
                       <p className="font-medium">Sähköposti</p>
                       <p className="text-gray-600">info@tehtavamestari.fi</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Phone className="h-5 w-5 text-emerald-600" />
+                    <Phone className="h-5 w-5 text-primary" />
                     <div>
                       <p className="font-medium">Puhelin</p>
                       <p className="text-gray-600">+358 40 123 4567</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <MapPin className="h-5 w-5 text-emerald-600" />
+                    <MapPin className="h-5 w-5 text-primary" />
                     <div>
                       <p className="font-medium">Osoite</p>
                       <p className="text-gray-600">
@@ -228,7 +228,7 @@ export default function YhteystiedotPage() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-emerald-600 hover:bg-emerald-700"
+                    className="w-full bg-primary hover:bg-primary/90"
                   >
                     {isSubmitting ? 'Lähetetään...' : 'Lähetä Viesti'}
                   </Button>

@@ -101,7 +101,7 @@ export default function ChangePasswordPage() {
           </Link>
         </Button>
 
-        <Card className="border-emerald-100 shadow-lg">
+        <Card className="border-primary/10 shadow-lg">
           <CardHeader className="space-y-1">
             <div className="flex items-center gap-2">
               <div className="p-2 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-lg">

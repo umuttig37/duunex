@@ -58,36 +58,20 @@ export default function DashboardLayout({
     // A full redirect might be too aggressive if the session is just loading.
     // Let's render the main content area, which might have its own loading state.
     return (
-      <main className="flex-1 flex flex-col bg-gray-100">
+      <main className="flex-1 flex flex-col bg-muted/50">
         <div className="flex-1 p-4 sm:p-6 md:p-8">{children}</div>
       </main>
     );
   }
 
-  // Define theme colors based on user role
-  const getThemeColors = () => {
-    if (passedUser.role === 'tasker') {
-      return {
-        sidebarBg: 'bg-emerald-700',
-        sidebarText: 'text-emerald-50',
-        borderColor: 'border-emerald-600',
-        logoTextColor: 'text-emerald-100',
-        buttonHover: 'hover:bg-emerald-600',
-        secondaryText: 'text-emerald-300',
-      };
-    }
-    // Default theme for users and others
-    return {
-      sidebarBg: 'bg-slate-800',
-      sidebarText: 'text-slate-100',
-      borderColor: 'border-slate-700',
-      logoTextColor: 'text-slate-200',
-      buttonHover: 'hover:bg-slate-700',
-      secondaryText: 'text-slate-400',
-    };
+  const theme = {
+    sidebarBg: 'bg-sidebar',
+    sidebarText: 'text-sidebar-foreground',
+    borderColor: 'border-sidebar-border',
+    logoTextColor: 'text-sidebar-foreground',
+    buttonHover: 'hover:bg-sidebar-accent',
+    secondaryText: 'text-sidebar-foreground/70',
   };
-
-  const theme = getThemeColors();
 
   const handleLogout = () => {
     startLogoutTransition(async () => {
@@ -176,7 +160,7 @@ export default function DashboardLayout({
   const isChat = variant === 'chat';
 
   return (
-    <div className={`flex min-h-screen bg-gray-100 ${isChat ? 'overflow-hidden' : ''}`}>
+    <div className={`flex min-h-screen bg-muted/50 ${isChat ? 'overflow-hidden' : ''}`}>
       {/* Sidebar for desktop */}
       <aside
         className={`hidden md:flex md:w-64 flex-col fixed inset-y-0 ${theme.sidebarBg} ${theme.sidebarText}`}
@@ -184,11 +168,11 @@ export default function DashboardLayout({
         <div
           className={`p-4 flex items-center gap-2 h-16 border-b ${theme.borderColor}`}
         >
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 rounded-md bg-emerald-500 flex items-center justify-center text-white font-bold text-lg">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+            <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
               TM
             </div>
-            <span className="text-xl font-semibold">TaskMVP</span>
+            <span className="text-lg font-semibold">TaskMVP</span>
           </Link>
         </div>
 
@@ -279,7 +263,7 @@ export default function DashboardLayout({
             <Button
               variant="outline"
               size="icon"
-              className="md:hidden fixed top-3 left-3 z-50 bg-white/95 backdrop-blur-sm shadow-lg border-gray-200"
+              className="md:hidden fixed top-3 left-3 z-50 bg-background border-border"
             >
               <MenuIcon className="h-5 w-5" />
               <span className="sr-only">Avaa valikko</span>
@@ -293,11 +277,11 @@ export default function DashboardLayout({
             <div
               className={`p-4 flex items-center gap-2 h-16 border-b ${theme.borderColor}`}
             >
-              <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                <div className="w-8 h-8 rounded-md bg-emerald-500 flex items-center justify-center text-white font-bold text-lg">
+              <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+                <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
                   TM
                 </div>
-                <span className="text-lg sm:text-xl font-semibold">TaskMVP</span>
+                <span className="text-lg font-semibold">TaskMVP</span>
               </Link>
             </div>
 
@@ -387,7 +371,7 @@ export default function DashboardLayout({
       )}
 
       {/* Main content */}
-      <main className={`flex-1 md:ml-64 flex flex-col bg-gray-100 ${isChat ? 'h-screen md:h-auto' : ''}`}>
+      <main className={`flex-1 md:ml-64 flex flex-col bg-muted/50 ${isChat ? 'h-screen md:h-auto' : ''}`}>
         <div
           className={`flex-1 ${isChat ? 'p-0 md:pt-0 md:pr-0 md:pb-0 md:pl-0' : 'p-4 sm:p-6 md:p-8'} ${isMobile ? 'pt-16' : ''} transition-all duration-300 flex flex-col`}
         >
@@ -396,37 +380,20 @@ export default function DashboardLayout({
 
         {/* Dashboard Footer (hidden in chat variant for immersive layout) */}
         {!isChat && (
-          <footer className="mt-auto border-t bg-white/80 backdrop-blur-sm">
+          <footer className="mt-auto border-t border-border bg-background/80 backdrop-blur-sm">
             <div className="px-4 md:px-8 py-3">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-sm">
                 <div className="flex items-center gap-4">
-                  <p className="text-gray-600">
-                    &copy; {new Date().getFullYear()} TaskMVP
-                  </p>
+                  <p className="text-muted-foreground">&copy; {new Date().getFullYear()} TaskMVP</p>
                   <div className="flex gap-3">
-                    <Link
-                      href="/terms"
-                      className="text-gray-500 hover:text-gray-700 transition-colors"
-                    >
-                      Käyttöehdot
-                    </Link>
-                    <Link
-                      href="/privacy"
-                      className="text-gray-500 hover:text-gray-700 transition-colors"
-                    >
-                      Tietosuoja
-                    </Link>
+                    <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">Käyttöehdot</Link>
+                    <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">Tietosuoja</Link>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div
-                    className={`w-2 h-2 rounded-full ${passedUser.role === 'tasker' ? 'bg-emerald-500' : 'bg-blue-500'}`}
-                  ></div>
-                  <span className="text-gray-500 text-xs">
-                    {passedUser.role === 'user' ? 'Käyttäjä' :
-                      passedUser.role === 'tasker' ? 'Tekijä' :
-                        passedUser.role === 'admin' ? 'Ylläpitäjä' : 'Käyttäjä'}{' '}
-                    -dashboard
+                  <div className="w-2 h-2 rounded-full bg-primary" />
+                  <span className="text-muted-foreground text-xs">
+                    {passedUser.role === 'user' ? 'Käyttäjä' : passedUser.role === 'tasker' ? 'Tekijä' : passedUser.role === 'admin' ? 'Ylläpitäjä' : 'Käyttäjä'} – dashboard
                   </span>
                 </div>
               </div>

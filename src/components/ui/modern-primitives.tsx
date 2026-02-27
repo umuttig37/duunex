@@ -65,8 +65,8 @@ export function StepIndicator({
           <div className="mt-2 text-center">
             <p className={cn(
               "text-xs font-medium",
-              isActive && "text-emerald-700",
-              isCompleted && "text-emerald-600",
+              isActive && "text-primary",
+              isCompleted && "text-primary",
               step > currentStep && "text-gray-400"
             )}>
               {title}
@@ -172,8 +172,8 @@ export function TemplateCard({
         <div className={cn(
           "flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-200",
           selected 
-            ? "bg-emerald-100 text-emerald-600" 
-            : "bg-gray-100 text-gray-600 group-hover:bg-emerald-50 group-hover:text-emerald-600"
+            ? "bg-primary/10 text-primary" 
+            : "bg-gray-100 text-gray-600 group-hover:bg-primary/10 group-hover:text-primary"
         )}>
           <Icon className="w-6 h-6" />
         </div>
@@ -227,8 +227,8 @@ export function CategoryBadge({
       className={cn(
         "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 touch-target",
         selected
-          ? "bg-emerald-100 text-emerald-700 border-2 border-emerald-300 shadow-sm"
-          : "bg-white border-2 border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700",
+          ? "bg-primary/10 text-primary border-2 border-primary/30 shadow-sm"
+          : "bg-white border-2 border-gray-200 text-gray-700 hover:border-primary/30 hover:bg-primary/10 hover:text-primary",
         className
       )}
       type="button"
@@ -265,7 +265,7 @@ export function ProgressBar({
           Step {currentStep} of {totalSteps}
         </span>
         {showPercentage && (
-          <span className="text-sm font-medium text-emerald-600">
+          <span className="text-sm font-medium text-primary">
             {percentage}%
           </span>
         )}
@@ -273,7 +273,7 @@ export function ProgressBar({
       
       <div className="w-full bg-gray-200 rounded-full h-2">
         <div
-          className="bg-emerald-600 h-2 rounded-full transition-all duration-500 ease-out"
+          className="bg-primary h-2 rounded-full transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
           role="progressbar"
           aria-valuenow={percentage}
@@ -368,7 +368,7 @@ export function FeatureHighlight({
 }: FeatureHighlightProps) {
   const variantClasses = {
     default: 'bg-gray-50 border-gray-200 text-gray-600',
-    success: 'bg-emerald-50 border-emerald-200 text-emerald-600',
+    success: 'bg-primary/5 border-primary/20 text-primary',
     info: 'bg-blue-50 border-blue-200 text-blue-600',
     warning: 'bg-yellow-50 border-yellow-200 text-yellow-600',
   };

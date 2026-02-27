@@ -108,7 +108,7 @@ export function DynamicQuestionComponent({ question, fieldName }: DynamicQuestio
                       field.onChange(currentValues.filter((val: string) => val !== option.value));
                     }
                   }}
-                  className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                  className="rounded border-gray-300 text-primary focus:ring-primary"
                 />
                 <Label htmlFor={`${fieldName}-${option.value}`} className="text-sm font-normal">
                   {option.label}

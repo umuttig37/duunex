@@ -60,7 +60,7 @@ export default function CategorySelection({ selectedCategory, onSelectCategory, 
                 p-4 cursor-pointer transition-all hover:shadow-md 
                 flex flex-col items-center justify-center text-center h-36
                 ${selectedCategory?.id === category.id // Compare by id for robustness
-                  ? "border-2 border-emerald-600 bg-emerald-50"
+                  ? "border-2 border-emerald-600 bg-primary/5"
                   : "border border-gray-200 hover:border-gray-300"
                 }
               `}
@@ -69,7 +69,7 @@ export default function CategorySelection({ selectedCategory, onSelectCategory, 
               <div
                 className={`
                   p-3 rounded-full mb-2 
-                  ${selectedCategory?.id === category.id ? "bg-emerald-100 text-emerald-600" : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"}
+                  ${selectedCategory?.id === category.id ? "bg-primary/10 text-primary" : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"}
                 `}
               >
                 <IconComponent size={28} />

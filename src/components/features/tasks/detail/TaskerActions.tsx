@@ -31,7 +31,7 @@ export default function TaskerActions({
     return (
       <Button
         size="lg"
-        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+        className="w-full bg-primary hover:bg-primary/90 text-white"
         asChild
       >
         <Link href="/signup/tasker">
@@ -84,7 +84,7 @@ export default function TaskerActions({
           <Button
             size="lg"
             variant="outline"
-            className="w-full border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+            className="w-full border-primary/30 text-primary hover:bg-primary/10"
             asChild
           >
             <Link href={`/dashboard/messages?receiverId=${task.user_id}&taskId=${taskId}`}>

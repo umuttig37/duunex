@@ -63,15 +63,15 @@ const items: ProjectItem[] = [
 
 export default function PopularProjectsSection() {
   return (
-    <section className="pt-28 sm:pt-28 pb-8 sm:pb-12 bg-gray-50">
+    <section className="pt-20 sm:pt-24 pb-8 sm:pb-12 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Suositut projektit</h2>
-        <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-6">Suositut projektit</h2>
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((item) => (
             <Link
               key={item.title}
               href={`/dashboard/tasks/new?category=${item.categorySlug}`}
-              className="group rounded-2xl bg-white border border-gray-200 hover:border-emerald-200 shadow-sm hover:shadow-md transition-all overflow-hidden"
+              className="group rounded-lg bg-card border border-border hover:border-primary/30 transition-all overflow-hidden"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden">
                 <Image
@@ -84,10 +84,10 @@ export default function PopularProjectsSection() {
                 />
               </div>
               <div className="p-4">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 group-hover:text-emerald-700">
+                <h3 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-sm text-gray-600 mt-1">{item.subtitle}</p>
+                <p className="text-sm text-muted-foreground mt-1">{item.subtitle}</p>
               </div>
             </Link>
           ))}

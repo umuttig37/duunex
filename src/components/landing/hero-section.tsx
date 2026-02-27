@@ -28,8 +28,8 @@ const HeroSection = () => {
       <div className="max-w-7xl mx-auto px-4">
         {/* Trust indicator at top */}
         <div className="text-center mb-8">
-          <p className="text-sm text-emerald-700 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-100 to-emerald-50 border border-emerald-200 rounded-full px-4 py-2 mx-auto w-fit shadow-sm">
-            <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+          <p className="text-sm text-primary flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-100 to-emerald-50 border border-primary/20 rounded-full px-4 py-2 mx-auto w-fit shadow-sm">
+            <svg className="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
             Luotettava kotipalvelujen markkinapaikka
@@ -66,7 +66,7 @@ const HeroSection = () => {
             <div className="flex flex-wrap gap-3 mb-8">
               {categories.map(({ icon: Icon, label }, index) => {
                 const colors = [
-                  'bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200',
+                  'bg-primary/10 text-primary border-primary/20 hover:bg-emerald-200',
                   'bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-200', 
                   'bg-purple-100 text-purple-700 border-purple-200 hover:bg-purple-200',
                   'bg-orange-100 text-orange-700 border-orange-200 hover:bg-orange-200',

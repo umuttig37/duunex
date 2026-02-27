@@ -24,17 +24,17 @@ export default function PricePanel({
     <Card className="shadow-lg border-slate-200 sticky top-8">
       <CardHeader className="pb-4">
         <CardTitle className="text-xl font-semibold text-slate-800 flex items-center">
-          <Euro className="h-5 w-5 mr-2 text-emerald-600" />
+          <Euro className="h-5 w-5 mr-2 text-primary" />
           Hinta
         </CardTitle>
         
         <div className="space-y-2">
-          <div className="text-3xl lg:text-4xl font-bold text-emerald-600">
+          <div className="text-3xl lg:text-4xl font-bold text-primary">
             {displayPrice ? `${displayPrice} €` : 'Ei budjettia'}
           </div>
           
           {hasAcceptedOffer && finalPrice && (
-            <p className="text-sm font-medium text-emerald-600">
+            <p className="text-sm font-medium text-primary">
               Sovittu hinta
             </p>
           )}
@@ -46,7 +46,7 @@ export default function PricePanel({
           )}
           
           {showOriginalBudget && (
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-sidebar-foreground/70">
               Alkuperäinen budjetti: {originalBudget} €
             </p>
           )}

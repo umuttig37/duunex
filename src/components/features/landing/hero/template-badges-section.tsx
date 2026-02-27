@@ -194,11 +194,11 @@ export function TemplateBadgesSection({
             <span>{template.name}</span>
             {/* Popularity indicator */}
             {(template.popularity_score || 0) >= 80 && (
-              <TrendingUp className="w-3 h-3 text-emerald-600" />
+              <TrendingUp className="w-3 h-3 text-primary" />
             )}
             {/* Questions indicator */}
             {template.questions && template.questions.length > 0 && (
-              <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+              <div className="w-2 h-2 bg-primary rounded-full" />
             )}
           </button>
         ))}

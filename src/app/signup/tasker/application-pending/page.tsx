@@ -9,8 +9,8 @@ export default function TaskerApplicationPendingPage() {
       <div className="max-w-2xl w-full space-y-6">
         {/* Success Icon */}
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 rounded-full mb-4">
-            <CheckCircle className="w-10 h-10 text-emerald-600" />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-primary/10 rounded-full mb-4">
+            <CheckCircle className="w-10 h-10 text-primary" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Kiitos hakemuksestasi!
@@ -21,13 +21,13 @@ export default function TaskerApplicationPendingPage() {
         </div>
 
         {/* Status Card */}
-        <Card className="border-emerald-200 bg-emerald-50/50">
+        <Card className="border-primary/20 bg-primary/5/50">
           <CardHeader className="text-center pb-4">
             <div className="inline-flex items-center justify-center w-12 h-12 bg-amber-100 rounded-full mb-3">
               <Clock className="w-6 h-6 text-amber-600" />
             </div>
-            <CardTitle className="text-emerald-800">Hakemus käsiteltävänä</CardTitle>
-            <CardDescription className="text-emerald-700">
+            <CardTitle className="text-primary">Hakemus käsiteltävänä</CardTitle>
+            <CardDescription className="text-primary">
               Tarkistamme hakemuksesi huolellisesti varmistaaksemme, että tarjoamme asiakkaillemme parasta mahdollista palvelua.
             </CardDescription>
           </CardHeader>
@@ -36,7 +36,7 @@ export default function TaskerApplicationPendingPage() {
               <h3 className="font-semibold text-gray-900">Seuraavat vaiheet:</h3>
               <div className="space-y-2">
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
                   <p className="text-sm text-gray-700">
                     <span className="font-medium">Käsittely:</span> Tarkistamme hakemuksesi 1-2 arkipäivässä
                   </p>

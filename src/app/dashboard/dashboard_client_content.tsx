@@ -145,8 +145,8 @@ export default function DashboardClientContent({
   return (
     <>
       <header className="mb-6 sm:mb-8">
-        <div className="bg-emerald-50 rounded-2xl p-6 sm:p-8 border border-emerald-100/50 shadow-sm">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-emerald-600 h-12 ">
+        <div className="bg-primary/5 rounded-2xl p-6 sm:p-8 border border-primary/10/50 shadow-sm">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary h-12 ">
             {getHeaderText()}
           </h1>
           <p className="text-slate-600 mt-2 text-base sm:text-lg">

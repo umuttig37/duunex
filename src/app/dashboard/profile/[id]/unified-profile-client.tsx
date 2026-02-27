@@ -749,7 +749,7 @@ export default function UnifiedProfileClient({
                 <CardContent className="space-y-4">
                   <div>
                     <label className="text-sm font-medium text-gray-700">Tuntihinta</label>
-                    <p className="text-lg font-semibold text-emerald-600">
+                    <p className="text-lg font-semibold text-primary">
                       {taskerDetails?.hourly_rate || 25}€/h
                     </p>
                   </div>
@@ -768,7 +768,7 @@ export default function UnifiedProfileClient({
                           return category ? (
                             <span
                               key={categoryId}
-                              className="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full"
+                              className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full"
                             >
                               {category.name_fi}
                             </span>

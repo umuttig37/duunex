@@ -294,7 +294,7 @@ export default function SmartTaskDetails({
               <label key={index} className="flex items-center space-x-3 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+                  className="w-4 h-4 text-primary rounded focus:ring-primary"
                   checked={(value || []).includes(option)}
                   onChange={(e) => {
                     const currentValues = value || [];
@@ -408,7 +408,7 @@ export default function SmartTaskDetails({
                   placeholder="Osoite tai alue"
                 />
                 {formData.latitude && formData.longitude && (
-                  <p className="text-xs text-emerald-600 mt-1">
+                  <p className="text-xs text-primary mt-1">
                     ✓ Sijainti tallennettu
                   </p>
                 )}
@@ -438,7 +438,7 @@ export default function SmartTaskDetails({
                 "border-2 border-dashed rounded-xl p-6 text-center transition-colors",
                 imageFiles.length >= 3
                   ? "border-gray-300 bg-gray-50 opacity-50"
-                  : "border-emerald-300 bg-white hover:border-emerald-400 cursor-pointer"
+                  : "border-primary/30 bg-white hover:border-emerald-400 cursor-pointer"
               )}>
                 <input
                   type="file"
@@ -457,7 +457,7 @@ export default function SmartTaskDetails({
                     imageFiles.length >= 3 && "cursor-not-allowed"
                   )}
                 >
-                  <Upload className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
+                  <Upload className="w-8 h-8 text-primary mx-auto mb-2" />
                   <p className="font-medium text-gray-800 mb-1">
                     Klikkaa tai raahaa kuvia
                   </p>
@@ -482,7 +482,7 @@ export default function SmartTaskDetails({
                           className="w-full h-20 object-cover rounded-lg"
                         />
                         {index === 0 && (
-                          <div className="absolute top-1 left-1 bg-emerald-500 text-white text-xs px-2 py-1 rounded">
+                          <div className="absolute top-1 left-1 bg-primary text-white text-xs px-2 py-1 rounded">
                             Pääkuva
                           </div>
                         )}

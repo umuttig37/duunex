@@ -453,7 +453,7 @@ function EnhancedOpenTasksMapComponent({
           {/* Map Statistics */}
           <div className={`absolute ${isMobile ? 'top-2 left-2 p-2' : 'top-4 left-4 p-3'} bg-white/95 backdrop-blur-sm rounded-lg border shadow-sm z-[1000]`}>
             <div className={`flex items-center gap-2 ${isMobile ? 'text-xs' : 'text-sm'}`}>
-              <div className={`${isMobile ? 'w-2 h-2' : 'w-3 h-3'} rounded-full bg-emerald-500`}></div>
+              <div className={`${isMobile ? 'w-2 h-2' : 'w-3 h-3'} rounded-full bg-primary`}></div>
               <span className="font-medium">
                 {isMobile ? `${validTasks.length}` : `${validTasks.length} avointa tehtävää`}
               </span>
@@ -478,7 +478,7 @@ function EnhancedOpenTasksMapComponent({
             <Button
               variant="outline"
               size="sm"
-              className={`absolute bottom-2 left-2 bg-white/95 backdrop-blur-sm border shadow-sm hover:bg-white/100 z-[1000] ${layersVisible ? 'bg-emerald-50 border-emerald-200' : ''}`}
+              className={`absolute bottom-2 left-2 bg-white/95 backdrop-blur-sm border shadow-sm hover:bg-white/100 z-[1000] ${layersVisible ? 'bg-primary/5 border-primary/20' : ''}`}
               onClick={() => setLayersVisible(!layersVisible)}
             >
               <Layers className="h-3 w-3 mr-1" />

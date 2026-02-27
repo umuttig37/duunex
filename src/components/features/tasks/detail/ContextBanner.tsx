@@ -40,10 +40,10 @@ const getBannerConfig = (type: BannerType) => {
     },
     success: {
       icon: CheckCircle,
-      className: 'border-emerald-200 bg-emerald-50',
-      iconClassName: 'text-emerald-600',
-      titleClassName: 'text-emerald-800',
-      descriptionClassName: 'text-emerald-700'
+      className: 'border-primary/20 bg-primary/5',
+      iconClassName: 'text-primary',
+      titleClassName: 'text-primary',
+      descriptionClassName: 'text-primary'
     },
     warning: {
       icon: AlertCircle,
@@ -68,8 +68,8 @@ const getBannerConfig = (type: BannerType) => {
     },
     payment_info: {
       icon: Zap,
-      className: 'border-emerald-200 bg-gradient-to-r from-emerald-50 to-blue-50',
-      iconClassName: 'text-emerald-600',
+      className: 'border-primary/20 bg-gradient-to-r from-emerald-50 to-blue-50',
+      iconClassName: 'text-primary',
       titleClassName: 'text-slate-800',
       descriptionClassName: 'text-slate-700'
     },
@@ -101,7 +101,7 @@ export default function ContextBanner({
         <div className="flex-shrink-0">
           <div className={cn(
             'w-8 h-8 rounded-full flex items-center justify-center',
-            type === 'payment_info' ? 'bg-emerald-100' : 'bg-white'
+            type === 'payment_info' ? 'bg-primary/10' : 'bg-white'
           )}>
             <Icon className={cn('h-4 w-4', config.iconClassName)} />
           </div>

@@ -208,16 +208,16 @@ export default function TestimonialBanner() {
   }, [scrollByOne]);
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-br from-slate-50 via-white to-emerald-50/30">
+    <section className="py-16 md:py-24 bg-muted/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-800 text-sm font-semibold rounded-full mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary text-sm font-semibold rounded-full mb-6">
             <CheckCircle className="w-4 h-4" />
             Tyytyväiset asiakkaat
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            Kumppanimme <span className="text-emerald-600">kiittävät</span>
+            Kumppanimme <span className="text-primary">kiittävät</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Tuhannet tyytyväiset asiakkaat luottavat palveluumme päivittäin
@@ -239,7 +239,7 @@ export default function TestimonialBanner() {
           {/* Trust Indicators */}
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
             <div className="flex items-center gap-3 mb-4">
-              <Shield className="w-8 h-8 text-emerald-600" />
+              <Shield className="w-8 h-8 text-primary" />
               <div>
                 <div className="font-semibold text-gray-900">Turvallinen</div>
                 <div className="text-sm text-gray-600">100% suojattu</div>
@@ -247,11 +247,11 @@ export default function TestimonialBanner() {
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-600" />
+                <CheckCircle className="w-4 h-4 text-primary" />
                 <span className="text-sm text-gray-700">Luotettu kumppani</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-600" />
+                <CheckCircle className="w-4 h-4 text-primary" />
                 <span className="text-sm text-gray-700">Vakuutetut tekijät</span>
               </div>
             </div>
@@ -284,10 +284,10 @@ export default function TestimonialBanner() {
                 setIsPaused(true);
                 scrollByOne('prev');
               }}
-              className="w-12 h-12 rounded-full bg-white border-2 border-gray-200 shadow-lg hover:border-emerald-300 hover:shadow-xl transition-all duration-300 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 group"
+              className="w-12 h-12 rounded-full bg-white border-2 border-gray-200 shadow-lg hover:border-primary/30 hover:shadow-xl transition-all duration-300 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 group"
               type="button"
             >
-              <ArrowLeft className="w-5 h-5 text-gray-600 group-hover:text-emerald-600 transition-colors" />
+              <ArrowLeft className="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors" />
             </button>
             
             {/* Dots Indicator */}
@@ -306,7 +306,7 @@ export default function TestimonialBanner() {
                   }}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
                     index === currentIndex % testimonials.length
-                      ? 'bg-emerald-600 w-8'
+                      ? 'bg-primary w-8'
                       : 'bg-gray-300 hover:bg-gray-400'
                   }`}
                   aria-label={`Siirry testimoniaaliin ${index + 1}`}
@@ -321,10 +321,10 @@ export default function TestimonialBanner() {
                 setIsPaused(true);
                 scrollByOne('next');
               }}
-              className="w-12 h-12 rounded-full bg-white border-2 border-gray-200 shadow-lg hover:border-emerald-300 hover:shadow-xl transition-all duration-300 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 group"
+              className="w-12 h-12 rounded-full bg-white border-2 border-gray-200 shadow-lg hover:border-primary/30 hover:shadow-xl transition-all duration-300 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 group"
               type="button"
             >
-              <ArrowRight className="w-5 h-5 text-gray-600 group-hover:text-emerald-600 transition-colors" />
+              <ArrowRight className="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors" />
             </button>
           </div>
 
@@ -355,7 +355,7 @@ export default function TestimonialBanner() {
                 <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 h-full relative">
                   {/* Quote Icon */}
                   <div className="absolute top-6 right-6 opacity-10">
-                    <Quote className="w-12 h-12 text-emerald-600" />
+                    <Quote className="w-12 h-12 text-primary" />
                   </div>
                   
                   {/* Stars */}
@@ -380,7 +380,7 @@ export default function TestimonialBanner() {
                         height={56}
                         className="w-14 h-14 rounded-full object-cover border-3 border-white shadow-md"
                       />
-                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
                         <CheckCircle className="w-4 h-4 text-white" />
                       </div>
                     </div>
@@ -407,7 +407,7 @@ export default function TestimonialBanner() {
                 setIsPaused(true);
                 scrollByOne('prev');
               }}
-              className="w-12 h-12 rounded-full bg-white border-2 border-gray-200 shadow-lg hover:border-emerald-300 hover:shadow-xl transition-all duration-300 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              className="w-12 h-12 rounded-full bg-white border-2 border-gray-200 shadow-lg hover:border-primary/30 hover:shadow-xl transition-all duration-300 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               type="button"
             >
               <ArrowLeft className="w-5 h-5 text-gray-600" />
@@ -420,7 +420,7 @@ export default function TestimonialBanner() {
                   key={index}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
                     index === currentIndex % testimonials.length
-                      ? 'bg-emerald-600 w-6'
+                      ? 'bg-primary w-6'
                       : 'bg-gray-300'
                   }`}
                 />
@@ -434,7 +434,7 @@ export default function TestimonialBanner() {
                 setIsPaused(true);
                 scrollByOne('next');
               }}
-              className="w-12 h-12 rounded-full bg-white border-2 border-gray-200 shadow-lg hover:border-emerald-300 hover:shadow-xl transition-all duration-300 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              className="w-12 h-12 rounded-full bg-white border-2 border-gray-200 shadow-lg hover:border-primary/30 hover:shadow-xl transition-all duration-300 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               type="button"
             >
               <ArrowRight className="w-5 h-5 text-gray-600" />

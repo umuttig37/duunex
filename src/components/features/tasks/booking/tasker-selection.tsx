@@ -301,7 +301,7 @@ export default function TaskerSelection({
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">Lajiteltu:</span>
           <select
-            className="border rounded-md px-2 py-1 text-sm bg-white focus:ring-emerald-500 focus:border-emerald-500"
+            className="border rounded-md px-2 py-1 text-sm bg-white focus:ring-primary focus:border-primary"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value)}
           >
@@ -334,7 +334,7 @@ export default function TaskerSelection({
                 <div className="space-y-3">
                   <Button 
                     onClick={onSwitchToOpenPosting}
-                    className="w-full bg-emerald-600 hover:bg-emerald-700"
+                    className="w-full bg-primary hover:bg-primary/90"
                   >
                     Siirry avoimeen julkaisuun
                   </Button>
@@ -363,7 +363,7 @@ export default function TaskerSelection({
                     alt={`${taskerItem.first_name} ${taskerItem.last_name || ''}`}
                     className="object-cover"
                   />
-                  <AvatarFallback className="bg-emerald-100 text-emerald-700 text-lg font-semibold">
+                  <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
                     {(taskerItem.first_name || '').charAt(0)}
                     {(taskerItem.last_name || '').charAt(0)}
                   </AvatarFallback>
@@ -381,7 +381,7 @@ export default function TaskerSelection({
                     <div className="flex items-center gap-3 mb-1">
                       <span className="text-gray-500 text-sm">Ei arvosteluja vielä</span>
                       {taskerItem.is_verified && (
-                        <Badge variant="outline" className="border-emerald-200 text-emerald-700 bg-emerald-50">
+                        <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5">
                           ✓ Vahvistettu
                         </Badge>
                       )}
@@ -411,7 +411,7 @@ export default function TaskerSelection({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="text-emerald-600 border-emerald-200 hover:bg-emerald-50"
+                    className="text-primary border-primary/20 hover:bg-primary/10"
                     onClick={() => handleViewProfile(taskerItem)}
                   >
                     Näytä profiili & arvostelut
@@ -419,8 +419,8 @@ export default function TaskerSelection({
                   <Button
                     size="sm"
                     className={`${selectedTasker?.id === taskerItem.id
-                      ? 'bg-emerald-700 hover:bg-emerald-800'
-                      : 'bg-emerald-600 hover:bg-emerald-700'
+                      ? 'bg-primary/90 hover:bg-emerald-800'
+                      : 'bg-primary hover:bg-primary/90'
                       } text-white`}
                     onClick={() => handleSelectTasker(taskerItem)}
                     disabled={selectedTasker?.id === taskerItem.id}

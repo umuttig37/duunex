@@ -48,7 +48,7 @@ export function CategoryInfoPanel({ category, className }: CategoryInfoPanelProp
           <div className="bg-white/95 backdrop-blur-xl border border-white/80 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 md:p-7 lg:p-8 backdrop-saturate-150">
             {/* Enhanced trending badge */}
             {category.trending && (
-              <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 sm:px-3.5 sm:py-1.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-[10px] sm:text-xs font-semibold rounded-full mb-2 sm:mb-4 shadow-sm">
+              <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 sm:px-3.5 sm:py-1.5 bg-primary text-primary-foreground text-[10px] sm:text-xs font-semibold rounded-full mb-2 sm:mb-4 shadow-sm">
                 <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full opacity-90"></div>
                 {category.trending}
               </div>
@@ -66,7 +66,7 @@ export function CategoryInfoPanel({ category, className }: CategoryInfoPanelProp
             <div className="space-y-2 sm:space-y-3">
               {category.benefits.slice(0, 3).map((benefit, index) => (
                 <div key={index} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-[15px] md:text-base">
-                  <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex-shrink-0 shadow-sm"></div>
+                  <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-primary rounded-full flex-shrink-0 shadow-sm"></div>
                   <span className="text-gray-800 font-medium leading-tight">{benefit}</span>
                 </div>
               ))}

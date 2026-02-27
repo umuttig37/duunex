@@ -327,7 +327,7 @@ export default function EnhancedOverdueManagement({ adminId }: { adminId: string
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'paid':
-        return <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200"><CreditCard className="h-3 w-3 mr-1" />Maksettu</Badge>;
+        return <Badge className="bg-primary/10 text-primary border-primary/20"><CreditCard className="h-3 w-3 mr-1" />Maksettu</Badge>;
       case 'in_progress':
         return <Badge className="bg-blue-100 text-blue-800 border-blue-200"><Play className="h-3 w-3 mr-1" />Käynnissä</Badge>;
       case 'assigned':

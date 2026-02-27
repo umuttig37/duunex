@@ -191,7 +191,7 @@ export default function SupportTicketManagement({ adminId }: SupportTicketManage
       case 'user':
         return <Badge variant="outline" className="text-blue-600 border-blue-600 text-xs"><User className="mr-1 h-3 w-3" />Asiakas</Badge>;
       case 'tasker':
-        return <Badge variant="outline" className="text-emerald-600 border-emerald-600 text-xs"><User className="mr-1 h-3 w-3" />Tekijä</Badge>;
+        return <Badge variant="outline" className="text-primary border-emerald-600 text-xs"><User className="mr-1 h-3 w-3" />Tekijä</Badge>;
       case 'admin':
         return <Badge variant="outline" className="text-red-600 border-red-600 text-xs"><User className="mr-1 h-3 w-3" />Admin</Badge>;
       default:

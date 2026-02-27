@@ -47,9 +47,9 @@ function ConversationListItemComponent({
       onClick={onClick}
       className={`
         w-full p-4 text-left transition-all duration-200 hover:bg-gray-50 border-l-2 
-        active:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-inset
+        active:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset
         min-h-[80px] touch-manipulation
-        ${isSelected ? 'bg-emerald-50 border-l-emerald-500 border-r-2 border-r-emerald-500' : 'border-l-transparent hover:border-l-gray-200'}
+        ${isSelected ? 'bg-primary/5 border-l-emerald-500 border-r-2 border-r-emerald-500' : 'border-l-transparent hover:border-l-gray-200'}
       `}
     >
       <div className="flex items-start space-x-3">
@@ -60,7 +60,7 @@ function ConversationListItemComponent({
               src={participant?.avatar_url || undefined}
               alt={participantName || 'User'}
             />
-            <AvatarFallback className="bg-emerald-100 text-emerald-700 font-medium">
+            <AvatarFallback className="bg-primary/10 text-primary font-medium">
               {(participantName || 'U').charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -74,7 +74,7 @@ function ConversationListItemComponent({
 
           {/* Tasker badge */}
           {participant?.role === 'tasker' && !conversation.isOnline && (
-            <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white flex items-center justify-center">
+            <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-primary rounded-full border-2 border-white flex items-center justify-center">
               <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
             </div>
           )}
@@ -101,7 +101,7 @@ function ConversationListItemComponent({
               {conversation.unreadCount > 0 && (
                 <Badge
                   variant="secondary"
-                  className="bg-emerald-600 text-white text-xs px-2 py-1 font-bold border border-emerald-700 shadow-sm min-w-[20px] h-5 flex items-center justify-center"
+                  className="bg-primary text-white text-xs px-2 py-1 font-bold border border-emerald-700 shadow-sm min-w-[20px] h-5 flex items-center justify-center"
                 >
                   {conversation.unreadCount > 99 ? '99+' : conversation.unreadCount}
                 </Badge>
@@ -171,7 +171,7 @@ function getTaskStatusStyle(status: string): string {
     case 'request_sent':
       return 'border-amber-200 text-amber-700 bg-amber-50';
     case 'in_progress':
-      return 'border-emerald-200 text-emerald-700 bg-emerald-50';
+      return 'border-primary/20 text-primary bg-primary/5';
     case 'completed':
       return 'border-green-200 text-green-700 bg-green-50';
     case 'cancelled':

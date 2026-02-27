@@ -55,11 +55,11 @@ export default function FloatingFeedbackButton({ onOpenDialog }: FloatingFeedbac
         className={`
           group relative flex items-center justify-center
           ${isDashboardPage ? 'px-4 py-3 rounded-lg' : 'px-3 py-2 rounded-lg'}
-          bg-emerald-600 hover:bg-emerald-700 
+          bg-primary hover:bg-primary/90 
           text-white shadow-lg hover:shadow-xl
           transition-all duration-300 ease-in-out
           ${isHovered ? 'scale-105' : 'scale-100'}
-          focus:outline-none focus:ring-4 focus:ring-emerald-200
+          focus:outline-none focus:ring-4 focus:ring-primary/20
           animate-bounce-gentle
           font-medium text-sm
         `}
@@ -72,7 +72,7 @@ export default function FloatingFeedbackButton({ onOpenDialog }: FloatingFeedbac
         )}
 
         {/* Pulse animation for attention */}
-        <div className={`absolute inset-0 ${isDashboardPage ? 'rounded-lg' : 'rounded-lg'} bg-emerald-600 animate-ping opacity-20`}></div>
+        <div className={`absolute inset-0 ${isDashboardPage ? 'rounded-lg' : 'rounded-lg'} bg-primary animate-ping opacity-20`}></div>
       </button>
     </div>
   );

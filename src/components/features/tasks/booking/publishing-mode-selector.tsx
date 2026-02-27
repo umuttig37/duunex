@@ -97,7 +97,7 @@ function ModeOption({ mode, selected, onSelect }: ModeOptionProps) {
               "w-12 h-12 rounded-full flex items-center justify-center transition-colors",
               selected
                 ? data.color === 'emerald'
-                  ? "bg-emerald-100 text-emerald-600"
+                  ? "bg-primary/10 text-primary"
                   : "bg-blue-100 text-blue-600"
                 : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
             )}>
@@ -114,7 +114,7 @@ function ModeOption({ mode, selected, onSelect }: ModeOptionProps) {
             "w-6 h-6 min-w-6 rounded-full border-2 flex items-center justify-center transition-colors",
             selected
               ? data.color === 'emerald'
-                ? "bg-emerald-600 border-emerald-600"
+                ? "bg-primary border-emerald-600"
                 : "bg-blue-600 border-blue-600"
               : "border-gray-300 group-hover:border-gray-400"
           )}>
@@ -400,11 +400,11 @@ export default function PublishingModeSelector({
               {/* Trust indicators */}
               <div className="space-y-2">
                 <div className="flex items-center justify-center gap-2 text-xs text-gray-600">
-                  <Shield className="w-4 h-4 text-emerald-600" />
+                  <Shield className="w-4 h-4 text-primary" />
                   <span>Turvallinen Paytrail-maksu</span>
                 </div>
                 <div className="flex items-center justify-center gap-2 text-xs text-gray-600">
-                  <CheckCircle className="w-4 h-4 text-emerald-600" />
+                  <CheckCircle className="w-4 h-4 text-primary" />
                   <span>Voit muokata tehtävää myöhemmin</span>
                 </div>
               </div>
@@ -419,8 +419,8 @@ export default function PublishingModeSelector({
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <ModernCard variant="elevated" className="max-w-md w-full">
             <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto">
-                <CheckCircle className="w-8 h-8 text-emerald-600" />
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                <CheckCircle className="w-8 h-8 text-primary" />
               </div>
 
               <h3 className="heading-2">Valmis julkaisuun?</h3>

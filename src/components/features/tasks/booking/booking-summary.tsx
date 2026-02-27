@@ -140,7 +140,7 @@ export default function BookingSummary({ formData, onEdit }: BookingSummaryProps
                 <h3 className="text-xl font-bold">{getCategoryNameDisplay()}</h3>
                 <p className="text-gray-600">{getTaskSizeText()}</p>
               </div>
-              <Button variant="ghost" size="sm" className="flex items-center gap-1 text-emerald-600" onClick={() => onEdit(1)}>
+              <Button variant="ghost" size="sm" className="flex items-center gap-1 text-primary" onClick={() => onEdit(1)}>
                 <Edit2 size={16} />Muokkaa
               </Button>
             </div>
@@ -148,7 +148,7 @@ export default function BookingSummary({ formData, onEdit }: BookingSummaryProps
             <div className="space-y-4">
               <div className="flex justify-between items-start">
                 <h4 className="font-medium text-lg">Tehtävän Tiedot</h4>
-                <Button variant="ghost" size="sm" className="flex items-center gap-1 text-emerald-600 -mt-1" onClick={() => onEdit(2)}>
+                <Button variant="ghost" size="sm" className="flex items-center gap-1 text-primary -mt-1" onClick={() => onEdit(2)}>
                   <Edit size={16} /> Muokkaa kaikkia
                 </Button>
               </div>
@@ -165,7 +165,7 @@ export default function BookingSummary({ formData, onEdit }: BookingSummaryProps
                   <p className="font-medium">Päivämäärä & Aika</p>
                   <p className="text-gray-600">{formattedDate()} • {getTimeText()}</p>
                 </div>
-                <Button variant="ghost" size="sm" className="ml-auto flex items-center gap-1 text-emerald-600" onClick={() => onEdit(dateTimeEditStep)}>
+                <Button variant="ghost" size="sm" className="ml-auto flex items-center gap-1 text-primary" onClick={() => onEdit(dateTimeEditStep)}>
                   <Edit2 size={16} />Muokkaa
                 </Button>
               </div>
@@ -203,7 +203,7 @@ export default function BookingSummary({ formData, onEdit }: BookingSummaryProps
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <h4 className="font-medium text-lg">Julkaisutapa</h4>
-                <Button variant="ghost" size="sm" className="flex items-center gap-1 text-emerald-600 -mt-1" onClick={() => onEdit(3)}>
+                <Button variant="ghost" size="sm" className="flex items-center gap-1 text-primary -mt-1" onClick={() => onEdit(3)}>
                   <Edit size={16} /> Muokkaa
                 </Button>
               </div>
@@ -219,7 +219,7 @@ export default function BookingSummary({ formData, onEdit }: BookingSummaryProps
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <h4 className="font-medium text-lg">Valittu Tekijä</h4>
-                  <Button variant="ghost" size="sm" className="flex items-center gap-1 text-emerald-600 -mt-1" onClick={() => onEdit(4)}>
+                  <Button variant="ghost" size="sm" className="flex items-center gap-1 text-primary -mt-1" onClick={() => onEdit(4)}>
                     <Edit size={16} /> {tasker ? "Vaihda" : "Valitse"}
                   </Button>
                 </div>
@@ -252,7 +252,7 @@ export default function BookingSummary({ formData, onEdit }: BookingSummaryProps
                     <span>{budget ? `${budget.toFixed(2)} €` : "Ei asetettu"}</span>
                   </div>
                   <p className="text-sm text-gray-500 mt-1">Tämä on summa, jonka olet ilmoittanut olevasi valmis maksamaan tehtävästä.</p>
-                  <Button variant="ghost" size="sm" className="flex items-center gap-1 text-emerald-600 -ml-2" onClick={() => onEdit(3)}>
+                  <Button variant="ghost" size="sm" className="flex items-center gap-1 text-primary -ml-2" onClick={() => onEdit(3)}>
                     <Edit2 size={16} />Muokkaa budjettia
                   </Button>
                 </>

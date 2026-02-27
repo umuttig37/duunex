@@ -203,7 +203,7 @@ export default function HeroSearchBar({
     'w-full text-lg md:text-xl transition-colors placeholder:text-gray-500 focus:outline-none';
   const variantClasses =
     variant === 'clean'
-      ? 'pl-14 pr-36 py-6 md:py-7 rounded-full border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 bg-white shadow-lg'
+      ? 'pl-14 pr-36 py-6 md:py-7 rounded-lg border border-input focus:border-primary focus:ring-2 focus:ring-primary/20 bg-background'
       : 'pl-12 pr-12 py-4 text-lg rounded-2xl border-2 border-white/30 focus:border-blue-400 focus:ring-4 focus:ring-blue-100/50 bg-white/95 backdrop-blur-sm shadow-xl';
   return (
     <div
@@ -250,7 +250,7 @@ export default function HeroSearchBar({
                 setIsOpen(defaultSuggestions.length > 0);
               }
             }}
-            className="absolute top-1/2 -translate-y-1/2 right-2 md:right-2 h-10 px-5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm md:text-base shadow-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none transition-colors"
+            className="absolute top-1/2 -translate-y-1/2 right-2 md:right-2 h-10 px-5 rounded-md bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-sm md:text-base focus:ring-2 focus:ring-ring focus:outline-none transition-colors"
             aria-label="Hae"
           >
             Hae
@@ -260,7 +260,7 @@ export default function HeroSearchBar({
           <Loader2 className="absolute right-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-blue-400 animate-spin" />
         )}
         {isLoading && variant === 'clean' && (
-          <Loader2 className="absolute right-24 top-1/2 -translate-y-1/2 h-5 w-5 text-emerald-500 animate-spin" />
+          <Loader2 className="absolute right-24 top-1/2 -translate-y-1/2 h-5 w-5 text-primary animate-spin" />
         )}
       </div>
 

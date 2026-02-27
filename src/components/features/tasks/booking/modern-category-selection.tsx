@@ -196,7 +196,7 @@ export default function ModernCategorySelection({
           {filteredTemplates.length > 0 && (
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-5 h-5 text-emerald-600" />
+                <TrendingUp className="w-5 h-5 text-primary" />
                 <h3 className="heading-3">Suositut pohjat</h3>
               </div>
 
@@ -334,11 +334,11 @@ export default function ModernCategorySelection({
         <ModernCard variant="selected" className="mt-8 animate-scale-in">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
-                <selectedCategory.icon className="w-5 h-5 text-emerald-600" />
+              <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                <selectedCategory.icon className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <p className="body-small text-emerald-700">Valittu kategoria:</p>
+                <p className="body-small text-primary">Valittu kategoria:</p>
                 <h3 className="heading-4">{selectedCategory.name_fi}</h3>
               </div>
             </div>

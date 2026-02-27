@@ -474,7 +474,7 @@ export default function TaskEditForm({
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="sm:flex-1 bg-emerald-600 hover:bg-emerald-700"
+          className="sm:flex-1 bg-primary hover:bg-primary/90"
         >
           {isSubmitting ? (
             <div className="flex items-center gap-2">

@@ -114,7 +114,7 @@ export default function TaskHeader({
       <div className="mb-4">
         <Link
           href={backHref}
-          className="inline-flex items-center text-emerald-600 hover:text-emerald-700 hover:underline transition-colors text-sm font-medium"
+          className="inline-flex items-center text-primary hover:text-primary hover:underline transition-colors text-sm font-medium"
         >
           <ArrowLeft className="mr-1.5 h-4 w-4" />
           Takaisin
@@ -128,9 +128,9 @@ export default function TaskHeader({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-2">
               {category && (
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-lg">
-                  <CategoryIcon className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-medium text-emerald-700">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/5 border border-primary/20 rounded-lg">
+                  <CategoryIcon className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium text-primary">
                     {category.name_fi || category.name}
                   </span>
                 </div>

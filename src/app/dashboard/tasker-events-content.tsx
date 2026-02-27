@@ -114,7 +114,7 @@ export default function TaskerEventsContent({ userId }: TaskerEventsContentProps
 
   const getTransactionIcon = (transaction: TransactionData) => {
     if (transaction.transaction_type === 'earnings') {
-      return <TrendingUp className="h-4 w-4 text-emerald-600" />;
+      return <TrendingUp className="h-4 w-4 text-primary" />;
     } else if (transaction.transaction_type === 'withdrawal') {
       return <Download className="h-4 w-4 text-red-600" />;
     } else if (transaction.transaction_type.startsWith('counter_offer')) {
@@ -244,7 +244,7 @@ export default function TaskerEventsContent({ userId }: TaskerEventsContentProps
                   </div>
                   <div className={`text-sm font-semibold ${
                     transaction.amount > 0 
-                      ? 'text-emerald-600' 
+                      ? 'text-primary' 
                       : 'text-red-600'
                   }`}>
                     {transaction.amount > 0 ? '+' : ''}
@@ -281,7 +281,7 @@ export default function TaskerEventsContent({ userId }: TaskerEventsContentProps
             <Button asChild variant="outline" className="h-auto p-4">
               <Link href="/dashboard/balance/withdraw">
                 <div className="text-center">
-                  <Download className="mx-auto h-6 w-6 mb-2 text-emerald-600" />
+                  <Download className="mx-auto h-6 w-6 mb-2 text-primary" />
                   <div className="text-sm font-medium">Tee nostopyyntö</div>
                   <div className="text-xs text-gray-500">Nosta ansaitsemiasi rahoja</div>
                 </div>

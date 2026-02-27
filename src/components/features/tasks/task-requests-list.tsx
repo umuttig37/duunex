@@ -235,7 +235,7 @@ export default function TaskRequestsList({ taskerId }: TaskRequestsListProps) {
                     {task.title || 'Nimetön tehtävä'}
                   </h3>
                   {task.categories?.name_fi && (
-                    <Badge variant="secondary" className="bg-emerald-100 text-emerald-800 border-emerald-200">
+                    <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
                       {task.categories.name_fi}
                     </Badge>
                   )}
@@ -266,7 +266,7 @@ export default function TaskRequestsList({ taskerId }: TaskRequestsListProps) {
                 </Badge>
                 {task.budget && (
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-emerald-700">
+                    <div className="text-2xl font-bold text-primary">
                       {task.budget.toFixed(0)}€
                     </div>
                     <div className="text-xs text-gray-500">budjetti</div>
@@ -341,7 +341,7 @@ export default function TaskRequestsList({ taskerId }: TaskRequestsListProps) {
               <Button
                 onClick={() => handleAcceptClick(task.id)}
                 disabled={isPending}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6"
+                className="bg-primary hover:bg-primary/90 text-white px-6"
               >
                 <CheckCircle className="mr-2 h-4 w-4" />
                 Hyväksy tarjous
@@ -359,7 +359,7 @@ export default function TaskRequestsList({ taskerId }: TaskRequestsListProps) {
               <AlertDialogTitle className="flex items-center gap-2">
                 {confirmDialog.type === 'accept' ? (
                   <>
-                    <CheckCircle className="w-5 h-5 text-emerald-600" />
+                    <CheckCircle className="w-5 h-5 text-primary" />
                     Hyväksy tehtäväpyyntö?
                   </>
                 ) : (
@@ -409,7 +409,7 @@ export default function TaskRequestsList({ taskerId }: TaskRequestsListProps) {
                   : handleDecline(confirmDialog.taskId)
                 }
                 className={confirmDialog.type === 'accept'
-                  ? 'bg-emerald-600 hover:bg-emerald-700'
+                  ? 'bg-primary hover:bg-primary/90'
                   : 'bg-red-600 hover:bg-red-700'
                 }
                 disabled={isPending}

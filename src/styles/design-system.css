@@ -1,96 +1,88 @@
-/* Modern Task Booking Flow Design System */
-/* Inspired by hero sections and HowItWorksSection styling */
+/* Minimalist Design System: black – graphite – white – green (accent) */
+/* References: Thumbtack, Apple, Klarna */
 
 /* ================================
-   COLOR PALETTE (EMERALD-FOCUSED)
+   COLOR PALETTE
    ================================ */
 :root {
-  /* Primary emerald colors from hero sections */
-  --emerald-50: #f0fdf4;
-  --emerald-100: #dcfce7;
-  --emerald-200: #bbf7d0;
-  --emerald-600: #059669;
-  --emerald-700: #047857;
-  --emerald-900: #064e3b;
+  /* Graphite scale (neutral) */
+  --graphite-50: #fafafa;
+  --graphite-100: #f4f4f5;
+  --graphite-200: #e4e4e7;
+  --graphite-300: #d4d4d8;
+  --graphite-400: #a1a1aa;
+  --graphite-500: #71717a;
+  --graphite-600: #52525b;
+  --graphite-700: #3f3f46;
+  --graphite-800: #27272a;
+  --graphite-900: #18181b;
 
-  /* Supporting colors */
-  --blue-50: #eff6ff;
-  --blue-100: #dbeafe;
-  --blue-200: #bfdbfe;
-  --blue-600: #2563eb;
-  --blue-700: #1d4ed8;
+  /* Green accent (single CTA color) */
+  --accent-green: #16a34a;
+  --accent-green-hover: #15803d;
+  --accent-green-muted: #dcfce7;
+  --accent-green-border: #86efac;
 
-  /* Neutral colors */
-  --gray-50: #f9fafb;
-  --gray-100: #f3f4f6;
-  --gray-200: #e5e7eb;
-  --gray-300: #d1d5db;
-  --gray-600: #4b5563;
-  --gray-700: #374151;
-  --gray-900: #111827;
-
-  /* Semantic colors */
-  --success: var(--emerald-600);
-  --success-bg: var(--emerald-50);
-  --info: var(--blue-600);
-  --info-bg: var(--blue-50);
-  --warning: #f59e0b;
-  --warning-bg: #fef3c7;
-  --error: #ef4444;
-  --error-bg: #fef2f2;
+  /* Semantic */
+  --success: var(--accent-green);
+  --success-bg: var(--accent-green-muted);
+  --info: var(--graphite-600);
+  --info-bg: var(--graphite-100);
+  --warning: #ca8a04;
+  --warning-bg: #fef9c3;
+  --error: #dc2626;
+  --error-bg: #fee2e2;
 }
 
 /* ================================
-   TYPOGRAPHY SCALE
+   TYPOGRAPHY (minimal, clear hierarchy)
    ================================ */
 .heading-1 {
-  @apply text-3xl md:text-4xl font-bold text-gray-900 leading-tight;
+  @apply text-3xl md:text-4xl font-semibold text-foreground tracking-tight leading-tight;
 }
 
 .heading-2 {
-  @apply text-2xl md:text-3xl font-bold text-gray-900 leading-tight;
+  @apply text-2xl md:text-3xl font-semibold text-foreground tracking-tight leading-tight;
 }
 
 .heading-3 {
-  @apply text-lg md:text-xl font-semibold text-emerald-900 leading-snug;
+  @apply text-lg md:text-xl font-semibold text-foreground leading-snug;
 }
 
 .heading-4 {
-  @apply text-base md:text-lg font-semibold text-gray-900 leading-snug;
+  @apply text-base md:text-lg font-medium text-foreground leading-snug;
 }
 
-/* Body text */
 .body-large {
-  @apply text-base md:text-lg text-gray-600 leading-relaxed;
+  @apply text-base md:text-lg text-muted-foreground leading-relaxed;
 }
 
 .body-base {
-  @apply text-sm md:text-base text-gray-600 leading-relaxed;
+  @apply text-sm md:text-base text-muted-foreground leading-relaxed;
 }
 
 .body-small {
-  @apply text-xs md:text-sm text-gray-500 leading-relaxed;
+  @apply text-xs md:text-sm text-muted-foreground leading-relaxed;
 }
 
-/* Special text styles */
 .text-accent {
-  @apply text-emerald-700 font-medium;
+  @apply text-primary font-medium;
 }
 
 .text-muted {
-  @apply text-gray-500;
+  @apply text-muted-foreground;
 }
 
 .text-success {
-  @apply text-emerald-700;
+  @apply text-primary;
 }
 
 .text-info {
-  @apply text-blue-700;
+  @apply text-zinc-600;
 }
 
 /* ================================
-   SPACING SYSTEM
+   SPACING
    ================================ */
 .section-padding {
   @apply px-4 py-8 md:py-12;
@@ -113,140 +105,134 @@
 }
 
 /* ================================
-   BUTTON SYSTEM
+   BUTTONS (minimal: rounded-md, no pill)
    ================================ */
 .btn-primary {
-  @apply h-12 px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
-  min-height: 48px; /* iOS accessibility standard */
+  @apply h-11 px-5 rounded-md bg-primary text-primary-foreground font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90;
+  min-height: 44px;
 }
 
 .btn-secondary {
-  @apply h-12 px-6 rounded-full border-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50 font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
-  min-height: 48px;
+  @apply h-11 px-5 rounded-md border border-border bg-secondary text-secondary-foreground font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary/80;
+  min-height: 44px;
 }
 
 .btn-outline {
-  @apply h-12 px-6 rounded-full border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
-  min-height: 48px;
+  @apply h-11 px-5 rounded-md border border-input bg-background font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent hover:text-accent-foreground;
+  min-height: 44px;
 }
 
 .btn-ghost {
-  @apply h-12 px-6 rounded-full text-gray-600 hover:bg-gray-100 font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
-  min-height: 48px;
+  @apply h-11 px-5 rounded-md text-foreground/80 font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-accent hover:text-accent-foreground;
+  min-height: 44px;
 }
 
 .btn-small {
-  @apply h-10 px-4 rounded-full text-sm font-medium transition-colors duration-200;
-  min-height: 40px;
+  @apply h-9 px-3 rounded-md text-sm font-medium transition-colors duration-200;
+  min-height: 36px;
 }
 
 /* ================================
-   CARD SYSTEM
+   CARDS (clean borders, subtle radius)
    ================================ */
 .card-base {
-  @apply bg-white rounded-2xl border border-gray-200 shadow-sm;
+  @apply bg-card rounded-lg border border-border text-card-foreground;
 }
 
 .card-elevated {
-  @apply bg-white rounded-2xl border border-gray-200 shadow-lg;
+  @apply bg-card rounded-lg border border-border shadow-sm text-card-foreground;
 }
 
 .card-interactive {
-  @apply bg-white rounded-2xl border-2 border-gray-200 hover:border-emerald-300 hover:shadow-md cursor-pointer transition-all duration-200;
+  @apply bg-card rounded-lg border border-border hover:border-primary/30 transition-colors duration-200 cursor-pointer text-card-foreground;
 }
 
 .card-selected {
-  @apply bg-emerald-50 border-2 border-emerald-600 shadow-md;
+  @apply bg-primary/5 border border-primary rounded-lg text-card-foreground;
 }
 
 .card-gradient {
-  @apply bg-gradient-to-br from-emerald-50 to-blue-50 border border-emerald-200;
+  @apply bg-gradient-to-br from-zinc-50 to-white border border-border rounded-lg;
 }
 
 /* ================================
-   STEP INDICATOR SYSTEM
+   STEP INDICATOR
    ================================ */
 .step-indicator {
-  @apply flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full font-semibold text-sm md:text-base transition-all duration-200;
+  @apply flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-md font-medium text-sm transition-all duration-200;
 }
 
 .step-indicator.active {
-  @apply bg-emerald-600 text-white shadow-md;
+  @apply bg-primary text-primary-foreground;
 }
 
 .step-indicator.completed {
-  @apply bg-emerald-100 text-emerald-700;
+  @apply bg-primary/10 text-primary;
 }
 
 .step-indicator.inactive {
-  @apply bg-gray-100 text-gray-400;
+  @apply bg-muted text-muted-foreground;
 }
 
 .step-connector {
-  @apply w-full h-0.5 bg-gray-200;
+  @apply w-full h-px bg-border;
 }
 
 .step-connector.completed {
-  @apply bg-emerald-300;
+  @apply bg-primary/30;
 }
 
 /* ================================
-   FORM ELEMENTS
+   FORMS
    ================================ */
 .form-input {
-  @apply w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-colors duration-200 text-gray-900 placeholder-gray-500;
-  min-height: 48px;
+  @apply w-full px-3 py-2.5 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors duration-200;
+  min-height: 44px;
 }
 
 .form-input.error {
-  @apply border-red-300 focus:border-red-500 focus:ring-red-100;
+  @apply border-destructive focus:ring-destructive/20;
 }
 
 .form-label {
-  @apply block text-sm font-semibold text-gray-900 mb-2;
+  @apply block text-sm font-medium text-foreground mb-1.5;
 }
 
 .form-help {
-  @apply text-xs text-gray-500 mt-1;
+  @apply text-xs text-muted-foreground mt-1;
 }
 
 .form-error {
-  @apply text-xs text-red-600 mt-1 font-medium;
+  @apply text-xs text-destructive mt-1 font-medium;
 }
 
 /* ================================
-   BADGE SYSTEM
+   BADGES
    ================================ */
 .badge-base {
-  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium;
 }
 
-.badge-emerald {
-  @apply bg-emerald-100 text-emerald-700 border border-emerald-200;
+.badge-emerald,
+.badge-success {
+  @apply bg-primary/10 text-primary border border-primary/20;
 }
 
-.badge-blue {
-  @apply bg-blue-100 text-blue-700 border border-blue-200;
+.badge-blue,
+.badge-info {
+  @apply bg-zinc-100 text-zinc-700 border border-zinc-200;
 }
 
 .badge-gray {
-  @apply bg-gray-100 text-gray-700 border border-gray-200;
-}
-
-.badge-success {
-  @apply bg-emerald-100 text-emerald-800;
-}
-
-.badge-info {
-  @apply bg-blue-100 text-blue-800;
+  @apply bg-muted text-muted-foreground border border-border;
 }
 
 .badge-warning {
-  @apply bg-yellow-100 text-yellow-800;
+  @apply bg-amber-100 text-amber-800 border border-amber-200;
 }
 
 /* ================================
-   UTILITY CLASSES
+   UTILITIES
    ================================ */
 .container-responsive {
   @apply max-w-4xl mx-auto px-4;
@@ -269,14 +255,14 @@
 }
 
 /* ================================
-   ANIMATION UTILITIES
+   ANIMATIONS
    ================================ */
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.25s ease-out;
 }
 
 .animate-slide-up {
-  animation: slideUp 0.4s ease-out;
+  animation: slideUp 0.3s ease-out;
 }
 
 .animate-scale-in {
@@ -289,60 +275,48 @@
 }
 
 @keyframes slideUp {
-  from { 
-    opacity: 0; 
-    transform: translateY(20px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scaleIn {
-  from { 
-    opacity: 0; 
-    transform: scale(0.95); 
-  }
-  to { 
-    opacity: 1; 
-    transform: scale(1); 
-  }
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 /* ================================
-   FOCUS MANAGEMENT
+   FOCUS
    ================================ */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2;
+  @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
 }
 
 .focus-ring-inset {
-  @apply focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-inset;
+  @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-inset;
 }
 
 /* ================================
-   TOUCH TARGETS (MOBILE)
+   TOUCH TARGETS
    ================================ */
 .touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.touch-target-large {
   min-height: 48px;
   min-width: 48px;
 }
 
-.touch-target-large {
-  min-height: 56px;
-  min-width: 56px;
-}
-
 /* ================================
-   LOADING STATES
+   LOADING
    ================================ */
 .loading-spinner {
   @apply animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full;
 }
 
 .loading-skeleton {
-  @apply animate-pulse bg-gray-200 rounded;
+  @apply animate-pulse bg-muted rounded;
 }
 
 /* ================================
@@ -361,18 +335,16 @@
 }
 
 /* ================================
-   HIGH CONTRAST MODE SUPPORT
+   HIGH CONTRAST
    ================================ */
 @media (prefers-contrast: high) {
   .btn-primary {
-    @apply border-2 border-emerald-800;
+    @apply border-2 border-foreground;
   }
-  
   .card-interactive {
-    @apply border-gray-400;
+    @apply border-foreground/30;
   }
-  
   .card-selected {
-    @apply border-emerald-800;
+    @apply border-primary;
   }
 }

@@ -120,7 +120,7 @@ export default function EnhancedTaskerMapContent({
                 <div className="text-xs text-blue-600">Kiireellisiä</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold text-emerald-600">{taskStats.noOffers}</div>
+                <div className="text-lg font-bold text-primary">{taskStats.noOffers}</div>
                 <div className="text-xs text-blue-600">Ei tarjouksia</div>
               </div>
             </div>
@@ -139,7 +139,7 @@ export default function EnhancedTaskerMapContent({
               <div className="text-xs text-blue-600">Kiireellisiä</div>
             </div>
             <div>
-              <div className="text-lg font-bold text-emerald-600">{taskStats.noOffers}</div>
+              <div className="text-lg font-bold text-primary">{taskStats.noOffers}</div>
               <div className="text-xs text-blue-600">Ei tarjouksia</div>
             </div>
           </div>
@@ -290,7 +290,7 @@ export default function EnhancedTaskerMapContent({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-emerald-600 mb-1">
+                <div className="text-2xl font-bold text-primary mb-1">
                   {taskStats.noOffers}
                 </div>
                 <p className="text-xs text-gray-600">

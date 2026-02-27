@@ -68,7 +68,7 @@ function ConversationSectionComponent({
                 {conversations.length}
               </Badge>
               {totalUnread > 0 && (
-                <Badge variant="secondary" className="text-xs bg-emerald-100 text-emerald-700">
+                <Badge variant="secondary" className="text-xs bg-primary/10 text-primary">
                   {totalUnread} lukematon{totalUnread !== 1 ? 'ta' : ''}
                 </Badge>
               )}

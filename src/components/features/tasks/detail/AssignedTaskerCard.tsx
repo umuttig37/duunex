@@ -25,10 +25,10 @@ export default function AssignedTaskerCard({
   const fullName = `${tasker.first_name || ''} ${tasker.last_name || ''}`.trim() || 'Tuntematon';
 
   return (
-    <Card className="border-emerald-200 bg-emerald-50/30">
+    <Card className="border-primary/20 bg-primary/5/30">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-semibold text-slate-800 flex items-center">
-          <Star className="h-5 w-5 mr-2 text-emerald-600" />
+          <Star className="h-5 w-5 mr-2 text-primary" />
           {status === 'request_sent' ? 'Pyyntö lähetetty tekijälle' : 'Valittu tekijä'}
         </CardTitle>
       </CardHeader>
@@ -42,11 +42,11 @@ export default function AssignedTaskerCard({
                 alt={fullName}
                 width={56}
                 height={56}
-                className="rounded-full border-2 border-emerald-200"
+                className="rounded-full border-2 border-primary/20"
               />
             ) : (
-              <div className="h-14 w-14 rounded-full bg-emerald-100 flex items-center justify-center border-2 border-emerald-200">
-                <User className="h-7 w-7 text-emerald-600" />
+              <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center border-2 border-primary/20">
+                <User className="h-7 w-7 text-primary" />
               </div>
             )}
           </div>
@@ -77,7 +77,7 @@ export default function AssignedTaskerCard({
             {canMessage && (
               <Link
                 href={`/dashboard/messages?receiverId=${tasker.id}&taskId=${taskId}`}
-                className="inline-flex items-center text-sm text-emerald-600 hover:text-emerald-700 hover:underline font-medium"
+                className="inline-flex items-center text-sm text-primary hover:text-primary hover:underline font-medium"
               >
                 <MessageSquare className="mr-1 h-4 w-4" />
                 Lähetä viesti

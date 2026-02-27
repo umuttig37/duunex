@@ -110,12 +110,12 @@ export function Header() {
           {/* Messages */}
           <Link
             href="/dashboard/messages"
-            className="relative flex h-9 w-9 items-center justify-center rounded-lg hover:bg-emerald-50 text-gray-600 hover:text-emerald-600 transition-colors"
+            className="relative flex h-9 w-9 items-center justify-center rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
             title="Viestit"
           >
             <MessageSquare className="h-5 w-5" />
             {unreadMessages.unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 inline-flex items-center justify-center rounded-full bg-emerald-600 text-white text-[10px] font-semibold h-5 min-w-[1.1rem] px-1">
+              <span className="absolute -top-1 -right-1 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-semibold h-5 min-w-[1.1rem] px-1">
                 {unreadMessages.unreadCount}
               </span>
             )}
@@ -124,7 +124,7 @@ export function Header() {
           {userRole === 'user' && (
             <Link
               href="/dashboard/tasks/new"
-              className="hidden md:flex items-center gap-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-3 py-2 transition-colors"
+              className="hidden md:flex items-center gap-1 rounded-md bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-medium px-3 py-2 transition-colors"
             >
               <PlusCircle className="h-4 w-4" />
               <span>Uusi Tehtävä</span>
@@ -133,7 +133,7 @@ export function Header() {
           {userRole === 'tasker' && (
             <Link
               href="/dashboard/open-tasks"
-              className="hidden md:flex items-center gap-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-3 py-2 transition-colors"
+              className="hidden md:flex items-center gap-1 rounded-md bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-medium px-3 py-2 transition-colors"
             >
               <ListChecks className="h-4 w-4" />
               <span>Avoimet</span>
@@ -143,15 +143,15 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
-                className="flex items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 group pl-1 pr-3 h-10 bg-white hover:bg-emerald-50 border border-emerald-100"
+                className="flex items-center gap-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring group pl-1 pr-3 h-10 bg-background hover:bg-muted border border-border"
               >
-                <Avatar className="h-8 w-8 ring-1 ring-emerald-100 group-hover:ring-emerald-200 transition">
+                <Avatar className="h-8 w-8 ring-1 ring-border transition">
                   <AvatarImage src={user?.user_metadata?.avatar_url} alt={userName} />
-                  <AvatarFallback className="bg-emerald-100 text-emerald-700 font-semibold">
+                  <AvatarFallback className="bg-muted text-foreground font-medium">
                     {userName?.charAt(0).toUpperCase() || 'U'}
                   </AvatarFallback>
                 </Avatar>
-                <span className="hidden sm:inline text-sm font-medium text-gray-700 group-hover:text-emerald-700 max-w-[110px] truncate">
+                <span className="hidden sm:inline text-sm font-medium text-foreground max-w-[110px] truncate">
                   {userName}
                 </span>
               </button>
@@ -159,9 +159,9 @@ export function Header() {
             <DropdownMenuContent className="w-60" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-9 w-9 ring-1 ring-emerald-100">
+                  <Avatar className="h-9 w-9 ring-1 ring-border">
                     <AvatarImage src={user?.user_metadata?.avatar_url} alt={userName} />
-                    <AvatarFallback className="bg-emerald-100 text-emerald-700 font-semibold">
+                    <AvatarFallback className="bg-muted text-foreground font-medium">
                       {userName?.charAt(0).toUpperCase() || 'U'}
                     </AvatarFallback>
                   </Avatar>
@@ -185,7 +185,7 @@ export function Header() {
                   <MessageSquare className="mr-2 h-4 w-4" />
                   <span>Viestit</span>
                   {unreadMessages.unreadCount > 0 && (
-                    <span className="ml-auto inline-flex items-center justify-center rounded-full bg-emerald-600 text-white text-[10px] font-semibold h-5 min-w-[1.1rem] px-1">
+                    <span className="ml-auto inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-semibold h-5 min-w-[1.1rem] px-1">
                       {unreadMessages.unreadCount}
                     </span>
                   )}
@@ -207,7 +207,7 @@ export function Header() {
           variant="outline"
           asChild
           size="sm"
-          className="flex-shrink-0 rounded-lg px-2 sm:px-4 py-2 sm:py-2 hover:bg-emerald-50/70 border border-emerald-200/50 text-emerald-700 hover:text-emerald-800 transition-all duration-200 text-xs sm:text-sm touch-manipulation"
+          className="flex-shrink-0 rounded-md px-2 sm:px-4 py-2 border-border text-foreground hover:bg-muted text-xs sm:text-sm touch-manipulation"
         >
           <Link href="/login">
             <LogIn className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
@@ -218,7 +218,7 @@ export function Header() {
         <Button
           asChild
           size="sm"
-          className="flex-shrink-0 rounded-lg px-2 sm:px-4 py-2 sm:py-2 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transition-all duration-200 text-xs sm:text-sm touch-manipulation"
+          className="flex-shrink-0 rounded-md px-2 sm:px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs sm:text-sm touch-manipulation"
         >
           <Link href="/signup">
             <UserPlus className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
@@ -237,22 +237,22 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-emerald-100 bg-white/90 backdrop-blur-md">
+      <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-3 sm:px-6">
           <div className="h-14 sm:h-16 flex items-center gap-2 sm:gap-4 overflow-hidden">
             {/* Left cluster */}
             <div className="flex items-center gap-2 sm:gap-6 min-w-0 flex-shrink-0">
-              <Link href="/" className="flex items-center gap-1 sm:gap-2 font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex-shrink-0 touch-manipulation">
-                <div className="w-8 h-8 sm:w-8 sm:h-8 rounded-md bg-emerald-600 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-sm">TM</div>
+              <Link href="/" className="flex items-center gap-1 sm:gap-2 font-semibold text-foreground hover:text-primary transition-colors flex-shrink-0 touch-manipulation">
+                <div className="w-8 h-8 sm:w-8 sm:h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs sm:text-sm">TM</div>
                 <span className="hidden sm:inline text-lg tracking-tight">TaskMVP</span>
               </Link>
               {!isMobile && (
-                <nav className="hidden md:flex items-center gap-2 text-sm font-medium text-gray-600">
+                <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-muted-foreground">
                   {navItems.map(item => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="px-3 py-2 rounded-md hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+                      className="px-3 py-2 rounded-md hover:text-foreground hover:bg-muted transition-colors"
                     >
                       {item.label}
                     </Link>
@@ -265,30 +265,30 @@ export function Header() {
               {isMobile && (
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon" className="rounded-lg h-10 w-10 touch-manipulation">
+                    <Button variant="ghost" size="icon" className="rounded-md h-10 w-10 touch-manipulation">
                       <Menu className="h-5 w-5" />
                       <span className="sr-only">Valikko</span>
                     </Button>
                   </SheetTrigger>
                   <SheetContent side="right" className="w-[300px] max-w-[90vw] p-0">
                     <SheetTitle className="sr-only">TaskMVP Navigaatiovalikko</SheetTitle>
-                    <div className="p-6 border-b bg-gradient-to-br from-emerald-50 to-white">
+                    <div className="p-6 border-b border-border bg-muted/30">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-md bg-emerald-600 flex items-center justify-center text-white font-bold text-sm">TM</div>
-                        <span className="font-semibold text-emerald-700">TaskMVP</span>
+                        <div className="w-9 h-9 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">TM</div>
+                        <span className="font-semibold text-foreground">TaskMVP</span>
                       </div>
                     </div>
-                    <nav className="p-4 flex flex-col gap-2">
+                    <nav className="p-4 flex flex-col gap-1">
                       {navItems.map(item => (
                         <Link
                           key={item.href}
                           href={item.href}
-                          className="px-4 py-3 rounded-md hover:bg-emerald-50 text-sm font-medium text-gray-700 hover:text-emerald-700 touch-manipulation"
+                          className="px-4 py-3 rounded-md hover:bg-muted text-sm font-medium text-foreground touch-manipulation"
                         >
                           {item.label}
                         </Link>
                       ))}
-                      <div className="mt-4 pt-4 border-t space-y-2">
+                      <div className="mt-4 pt-4 border-t border-border space-y-2">
                         <AuthButtons />
                       </div>
                     </nav>

@@ -20,7 +20,7 @@ export default function TaskerMapContent({ taskerId, openTasksForMap }: TaskerMa
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-xl">
-            <MapPin className="h-5 w-5 text-emerald-600" />
+            <MapPin className="h-5 w-5 text-primary" />
           </div>
           <div>
             <h2 className="text-xl font-semibold text-gray-900">Lähialueen tehtävät</h2>
@@ -30,7 +30,7 @@ export default function TaskerMapContent({ taskerId, openTasksForMap }: TaskerMa
           </div>
         </div>
         {tasksCount > 0 && (
-          <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 font-medium">
+          <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 font-medium">
             <Zap className="h-3 w-3 mr-1.5" />
             {tasksCount}
           </Badge>
@@ -47,7 +47,7 @@ export default function TaskerMapContent({ taskerId, openTasksForMap }: TaskerMa
               {/* Modern floating status */}
               <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md rounded-2xl px-4 py-2.5 shadow-lg border border-white/20 z-10">
                 <div className="flex items-center gap-2.5 text-sm font-medium text-gray-700">
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></div>
                   <span>{tasksCount} avointa</span>
                 </div>
               </div>

@@ -49,12 +49,12 @@ const getTaskStatusMeta = (status: string): StatusMeta => {
     completed: {
       label: 'Valmis',
       variant: 'default',
-      className: 'bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-500'
+      className: 'bg-primary hover:bg-primary text-white border-emerald-500'
     },
     early_completed: {
       label: 'Valmis (aikainen)',
       variant: 'default',
-      className: 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600'
+      className: 'bg-primary hover:bg-primary/90 text-white border-emerald-600'
     },
     cancelled: {
       label: 'Peruutettu',

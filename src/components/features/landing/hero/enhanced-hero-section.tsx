@@ -63,24 +63,19 @@ const EnhancedHeroSection = () => {
   }, []);
 
   return (
-    <section className="bg-gradient-to-b from-white via-emerald-50/40 to-white pt-16 sm:pt-20 pb-8 lg:pb-12">
+    <section className="bg-background pt-16 sm:pt-20 pb-8 lg:pb-12">
       <div className="max-w-6xl mx-auto px-4">
-        {/* Main heading - more compact */}
         <div className="text-center mb-6">
-          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-3 leading-tight">
-            Löydä luotettavaa apua{' '}
-            <span className="bg-gradient-to-r from-emerald-600 via-blue-600 to-emerald-600 bg-clip-text text-transparent">
-              kotiin, tänään
-            </span>
+          <h1 className="text-3xl lg:text-4xl font-semibold text-foreground tracking-tight mb-3 leading-tight">
+            Löydä luotettavaa apua <span className="text-primary">kotiin, tänään</span>
           </h1>
 
-          <p className="text-base text-gray-600 max-w-xl mx-auto mb-4">
+          <p className="text-base text-muted-foreground max-w-xl mx-auto mb-4">
             Siivouspalveluista huonekalujen kokoamiseen, tarkistetut auttajat ovat valmiina kun tarvitset.
           </p>
 
-          {/* Prominent Paytrail Partnership Display */}
-          <div className="flex items-center justify-center gap-3 py-3 px-4 bg-white rounded-xl border border-emerald-100 shadow-sm max-w-sm mx-auto">
-            <span className="text-sm font-medium text-gray-700">Turvalliset maksut Paytraililla!</span>
+          <div className="flex items-center justify-center gap-3 py-3 px-4 bg-muted/50 rounded-lg border border-border max-w-sm mx-auto">
+            <span className="text-sm font-medium text-foreground">Turvalliset maksut Paytraililla!</span>
             <Image
               src="/images/hero/paytrail.png"
               alt="Paytrail - Turvallinen maksukumppani"
@@ -128,7 +123,7 @@ const EnhancedHeroSection = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => setShowAllCategories(!showAllCategories)}
-                      className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 font-medium"
+                      className="text-primary hover:bg-primary/10 font-medium"
                     >
                       {showAllCategories ? (
                         <>Näytä vähemmän</>
@@ -147,7 +142,7 @@ const EnhancedHeroSection = () => {
         {activeCategory && (
           <>
             {/* divider */}
-            <div className="h-px bg-gray-200 w-full my-6"></div>
+            <div className="h-px bg-border w-full my-6" />
 
             {/* Compact layout for selected category */}
             <div className="max-w-5xl mx-auto">
@@ -168,30 +163,20 @@ const EnhancedHeroSection = () => {
 
         {/* CTA Buttons - more compact positioning */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6 max-w-md mx-auto">
-          <Button
-            asChild
-            size="lg"
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg font-medium"
-          >
+          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-md font-medium">
             <Link href="/dashboard/tasks/new" onClick={() => trackEvent('hero_cta_click', { type: 'create_task' })}>
               Luo tehtävä
             </Link>
           </Button>
-          <Button
-            asChild
-            variant="outline"
-            size="lg"
-            className="border-emerald-300 text-emerald-700 hover:bg-emerald-50 px-8 py-4 rounded-lg font-medium"
-          >
+          <Button asChild variant="outline" size="lg" className="border-border text-foreground hover:bg-muted rounded-md px-8 py-4 font-medium">
             <Link href="/signup/tasker" onClick={() => trackEvent('hero_cta_click', { type: 'become_tasker' })}>Ryhdy tekijäksi</Link>
           </Button>
         </div>
 
-        {/* Trust elements - simplified without duplicate Paytrail logo */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 pt-4 border-t border-gray-100">
-          <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-gray-600">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 pt-4 border-t border-border">
+          <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-muted-foreground">
             <span>✓ Rahasi palautetaan, jos työ ei onnistu</span>
-            <span className="hidden sm:inline text-gray-400">•</span>
+            <span className="hidden sm:inline">•</span>
             <span>Luottaa yli 10 000 kotitaloutta</span>
           </div>
         </div>

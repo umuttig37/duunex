@@ -152,7 +152,7 @@ export default async function OpenTasksPage() {
             </p>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold text-emerald-600">
+            <div className="text-2xl font-bold text-primary">
               {openTasksForMap.length}
             </div>
             <div className="text-sm text-gray-500">

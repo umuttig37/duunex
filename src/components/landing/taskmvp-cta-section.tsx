@@ -25,7 +25,7 @@ export default function TaskMvpCtaSection() {
               <Button
                 asChild
                 size="lg"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-full px-6 py-3 transition-colors duration-200"
+                className="bg-primary hover:bg-primary/90 text-white font-semibold rounded-full px-6 py-3 transition-colors duration-200"
               >
                 <Link href="/dashboard/tasks/new">
                   Aloita tehtävä

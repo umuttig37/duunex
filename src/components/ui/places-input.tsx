@@ -223,7 +223,7 @@ export default function PlacesInput({
           disabled={disabled}
           className={cn(
             "w-full pl-10 pr-10 py-2.5 border border-gray-200 rounded-lg",
-            "focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent",
+            "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
             "placeholder:text-gray-400 text-sm",
             "disabled:bg-gray-50 disabled:cursor-not-allowed",
             className
@@ -253,10 +253,10 @@ export default function PlacesInput({
               onClick={() => handleSelectSuggestion(suggestion)}
               className={cn(
                 "w-full px-4 py-3 text-left text-sm hover:bg-gray-50 flex items-start gap-3 border-b border-gray-100 last:border-b-0",
-                index === selectedIndex && "bg-emerald-50"
+                index === selectedIndex && "bg-primary/5"
               )}
             >
-              <MapPin className="h-4 w-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+              <MapPin className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-gray-900 truncate">
                   {formatAddress(suggestion)}

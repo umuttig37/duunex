@@ -146,7 +146,7 @@ export default function MediaGallery({ attachments, taskTitle }: MediaGalleryPro
             onClick={() => openModal(index)}
             className={`relative h-16 md:h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
               index === selectedImageIndex
-                ? 'border-emerald-500 ring-2 ring-emerald-200'
+                ? 'border-emerald-500 ring-2 ring-primary/20'
                 : 'border-transparent hover:border-slate-300'
             }`}
           >
@@ -158,7 +158,7 @@ export default function MediaGallery({ attachments, taskTitle }: MediaGalleryPro
               className="transition-opacity duration-200 hover:opacity-80"
             />
             {index === selectedImageIndex && (
-              <div className="absolute inset-0 bg-emerald-500 bg-opacity-20" />
+              <div className="absolute inset-0 bg-primary bg-opacity-20" />
             )}
           </button>
         ))}

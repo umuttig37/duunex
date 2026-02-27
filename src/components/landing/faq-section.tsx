@@ -33,36 +33,32 @@ const faqs: { question: string; answer: string }[] = [
 
 export default function FAQSection() {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-white">
+    <section className="py-12 sm:py-16 md:py-20 bg-background">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-5 gap-10">
-        {/* Left: big heading */}
         <div className="lg:col-span-2">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-[1.1]">
+          <h2 className="text-3xl sm:text-4xl font-semibold text-foreground tracking-tight leading-[1.15]">
             Usein kysytyt
             <br />
             kysymykset
           </h2>
         </div>
-
-        {/* Right: minimalist list */}
         <div className="lg:col-span-3">
-          <Accordion.Root type="single" collapsible className="divide-y divide-gray-200 border-y">
+          <Accordion.Root type="single" collapsible className="divide-y divide-border border-y border-border">
             {faqs.map((faq, index) => (
               <Accordion.Item key={index} value={`item-${index}`} className="group">
                 <Accordion.Trigger className="w-full text-left py-5 focus:outline-none">
                   <div className="flex items-center justify-between gap-6">
-                    <span className="text-base md:text-lg font-medium text-gray-900">
+                    <span className="text-base md:text-lg font-medium text-foreground">
                       {faq.question}
                     </span>
-                    <span className="shrink-0 text-emerald-600">
-                      {/* plus/minus toggle */}
+                    <span className="shrink-0 text-primary">
                       <Plus className="h-5 w-5 group-data-[state=open]:hidden" />
                       <Minus className="h-5 w-5 hidden group-data-[state=open]:block" />
                     </span>
                   </div>
                 </Accordion.Trigger>
                 <Accordion.Content className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up overflow-hidden">
-                  <div className="pb-5 pr-10 text-gray-600">
+                  <div className="pb-5 pr-10 text-muted-foreground">
                     {faq.answer}
                   </div>
                 </Accordion.Content>

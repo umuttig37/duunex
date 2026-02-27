@@ -71,7 +71,7 @@ function ConversationListComponent({
             placeholder="Hae keskusteluja..."
             value={searchQuery}
             onChange={handleSearchChange}
-            className="pl-10 bg-white border-gray-300 focus:bg-white focus:border-emerald-400 focus:ring-1 focus:ring-emerald-200"
+            className="pl-10 bg-white border-gray-300 focus:bg-white focus:border-emerald-400 focus:ring-1 focus:ring-primary/20"
           />
         </div>
 
@@ -84,7 +84,7 @@ function ConversationListComponent({
             className={`
               flex-shrink-0 text-xs
               ${filterType === 'all'
-                ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
+                ? 'bg-primary/10 text-primary hover:bg-emerald-200'
                 : 'text-gray-600 hover:text-gray-900'
               }
             `}
@@ -103,7 +103,7 @@ function ConversationListComponent({
             className={`
               flex-shrink-0 text-xs
               ${filterType === 'active'
-                ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
+                ? 'bg-primary/10 text-primary hover:bg-emerald-200'
                 : 'text-gray-600 hover:text-gray-900'
               }
             `}
@@ -123,7 +123,7 @@ function ConversationListComponent({
             className={`
               flex-shrink-0 text-xs
               ${filterType === 'unread'
-                ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
+                ? 'bg-primary/10 text-primary hover:bg-emerald-200'
                 : 'text-gray-600 hover:text-gray-900'
               }
             `}
@@ -131,7 +131,7 @@ function ConversationListComponent({
             <span className="hidden sm:inline">Lukemattomat</span>
             <span className="sm:hidden">Unread</span>
             {conversationCounts.unreadCount > 0 && (
-              <Badge variant="secondary" className="ml-1 bg-emerald-600 text-white text-xs font-bold border border-emerald-700">
+              <Badge variant="secondary" className="ml-1 bg-primary text-white text-xs font-bold border border-emerald-700">
                 {conversationCounts.unreadCount}
               </Badge>
             )}
@@ -144,7 +144,7 @@ function ConversationListComponent({
             className={`
               flex-shrink-0 text-xs
               ${filterType === 'completed'
-                ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
+                ? 'bg-primary/10 text-primary hover:bg-emerald-200'
                 : 'text-gray-600 hover:text-gray-900'
               }
             `}
@@ -165,7 +165,7 @@ function ConversationListComponent({
               className={`
                 flex-shrink-0 text-xs
                 ${filterType === 'pinned'
-                  ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
+                  ? 'bg-primary/10 text-primary hover:bg-emerald-200'
                   : 'text-gray-600 hover:text-gray-900'
                 }
               `}

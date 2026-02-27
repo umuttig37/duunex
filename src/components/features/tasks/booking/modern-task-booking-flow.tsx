@@ -497,24 +497,24 @@ export default function ModernTaskBookingFlow({
 
       {/* Restored State Banner */}
       {showRestoredBanner && (
-        <div className="bg-emerald-50 border border-emerald-200 mx-4 mt-4 p-4 rounded-lg animate-slide-down">
+        <div className="bg-primary/5 border border-primary/20 mx-4 mt-4 p-4 rounded-lg animate-slide-down">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
-                <CheckCircle className="w-4 h-4 text-emerald-600" />
+              <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <p className="font-medium text-emerald-800">
+                <p className="font-medium text-primary">
                   Tiedot palautettu
                 </p>
-                <p className="text-sm text-emerald-700">
+                <p className="text-sm text-primary">
                   Jatkat siitä mihin jäit
                 </p>
               </div>
             </div>
             <button
               onClick={() => setShowRestoredBanner(false)}
-              className="text-emerald-600 hover:text-emerald-800 p-1"
+              className="text-primary hover:text-primary p-1"
             >
               <X className="w-4 h-4" />
             </button>

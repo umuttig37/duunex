@@ -244,7 +244,7 @@ export default function EnhancedPaymentDashboard({
     switch (status) {
       case 'paid':
         return (
-          <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200">
+          <Badge className="bg-primary/10 text-primary border-primary/20">
             <CheckCircle className="h-3 w-3 mr-1" />
             Maksettu
           </Badge>
@@ -277,7 +277,7 @@ export default function EnhancedPaymentDashboard({
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'paid': return <CheckCircle className="h-5 w-5 text-emerald-600" />;
+      case 'paid': return <CheckCircle className="h-5 w-5 text-primary" />;
       case 'pending': return <Clock className="h-5 w-5 text-amber-600" />;
       case 'failed': return <XCircle className="h-5 w-5 text-red-600" />;
       case 'refunded': return <Euro className="h-5 w-5 text-blue-600" />;
@@ -286,7 +286,7 @@ export default function EnhancedPaymentDashboard({
   };
 
   const getTrendIcon = (current: number, previous: number) => {
-    if (current > previous) return <TrendingUp className="h-4 w-4 text-emerald-600" />;
+    if (current > previous) return <TrendingUp className="h-4 w-4 text-primary" />;
     if (current < previous) return <TrendingDown className="h-4 w-4 text-red-600" />;
     return <ArrowUp className="h-4 w-4 text-gray-500" />;
   };
@@ -321,18 +321,18 @@ export default function EnhancedPaymentDashboard({
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-emerald-600/20"></div>
           <CardHeader className="relative pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-emerald-800">
+              <CardTitle className="text-sm font-medium text-primary">
                 Maksetut Yhteensä
               </CardTitle>
               {getStatusIcon('paid')}
             </div>
           </CardHeader>
           <CardContent className="relative">
-            <div className="text-2xl font-bold text-emerald-700 mb-1">
+            <div className="text-2xl font-bold text-primary mb-1">
               {formatCurrency(stats?.total_paid || 0)}
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-emerald-600">{stats?.paid_count || 0} maksua</span>
+              <span className="text-primary">{stats?.paid_count || 0} maksua</span>
               {getTrendIcon(stats?.paid_count || 0, 0)}
             </div>
           </CardContent>

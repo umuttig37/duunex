@@ -317,7 +317,7 @@ const CompactTaskCard: React.FC<CompactTaskCardProps> = ({
               href={`/dashboard/tasks/${task.id}`}
               className="w-full sm:flex-1"
             >
-              <Button size="sm" variant="default" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
+              <Button size="sm" variant="default" className="w-full bg-primary hover:bg-primary/90 text-white">
                 <Euro className="mr-2 h-4 w-4 flex-shrink-0" />
                 <span className="truncate">Maksa {displayPrice?.toFixed(2) || task.budget?.toFixed(2)}€</span>
               </Button>

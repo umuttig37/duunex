@@ -263,7 +263,7 @@ export default function TaskOffersList({
         );
       case 'accepted':
         return (
-          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/5 text-primary">
             Hyväksytty
           </span>
         );
@@ -437,7 +437,7 @@ export default function TaskOffersList({
                 offer.original_offered_price !== offer.offered_price && (
                   <div className="text-xs text-gray-500 mt-1">
                     <span className="line-through">{offer.original_offered_price}€</span>
-                    <span className="ml-1 text-emerald-600">→ {offer.offered_price}€</span>
+                    <span className="ml-1 text-primary">→ {offer.offered_price}€</span>
                   </div>
                 )}
             </div>

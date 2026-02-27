@@ -89,15 +89,15 @@ export default async function AdminDashboardPage() {
       {/* Dashboard Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         <Link href="/admin/payments">
-          <Card className="hover:shadow-md transition-all duration-200 cursor-pointer border-emerald-200 hover:border-emerald-300 active:scale-[0.98]">
+          <Card className="hover:shadow-md transition-all duration-200 cursor-pointer border-primary/20 hover:border-primary/30 active:scale-[0.98]">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium truncate pr-2">
                 Maksut
               </CardTitle>
-              <Euro className="h-4 w-4 text-emerald-600 flex-shrink-0" />
+              <Euro className="h-4 w-4 text-primary flex-shrink-0" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-emerald-600">
+              <div className="text-2xl font-bold text-primary">
                 {paymentStats?.total_paid || 0}€
               </div>
               <p className="text-xs text-muted-foreground">
@@ -213,7 +213,7 @@ export default async function AdminDashboardPage() {
               href="/admin/payments"
               className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-all duration-200 active:scale-[0.98] hover:border-gray-300"
             >
-              <Euro className="h-8 w-8 text-emerald-600 mr-3" />
+              <Euro className="h-8 w-8 text-primary mr-3" />
               <div>
                 <h3 className="font-medium">Seuraa maksuja</h3>
                 <p className="text-sm text-gray-600">

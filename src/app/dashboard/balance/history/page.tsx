@@ -77,7 +77,7 @@ export default async function BalanceHistoryPage() {
   const getTransactionIcon = (type: string) => {
     switch (type) {
       case 'earnings':
-        return <TrendingUp className="h-4 w-4 text-emerald-600" />;
+        return <TrendingUp className="h-4 w-4 text-primary" />;
       case 'withdrawal':
         return <Download className="h-4 w-4 text-blue-600" />;
       default:
@@ -97,7 +97,7 @@ export default async function BalanceHistoryPage() {
   const getTransactionBadge = (type: string) => {
     switch (type) {
       case 'earnings':
-        return <Badge variant="outline" className="text-emerald-600 border-emerald-600">Ansiot</Badge>;
+        return <Badge variant="outline" className="text-primary border-emerald-600">Ansiot</Badge>;
       case 'withdrawal':
         return <Badge variant="outline" className="text-blue-600 border-blue-600">Nosto</Badge>;
       case 'adjustment':
@@ -148,7 +148,7 @@ export default async function BalanceHistoryPage() {
               <CardTitle className="text-lg">Nykyinen saldo</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-emerald-600">
+              <div className="text-2xl font-bold text-primary">
                 {formatCurrency(balanceData?.current_balance || 0)}
               </div>
             </CardContent>
@@ -264,7 +264,7 @@ export default async function BalanceHistoryPage() {
                         {getTransactionBadge(transaction.transaction_type)}
                         <div className={`text-lg font-semibold ${
                           transaction.amount > 0 
-                            ? 'text-emerald-600' 
+                            ? 'text-primary' 
                             : 'text-red-600'
                         }`}>
                           {transaction.amount > 0 ? '+' : ''}

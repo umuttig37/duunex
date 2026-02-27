@@ -284,16 +284,16 @@ export default function TaskDetailContent({
               <CardTitle className="text-2xl font-semibold text-slate-800">
                 Hinta
               </CardTitle>
-              <div className="text-4xl font-bold text-emerald-600 pt-1">
+              <div className="text-4xl font-bold text-primary pt-1">
                 {finalPrice ? `${finalPrice} €` : 'Ei budjettia'}
               </div>
               {finalPrice && acceptedOffer && (
                 <div className="space-y-1">
-                  <p className="text-sm text-emerald-600 font-medium">
+                  <p className="text-sm text-primary font-medium">
                     Sovittu hinta
                   </p>
                   {displayTask.budget && finalPrice !== displayTask.budget && (
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-sidebar-foreground/70">
                       Alkuperäinen budjetti: {displayTask.budget} €
                     </p>
                   )}
@@ -325,7 +325,7 @@ export default function TaskDetailContent({
                           ? 'bg-blue-500 text-white'
                           : displayTask.status === 'completed' ||
                             displayTask.status === 'early_completed'
-                            ? 'bg-emerald-500 text-white'
+                            ? 'bg-primary text-white'
                             : ''
                     }
                   >
@@ -349,7 +349,7 @@ export default function TaskDetailContent({
                   <div className="pt-2">
                     <Button
                       size="lg"
-                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                      className="w-full bg-primary hover:bg-primary/90 text-white"
                       asChild
                     >
                       <Link
@@ -368,8 +368,8 @@ export default function TaskDetailContent({
                   <div className="bg-gradient-to-r from-blue-50 to-emerald-50 border border-blue-200 rounded-lg p-4 mb-3">
                     <div className="flex items-start space-x-3">
                       <div className="flex-shrink-0">
-                        <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
-                          <Info className="h-4 w-4 text-emerald-600" />
+                        <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                          <Info className="h-4 w-4 text-primary" />
                         </div>
                       </div>
                       <div className="flex-1 min-w-0">
@@ -377,7 +377,7 @@ export default function TaskDetailContent({
                           💰 Ansaitsemasi summa
                         </h4>
                         <p className="text-sm text-slate-600 leading-relaxed">
-                          <span className="font-medium text-emerald-600">
+                          <span className="font-medium text-primary">
                             {finalPrice} €
                           </span>{' '}
                           lisätään saldoosi, kun sekä sinä että asiakas
@@ -397,7 +397,7 @@ export default function TaskDetailContent({
                   <div className="pt-2">
                     <Button
                       size="lg"
-                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                      className="w-full bg-primary hover:bg-primary/90 text-white"
                       asChild
                     >
                       <Link
@@ -476,7 +476,7 @@ export default function TaskDetailContent({
               {!isTasker && !isTaskOwner && displayTask.status === 'open' && (
                 <Button
                   size="lg"
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className="w-full bg-primary hover:bg-primary/90 text-white"
                   asChild
                 >
                   <Link href="/signup/tasker">
@@ -501,11 +501,11 @@ export default function TaskDetailContent({
                             }`}
                           width={48}
                           height={48}
-                          className="rounded-full border-2 border-emerald-200"
+                          className="rounded-full border-2 border-primary/20"
                         />
                       ) : (
-                        <div className="h-12 w-12 rounded-full bg-emerald-100 flex items-center justify-center border-2 border-emerald-200">
-                          <User className="h-6 w-6 text-emerald-600" />
+                        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center border-2 border-primary/20">
+                          <User className="h-6 w-6 text-primary" />
                         </div>
                       )}
                       <div>

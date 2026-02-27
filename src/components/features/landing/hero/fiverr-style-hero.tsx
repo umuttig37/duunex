@@ -80,7 +80,7 @@ const FiverrStyleHero = () => {
                 <Button
                   type="submit"
                   size="lg"
-                  className="bg-emerald-600 hover:bg-emerald-700 px-10 py-6 rounded-none font-semibold text-base transition-all duration-200 hover:shadow-lg"
+                  className="bg-primary hover:bg-primary/90 px-10 py-6 rounded-none font-semibold text-base transition-all duration-200 hover:shadow-lg"
                 >
                   <Search className="h-5 w-5" />
                 </Button>

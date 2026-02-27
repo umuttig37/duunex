@@ -88,11 +88,11 @@ export default function UserEventsContent({ userId }: UserEventsContentProps) {
       case 'assignment':
         return <UserCheck className="h-4 w-4 text-blue-600" />;
       case 'completion':
-        return <TrendingUp className="h-4 w-4 text-emerald-600" />;
+        return <TrendingUp className="h-4 w-4 text-primary" />;
       case 'cancellation':
         return <Clock className="h-4 w-4 text-gray-600" />;
       case 'refund':
-        return <TrendingUp className="h-4 w-4 text-emerald-600" />;
+        return <TrendingUp className="h-4 w-4 text-primary" />;
       case 'counter_offer_sent':
         return <ArrowLeftRight className="h-4 w-4 text-amber-600" />;
       case 'counter_offer_response':
@@ -112,7 +112,7 @@ export default function UserEventsContent({ userId }: UserEventsContentProps) {
       <div className={`text-sm font-semibold ${
         isNegative ? 'text-red-600' : 
         isCounterOffer ? 'text-amber-600' :
-        'text-emerald-600'
+        'text-primary'
       }`}>
         {isNegative ? '-' : (isCounterOffer ? '' : '+')}
         {formatCurrency(Math.abs(transaction.amount))}
@@ -225,7 +225,7 @@ export default function UserEventsContent({ userId }: UserEventsContentProps) {
               <Button asChild variant="outline" className="h-auto p-4">
                 <Link href="/dashboard">
                   <div className="text-center">
-                    <UserCheck className="mx-auto h-6 w-6 mb-2 text-emerald-600" />
+                    <UserCheck className="mx-auto h-6 w-6 mb-2 text-primary" />
                     <div className="text-sm font-medium">Omat tehtävät</div>
                     <div className="text-xs text-gray-500">Hallinnoi aktiivisia tehtäviä</div>
                   </div>

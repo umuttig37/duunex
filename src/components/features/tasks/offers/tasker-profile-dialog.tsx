@@ -87,12 +87,12 @@ export function TaskerProfileDialog({
         <div className="space-y-6">
           {/* Header Section */}
           <div className="flex items-start gap-4">
-            <Avatar className="w-20 h-20 ring-2 ring-emerald-100">
+            <Avatar className="w-20 h-20 ring-2 ring-primary/10">
               <AvatarImage
                 src={tasker.avatar_url}
                 alt={`${tasker.first_name} ${tasker.last_name || ''}`}
               />
-              <AvatarFallback className="bg-emerald-100 text-emerald-700 text-xl font-semibold">
+              <AvatarFallback className="bg-primary/10 text-primary text-xl font-semibold">
                 {tasker.first_name?.charAt(0)?.toUpperCase()}
                 {tasker.last_name?.charAt(0)?.toUpperCase()}
               </AvatarFallback>
@@ -104,7 +104,7 @@ export function TaskerProfileDialog({
                   {tasker.first_name} {tasker.last_name || ''}
                 </h2>
                 {tasker.is_verified && (
-                  <Badge variant="outline" className="border-emerald-200 text-emerald-700 bg-emerald-50">
+                  <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5">
                     <Shield className="w-3 h-3 mr-1" />
                     Vahvistettu
                   </Badge>
@@ -117,7 +117,7 @@ export function TaskerProfileDialog({
                     <MapPin className="w-4 h-4" />
                     <span>{tasker.location_text}</span>
                     {tasker.distance_meters && (
-                      <span className="text-emerald-600 font-medium">
+                      <span className="text-primary font-medium">
                         ({formatDistance(tasker.distance_meters)} päässä)
                       </span>
                     )}
@@ -165,7 +165,7 @@ export function TaskerProfileDialog({
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {tasker.total_tasks_completed !== undefined && (
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-emerald-600">
+                  <div className="text-2xl font-bold text-primary">
                     {tasker.total_tasks_completed}
                   </div>
                   <div className="text-sm text-gray-600">Tehtävää tehty</div>
@@ -174,7 +174,7 @@ export function TaskerProfileDialog({
 
               {tasker.completion_rate !== undefined && (
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-emerald-600">
+                  <div className="text-2xl font-bold text-primary">
                     {Math.round(tasker.completion_rate)}%
                   </div>
                   <div className="text-sm text-gray-600">Valmistumisaste</div>
@@ -182,7 +182,7 @@ export function TaskerProfileDialog({
               )}
 
               <div className="text-center">
-                <div className="text-2xl font-bold text-emerald-600">
+                <div className="text-2xl font-bold text-primary">
                   {formatResponseTime(tasker.average_response_time)}
                 </div>
                 <div className="text-sm text-gray-600">Vast. aika</div>

@@ -191,11 +191,11 @@ export default function TaskerBalanceCard({ userId }: TaskerBalanceCardProps) {
         <CardContent>
           <div className="space-y-3 sm:space-y-4">
             {/* Current Balance */}
-            <div className="text-center p-3 sm:p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-200">
-              <div className="text-2xl sm:text-3xl font-bold text-emerald-700">
+            <div className="text-center p-3 sm:p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-primary/20">
+              <div className="text-2xl sm:text-3xl font-bold text-primary">
                 {formatCurrency(balance?.current_balance || 0)}
               </div>
-              <p className="text-xs sm:text-sm text-emerald-600 mt-1">Nostettavissa oleva saldo</p>
+              <p className="text-xs sm:text-sm text-primary mt-1">Nostettavissa oleva saldo</p>
               {balance?.pending_withdrawals && balance.pending_withdrawals > 0 && (
                 <div className="mt-2 px-2 py-1 bg-yellow-100 border border-yellow-300 rounded text-xs text-yellow-800">
                   {formatCurrency(balance.pending_withdrawals)} odottaa käsittelyä
@@ -229,7 +229,7 @@ export default function TaskerBalanceCard({ userId }: TaskerBalanceCardProps) {
             {/* Withdrawal Button */}
             <div className="pt-2">
               {hasVerifiedBankAccount ? (
-                <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700">
+                <Button asChild className="w-full bg-primary hover:bg-primary/90">
                   <Link href="/dashboard/balance/withdraw">
                     <DollarSign className="mr-2 h-4 w-4" />
                     Tee nostopyyntö

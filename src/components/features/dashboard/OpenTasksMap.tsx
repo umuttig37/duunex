@@ -238,7 +238,7 @@ const OpenTasksMapComponent: React.FC<OpenTaskMapProps> = ({ openTasks }) => {
               <CardHeader className="p-4 pb-2">
                 <CardTitle className="text-base font-semibold text-gray-900 mb-2 line-clamp-2">{selectedTask.title}</CardTitle>
                 {selectedTask.categories?.name_fi && (
-                  <Badge variant="secondary" className="text-xs w-fit bg-emerald-100 text-emerald-700 border-emerald-200">
+                  <Badge variant="secondary" className="text-xs w-fit bg-primary/10 text-primary border-primary/20">
                     {selectedTask.categories.name_fi}
                   </Badge>
                 )}
@@ -250,7 +250,7 @@ const OpenTasksMapComponent: React.FC<OpenTaskMapProps> = ({ openTasks }) => {
                     📍 {selectedTask.location_text}
                   </p>
                 )}
-                <Button size="sm" asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium">
+                <Button size="sm" asChild className="w-full bg-primary hover:bg-primary/90 text-white rounded-xl font-medium">
                   <Link href={`/dashboard/tasks/${selectedTask.id}`} target="_blank" rel="noopener noreferrer">
                     Näytä tehtävä <ExternalLink className="ml-2 h-3.5 w-3.5" />
                   </Link>

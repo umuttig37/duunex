@@ -114,7 +114,7 @@ export function MessageComposer({
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={disabled}
-            className="flex-shrink-0 p-2 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-shrink-0 p-2 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ImageIcon className="h-5 w-5" />
           </button>
@@ -136,7 +136,7 @@ export function MessageComposer({
               onKeyDown={handleKeyPress}
               placeholder="Kirjoita viesti... (Enter = lähetä, Shift+Enter = rivinvaihto)"
               disabled={disabled}
-              className="min-h-[44px] max-h-32 resize-none border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+              className="min-h-[44px] max-h-32 resize-none border-gray-200 focus:border-primary/30 focus:ring-primary/20"
               style={{
                 height: 'auto',
                 overflowY: message.split('\n').length > 3 ? 'auto' : 'hidden',
@@ -155,7 +155,7 @@ export function MessageComposer({
             onClick={handleSend}
             disabled={!canSend}
             size="sm"
-            className="flex-shrink-0 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 h-11 w-11 p-0"
+            className="flex-shrink-0 bg-primary hover:bg-primary/90 disabled:opacity-50 h-11 w-11 p-0"
           >
             {isLoading ? (
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

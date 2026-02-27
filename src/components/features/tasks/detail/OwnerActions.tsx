@@ -94,7 +94,7 @@ export default function OwnerActions({
       <div className="space-y-3">
         <Button
           size="lg"
-          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+          className="w-full bg-primary hover:bg-primary/90 text-white"
           asChild
         >
           <Link href={`#offers`}>
@@ -194,7 +194,7 @@ export default function OwnerActions({
         
         <Button
           size="lg"
-          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+          className="w-full bg-primary hover:bg-primary/90 text-white"
           onClick={() => setShowPaymentFlow(true)}
         >
           <Euro className="mr-2 h-4 w-4" />
@@ -222,7 +222,7 @@ export default function OwnerActions({
       <div className="space-y-3">
         <Button
           size="lg"
-          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+          className="w-full bg-primary hover:bg-primary/90 text-white"
           asChild
         >
           <Link href={`/dashboard/messages?receiverId=${task.assigned_tasker_id}&taskId=${taskId}`}>

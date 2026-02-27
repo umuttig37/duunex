@@ -184,7 +184,7 @@ export default function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps)
                   />
                   <div className="flex justify-between text-xs text-gray-500">
                     <span>0 - Ei lainkaan</span>
-                    <span className="font-medium text-emerald-600">
+                    <span className="font-medium text-primary">
                       {conceptScore}/10 - {getScoreLabel(conceptScore)}
                     </span>
                     <span>10 - Erittäin hyvin</span>
@@ -208,7 +208,7 @@ export default function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps)
                   />
                   <div className="flex justify-between text-xs text-gray-500">
                     <span>0 - Erittäin vaikea</span>
-                    <span className="font-medium text-emerald-600">
+                    <span className="font-medium text-primary">
                       {usabilityScore}/10 - {getScoreLabel(usabilityScore)}
                     </span>
                     <span>10 - Erittäin helppo</span>
@@ -245,7 +245,7 @@ export default function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps)
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-emerald-600 hover:bg-emerald-700"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   {isSubmitting ? (
                     <>
@@ -265,8 +265,8 @@ export default function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps)
         ) : (
           /* Success State */
           <div className="py-8 text-center">
-            <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
-              <Heart className="w-8 h-8 text-emerald-600" />
+            <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+              <Heart className="w-8 h-8 text-primary" />
             </div>
             <DialogTitle className="text-lg font-semibold text-gray-900 mb-2">
               Kiitos palautteestasi! 🎉
