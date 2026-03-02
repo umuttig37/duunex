@@ -124,7 +124,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
     zipcode: '',
     latitude: null,
     longitude: null,
-    serviceRadius: 10,
+    serviceRadius: 25,
     hourlyRate: 0,
     categories: initialCategoryId ? [initialCategoryId] : [],
     bio: '',
@@ -461,7 +461,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
         profile_id: userId,
         category_id: categoryId,
       }));
-      
+
       const { error: catError } = await supabase.from('tasker_categories').insert(categoryRows);
       if (catError) {
         console.error('Category insertion failed:', catError);
@@ -621,18 +621,21 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                 <label htmlFor="serviceRadius" className="block text-sm font-medium text-gray-700 mb-1">
                   Palvelusäde (km) *
                 </label>
-                <input
-                  type="number"
-                  id="serviceRadius"
-                  name="serviceRadius"
-                  min={1}
-                  max={200}
-                  value={formData.serviceRadius}
-                  onChange={handleNumberInputChange}
-                  className="block w-full rounded-md border-gray-300 focus:border-green-500 focus:ring-green-500 border py-2 px-3 focus:outline-none focus:ring-2"
-                  placeholder="10"
-                  required
-                />
+                <div className="flex items-center gap-3 py-3">
+                  <input
+                    type="range"
+                    id="serviceRadius"
+                    name="serviceRadius"
+                    min={1}
+                    max={200}
+                    value={formData.serviceRadius}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, serviceRadius: Number(e.target.value) }))}
+                    className="flex-1 h-2 rounded-lg appearance-none bg-gray-200 accent-green-600 cursor-pointer"
+                  />
+                  <span className="text-sm font-medium text-gray-700 tabular-nums min-w-[3rem]">
+                    {formData.serviceRadius} km
+                  </span>
+                </div>
               </div>
             </div>
             <div className="mt-6">
