@@ -863,6 +863,38 @@ export async function createPayment(
 
   const orderId = payment.id;
 
+  // If Paytrail mock mode is enabled, simulate a successful payment immediately
+  const isMockMode =
+    process.env.PAYTRAIL_MOCK === 'true' ||
+    process.env.NEXT_PUBLIC_PAYTRAIL_MOCK === 'true';
+
+  if (isMockMode) {
+    // 5a. Mark payment as paid
+    await supabase
+      .from('payments')
+      .update({ status: 'paid' })
+      .eq('id', orderId);
+
+    // 5b. Update task to paid and assign the tasker from the accepted offer
+    await supabase
+      .from('tasks')
+      .update({
+        status: 'paid',
+        assigned_tasker_id: offer.tasker_id,
+      })
+      .eq('id', taskId);
+
+    // 5c. Return a mock payment URL that immediately returns to the task page
+    const appUrl =
+      process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+
+    return {
+      success: true,
+      paymentUrl: `${appUrl}/dashboard/tasks/${taskId}?payment=success&orderId=${orderId}&mock=1`,
+      message: 'Mock payment processed successfully.',
+    };
+  }
+
   // 5. Initiate payment with Paytrail using the new payment ID as the stamp
   try {
     const paymentResponse = await initiatePayment({
