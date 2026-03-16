@@ -63,28 +63,7 @@ export async function initiatePayment(
   const { amountCents, currency, orderId, customerEmail, taskId } =
     paymentRequest;
 
-  // ============================================================================
-  // When PAYTRAIL_MOCK or NEXT_PUBLIC_PAYTRAIL_MOCK is set to "true",
-  // skip the real Paytrail API call and return a fake payment URL.
-  // ============================================================================
-  const isMockMode =
-    process.env.PAYTRAIL_MOCK === 'true' ||
-    process.env.NEXT_PUBLIC_PAYTRAIL_MOCK === 'true';
-
-  if (isMockMode) {
-    const mockBaseUrl =
-      process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-
-    console.log(
-      `[Paytrail Service] Mock mode enabled. Skipping real Paytrail call for order ${orderId}.`
-    );
-
-    return {
-      transactionId: `mock-tx-${orderId}`,
-      paymentUrl: `${mockBaseUrl}/dashboard/tasks/${taskId}?payment=success&orderId=${orderId}&mock=1`,
-    };
-  }
-
+  // Determine base app URL (used both in mock mode and real Paytrail callbacks)
   let appUrl = 'http://localhost:3000'; // Default for local development
   if (process.env.VERCEL_ENV === 'production') {
     // For production, always use the canonical URL from NEXT_PUBLIC_APP_URL.
@@ -94,7 +73,28 @@ export async function initiatePayment(
     appUrl = `https://${process.env.VERCEL_URL}`;
   }
 
-  console.log(`[Paytrail Service] VERCEL_ENV: ${process.env.VERCEL_ENV}. Using appUrl: ${appUrl} for callbacks.`);
+  // ============================================================================
+  // When PAYTRAIL_MOCK or NEXT_PUBLIC_PAYTRAIL_MOCK is set to "true",
+  // skip the real Paytrail API call and return a fake payment URL.
+  // ============================================================================
+  const isMockMode =
+    process.env.PAYTRAIL_MOCK === 'true' ||
+    process.env.NEXT_PUBLIC_PAYTRAIL_MOCK === 'true';
+
+  if (isMockMode) {
+    console.log(
+      `[Paytrail Service] Mock mode enabled. Using appUrl: ${appUrl}. Skipping real Paytrail call for order ${orderId}.`
+    );
+
+    return {
+      transactionId: `mock-tx-${orderId}`,
+      paymentUrl: `${appUrl}/dashboard/tasks/${taskId}?payment=success&orderId=${orderId}&mock=1`,
+    };
+  }
+
+  console.log(
+    `[Paytrail Service] VERCEL_ENV: ${process.env.VERCEL_ENV}. Using appUrl: ${appUrl} for callbacks.`
+  );
 
   // Create an instance of the main request object
   const payload = new CreatePaymentRequest();
