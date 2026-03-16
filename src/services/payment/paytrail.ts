@@ -64,7 +64,6 @@ export async function initiatePayment(
     paymentRequest;
 
   // ============================================================================
-  // Mock mode for local / non-production environments
   // When PAYTRAIL_MOCK or NEXT_PUBLIC_PAYTRAIL_MOCK is set to "true",
   // skip the real Paytrail API call and return a fake payment URL.
   // ============================================================================
