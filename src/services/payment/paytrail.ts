@@ -57,19 +57,35 @@ export interface PaymentResponse {
   paymentUrl: string;
 }
 
-/**
- * Asynchronously initiates a payment via Paytrail.
- *
- * @param paymentRequest The details of the payment to initiate.
- * @returns A promise that resolves to a PaymentResponse object containing the transaction ID and payment URL.
- */
 export async function initiatePayment(
   paymentRequest: PaymentRequest
 ): Promise<PaymentResponse> {
   const { amountCents, currency, orderId, customerEmail, taskId } =
     paymentRequest;
 
-  // Dynamically determine the base URL for callbacks based on the environment.
+  // ============================================================================
+  // Mock mode for local / non-production environments
+  // When PAYTRAIL_MOCK or NEXT_PUBLIC_PAYTRAIL_MOCK is set to "true",
+  // skip the real Paytrail API call and return a fake payment URL.
+  // ============================================================================
+  const isMockMode =
+    process.env.PAYTRAIL_MOCK === 'true' ||
+    process.env.NEXT_PUBLIC_PAYTRAIL_MOCK === 'true';
+
+  if (isMockMode) {
+    const mockBaseUrl =
+      process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+
+    console.log(
+      `[Paytrail Service] Mock mode enabled. Skipping real Paytrail call for order ${orderId}.`
+    );
+
+    return {
+      transactionId: `mock-tx-${orderId}`,
+      paymentUrl: `${mockBaseUrl}/dashboard/tasks/${taskId}?payment=success&orderId=${orderId}&mock=1`,
+    };
+  }
+
   let appUrl = 'http://localhost:3000'; // Default for local development
   if (process.env.VERCEL_ENV === 'production') {
     // For production, always use the canonical URL from NEXT_PUBLIC_APP_URL.
