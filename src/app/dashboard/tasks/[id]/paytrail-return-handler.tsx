@@ -108,6 +108,7 @@ export default function PaytrailReturnHandler({
   useEffect(() => {
     const paymentStatus =
       searchParams['payment'] || searchParams['checkout-status'];
+    const isMock = searchParams['mock'] === '1' || searchParams['mock'] === 'true';
 
     if (paymentStatus && !isPolling && !fetchedTask) {
       setIsProcessing(true);
@@ -115,14 +116,53 @@ export default function PaytrailReturnHandler({
       window.history.replaceState({}, '', newUrl);
 
       if (paymentStatus === 'success' || paymentStatus === 'ok') {
-        toast({
-          title: 'Maksu onnistui!',
-          description: 'Päivitetään tehtävän tilaa. Tämä voi kestää hetken...',
-          variant: 'default',
-          duration: 8000,
-        });
-        setIsPolling(true);
-        pollForStatusUpdate();
+        // In mock mode we don't have a real webhook updating the task status,
+        // so fetch the latest task data once and stop processing.
+        if (isMock) {
+          const fetchOnce = async () => {
+            try {
+              const supabase = createClient();
+              const { data: task } = await supabase
+                .from('tasks')
+                .select(
+                  `
+                  *,
+                  categories:category_id(name_fi, name),
+                  publisher:profiles!tasks_user_id_fkey(first_name, last_name, avatar_url),
+                  task_attachments(id, file_url, file_type),
+                  assignedTasker:profiles!tasks_assigned_tasker_id_fkey(id, first_name, last_name, avatar_url, bio)
+                `
+                )
+                .eq('id', taskId)
+                .single();
+
+              if (task) {
+                setFetchedTask(task as TaskData);
+              }
+            } finally {
+              setIsProcessing(false);
+              setIsPolling(false);
+            }
+          };
+
+          toast({
+            title: 'Maksu (mock) onnistui!',
+            description: 'Päivitetään näkymä ilman webhook-odotusta.',
+            variant: 'default',
+            duration: 6000,
+          });
+
+          fetchOnce();
+        } else {
+          toast({
+            title: 'Maksu onnistui!',
+            description: 'Pävitetään tehtävän tilaa. Tämä voi kestää hetken...',
+            variant: 'default',
+            duration: 8000,
+          });
+          setIsPolling(true);
+          pollForStatusUpdate();
+        }
       } else if (paymentStatus === 'cancel' || paymentStatus === 'fail') {
         toast({
           title: 'Maksu peruutettu tai epäonnistui',
