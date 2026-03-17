@@ -41,6 +41,14 @@ export interface PaymentRequest {
    * The task ID.
    */
   taskId: string;
+
+  /**
+   * Optional base URL for redirect/callback URLs.
+   * When provided, it should be the exact origin the user is currently on
+   * (e.g. https://taskmvp-wo1w.vercel.app). This prevents cross-domain redirects
+   * that would otherwise drop auth cookies and "log out" the user.
+   */
+  appUrl?: string;
 }
 
 /**
@@ -64,15 +72,21 @@ export async function initiatePayment(
     paymentRequest;
 
   // Determine base app URL (used for Paytrail redirectUrls and callbackUrls).
-  let appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  let appUrl =
+    paymentRequest.appUrl ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    'http://localhost:3000';
 
+  // If caller didn't provide appUrl, fall back to Vercel deployment URL when available.
   // Vercel provides VERCEL_URL as a hostname (no protocol). Users sometimes
   // mistakenly set it to a full URL. Normalize both cases.
-  const vercelUrl = process.env.VERCEL_URL;
-  if (vercelUrl) {
-    appUrl = vercelUrl.startsWith('http://') || vercelUrl.startsWith('https://')
-      ? vercelUrl
-      : `https://${vercelUrl}`;
+  if (!paymentRequest.appUrl) {
+    const vercelUrl = process.env.VERCEL_URL;
+    if (vercelUrl) {
+      appUrl = vercelUrl.startsWith('http://') || vercelUrl.startsWith('https://')
+        ? vercelUrl
+        : `https://${vercelUrl}`;
+    }
   }
 
   // ============================================================================

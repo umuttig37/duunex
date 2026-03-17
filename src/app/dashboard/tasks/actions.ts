@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { sendEarlyCompletionRequestedEmail } from '@/services/notifications/email-service';
 import { initiatePayment } from '@/services/payment/paytrail';
 import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 // Import schema and state type from the new schema file
 import { TaskFormState, TaskSchema } from '@/app/dashboard/tasks/schema';
@@ -897,12 +898,20 @@ export async function createPayment(
 
   // 5. Initiate payment with Paytrail using the new payment ID as the stamp
   try {
+    // Use the current request origin to avoid cross-domain redirects
+    // (which would drop auth cookies and appear as "logged out").
+    const h = await headers();
+    const proto = h.get('x-forwarded-proto') || 'https';
+    const host = h.get('x-forwarded-host') || h.get('host');
+    const requestAppUrl = host ? `${proto}://${host}` : undefined;
+
     const paymentResponse = await initiatePayment({
       amountCents: Math.round(amount * 100),
       currency: 'EUR',
       orderId: orderId, // This is the payment.id, used as checkout-stamp
       customerEmail: email,
       taskId: taskId, // This is the task.id, used as checkout-reference
+      appUrl: requestAppUrl,
     });
 
     if (paymentResponse.paymentUrl) {
