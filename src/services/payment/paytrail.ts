@@ -66,8 +66,13 @@ export async function initiatePayment(
   // Determine base app URL (used for Paytrail redirectUrls and callbackUrls).
   let appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
-  if (process.env.VERCEL_URL) {
-    appUrl = `https://${process.env.VERCEL_URL}`;
+  // Vercel provides VERCEL_URL as a hostname (no protocol). Users sometimes
+  // mistakenly set it to a full URL. Normalize both cases.
+  const vercelUrl = process.env.VERCEL_URL;
+  if (vercelUrl) {
+    appUrl = vercelUrl.startsWith('http://') || vercelUrl.startsWith('https://')
+      ? vercelUrl
+      : `https://${vercelUrl}`;
   }
 
   // ============================================================================

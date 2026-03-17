@@ -195,6 +195,26 @@ export async function GET(request: NextRequest) {
           data: null,
           error: { message: data.error, code: 'RPC_ERROR' }
         };
+      } else if (error?.code === 'PGRST202') {
+        // Supabase can't find the RPC function (not deployed). Fallback to a direct table update
+        // so payments still work on environments where migrations weren't applied.
+        console.warn(
+          '[Paytrail Callback] RPC update_payment_from_paytrail_callback not found (PGRST202). Falling back to direct payments update.'
+        );
+
+        const { data: paymentRow, error: paymentError } = await supabase
+          .from('payments')
+          .update({
+            status: paymentStatus,
+            paytrail_transaction_id: transactionId || null,
+            raw_response: { raw_query: url.search },
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', paymentId)
+          .select('id, task_id')
+          .single();
+
+        return paymentError ? { data: null, error: paymentError } : { data: paymentRow, error: null };
       } else {
         return { data, error };
       }
@@ -391,6 +411,30 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: true, message: "Already processed" });
       }
       return NextResponse.json({ error: 'Failed to update payment with 3% fee processing' }, { status: 500 });
+    } else if (updateError?.code === 'PGRST202') {
+      console.warn(
+        '[Paytrail Callback] RPC update_payment_from_paytrail_callback not found (PGRST202). Falling back to direct payments update.'
+      );
+
+      const { data: paymentRow, error: paymentError } = await supabase
+        .from('payments')
+        .update({
+          status: paymentStatus,
+          paytrail_transaction_id: transactionId || null,
+          // body may not be JSON; store it safely as JSONB
+          raw_response: { raw_body: body },
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', paymentId)
+        .select('id, task_id')
+        .single();
+
+      if (paymentError) {
+        console.error(`Fallback payment update failed for paymentId ${paymentId}:`, paymentError);
+        return NextResponse.json({ error: 'Failed to update payment (fallback)' }, { status: 500 });
+      }
+
+      payment = paymentRow;
     } else if (updateError) {
       console.error(`Error updating payment for paymentId ${paymentId}:`, updateError);
       console.error('Full updateError object:', JSON.stringify(updateError, null, 2));
