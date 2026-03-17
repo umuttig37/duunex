@@ -65,15 +65,15 @@ interface EnhancedOpenTasksMapProps {
 }
 
 // Create custom divIcon for markers based on marker type
-const createCustomIcon = (markerType: { 
-  color: string; 
-  bgColor: string; 
-  borderColor: string; 
+const createCustomIcon = (markerType: {
+  color: string;
+  bgColor: string;
+  borderColor: string;
   icon: string;
   priority: number;
 }): L.DivIcon => {
   const showPriorityDot = markerType.priority <= 2;
-  
+
   return L.divIcon({
     className: 'custom-marker-icon',
     html: `
@@ -118,28 +118,28 @@ const createCustomIcon = (markerType: {
 };
 
 // Map controller component for zoom and navigation
-function MapController({ 
-  validTasks, 
-  mapRef 
-}: { 
+function MapController({
+  validTasks,
+  mapRef
+}: {
   validTasks: { position: [number, number] }[];
   mapRef: React.MutableRefObject<L.Map | null>;
 }) {
   const map = useMap();
-  
+
   useEffect(() => {
     mapRef.current = map;
-    
+
     if (validTasks.length > 0) {
       const bounds = L.latLngBounds(validTasks.map(t => t.position));
       map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
-      
+
       if (validTasks.length === 1) {
         map.setView(validTasks[0].position, 14);
       }
     }
   }, [map, validTasks, mapRef]);
-  
+
   return null;
 }
 
@@ -154,7 +154,7 @@ function EnhancedOpenTasksMapComponent({
 }: EnhancedOpenTasksMapProps) {
   const [layersVisible, setLayersVisible] = useState(true);
   const [fetchedTaskerCategories, setFetchedTaskerCategories] = useState<string[]>([]);
-  
+
   // Use prop categories if available, otherwise fetch them
   const taskerCategories = propTaskerCategories || fetchedTaskerCategories;
 
@@ -238,11 +238,11 @@ function EnhancedOpenTasksMapComponent({
   // Get cached or create new marker icon
   const getMarkerIcon = useCallback((markerType: ReturnType<typeof getMarkerType>): L.DivIcon => {
     const cacheKey = `${markerType.name}-${markerType.color}-${markerType.bgColor}-${markerType.borderColor}-${markerType.priority}`;
-    
+
     if (markerIconCache.current.has(cacheKey)) {
       return markerIconCache.current.get(cacheKey)!;
     }
-    
+
     const icon = createCustomIcon(markerType);
     markerIconCache.current.set(cacheKey, icon);
     return icon;
@@ -300,9 +300,9 @@ function EnhancedOpenTasksMapComponent({
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          
+
           <MapController validTasks={validTasks} mapRef={mapRef} />
-          
+
           {validTasks.map((task) => {
             const markerType = getMarkerType(task, taskerCategories);
             const icon = getMarkerIcon(markerType);
@@ -341,7 +341,7 @@ function EnhancedOpenTasksMapComponent({
                         </div>
                       </div>
                     </div>
-                    
+
                     <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-700 line-clamp-2 mb-3`}>
                       {task.description}
                     </p>
@@ -396,6 +396,7 @@ function EnhancedOpenTasksMapComponent({
                         href={`/dashboard/tasks/${task.id}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        style={{ color: '#fff' }}
                       >
                         {isMobile ? 'Katso tiedot' : 'Katso tiedot & tee tarjous'}
                         <ExternalLink className="ml-2 h-3 w-3" />

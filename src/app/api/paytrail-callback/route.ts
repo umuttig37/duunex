@@ -2,6 +2,36 @@ import { supabaseAdmin } from '@/lib/supabase/admin';
 import { validatePaytrailCallback } from '@/services/payment/paytrail';
 import { NextRequest, NextResponse } from 'next/server';
 
+type UpdatePaymentFromPaytrailCallbackRpcResult =
+  | {
+      success: true;
+      payment_id: string;
+      task_id: string;
+      // extra diagnostic fields may be present
+      [key: string]: unknown;
+    }
+  | {
+      success: false;
+      error: string;
+      [key: string]: unknown;
+    };
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const isUpdatePaymentRpcResult = (
+  value: unknown
+): value is UpdatePaymentFromPaytrailCallbackRpcResult => {
+  if (!isRecord(value)) return false;
+  if (typeof value.success !== 'boolean') return false;
+
+  if (value.success) {
+    return typeof value.payment_id === 'string' && typeof value.task_id === 'string';
+  }
+
+  return typeof value.error === 'string';
+};
+
 // Helper function to extract data from query params, headers, or body
 const getCallbackData = ({
   headers,
@@ -98,6 +128,13 @@ export async function GET(request: NextRequest) {
   console.log('================================');
 
   try {
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error(
+        '[Paytrail Callback] Missing SUPABASE_SERVICE_ROLE_KEY. Cannot update DB from callback.'
+      );
+      return NextResponse.redirect(new URL('/dashboard?payment=callback-misconfigured', url.origin));
+    }
+
     // 1. Validate the callback signature (from query params)
     // For GET, pass headers and empty body, but signature is in query params
     // You may want to adapt validatePaytrailCallback to accept query params for GET
@@ -144,7 +181,7 @@ export async function GET(request: NextRequest) {
         });
 
       // Transform the RPC result to match expected format
-      if (data && typeof data === 'object' && data.success) {
+      if (isUpdatePaymentRpcResult(data) && data.success) {
         return {
           data: {
             id: data.payment_id,
@@ -153,7 +190,7 @@ export async function GET(request: NextRequest) {
           },
           error: null
         };
-      } else if (data && typeof data === 'object' && !data.success) {
+      } else if (isUpdatePaymentRpcResult(data) && !data.success) {
         return {
           data: null,
           error: { message: data.error, code: 'RPC_ERROR' }
@@ -294,6 +331,13 @@ export async function POST(request: NextRequest) {
   console.log('================================');
 
   try {
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error(
+        '[Paytrail Callback] Missing SUPABASE_SERVICE_ROLE_KEY. Cannot update DB from callback.'
+      );
+      return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+    }
+
     // 1. Validate the callback signature
     if (!validatePaytrailCallback(headers, body)) {
       console.error('Invalid Paytrail callback signature.');
@@ -334,15 +378,15 @@ export async function POST(request: NextRequest) {
 
     // Transform the RPC result to match expected format for backward compatibility
     let payment = null;
-    if (data && typeof data === 'object' && data.success) {
+    if (isUpdatePaymentRpcResult(data) && data.success) {
       payment = {
         id: data.payment_id,
         task_id: data.task_id
       };
       console.log('POST: Payment update with 3% fee processing successful:', data);
-    } else if (data && typeof data === 'object' && !data.success) {
+    } else if (isUpdatePaymentRpcResult(data) && !data.success) {
       console.error(`Error updating payment for paymentId ${paymentId}:`, data.error);
-      if (data.error && data.error.includes('not found')) {
+      if (data.error.includes('not found')) {
         console.warn(`Payment record with ID ${paymentId} not found. It might have been already processed.`);
         return NextResponse.json({ success: true, message: "Already processed" });
       }

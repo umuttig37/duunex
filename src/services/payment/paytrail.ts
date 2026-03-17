@@ -63,13 +63,10 @@ export async function initiatePayment(
   const { amountCents, currency, orderId, customerEmail, taskId } =
     paymentRequest;
 
-  // Determine base app URL (used both in mock mode and real Paytrail callbacks)
-  let appUrl = 'http://localhost:3000'; // Default for local development
-  if (process.env.VERCEL_ENV === 'production') {
-    // For production, always use the canonical URL from NEXT_PUBLIC_APP_URL.
-    appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://taskmvp.vercel.app';
-  } else if (process.env.VERCEL_ENV === 'preview' && process.env.VERCEL_URL) {
-    // For Vercel preview deployments, use the unique deployment URL.
+  // Determine base app URL (used for Paytrail redirectUrls and callbackUrls).
+  let appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+
+  if (process.env.VERCEL_URL) {
     appUrl = `https://${process.env.VERCEL_URL}`;
   }
 
@@ -149,8 +146,21 @@ export async function initiatePayment(
       );
     }
   } catch (error) {
-    console.error('Exception caught during Paytrail payment creation:', error);
-    throw new Error('Error initiating payment with Paytrail.');
+    // Preserve the original error details for debugging.
+    // The caller decides what (if anything) to show to the end user.
+    console.error('Exception caught during Paytrail payment creation:', {
+      hasSecretKey: Boolean(process.env.PAYTRAIL_SECRET_KEY),
+      orderId,
+      taskId,
+      amountCents,
+      currency,
+      error,
+    });
+
+    const message =
+      error instanceof Error ? error.message : 'Unknown Paytrail error';
+
+    throw new Error(`Paytrail createPayment failed: ${message}`, { cause: error });
   }
 }
 

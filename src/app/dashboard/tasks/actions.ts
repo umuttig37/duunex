@@ -90,7 +90,7 @@ export async function createTask(prevState: TaskFormState, formData: FormData): 
       file_url: url,
       file_type: 'image',
     }));
-    const { error: attachmentError } = await supabase.from('task_attachments').insert(attachments);    if (attachmentError) {
+    const { error: attachmentError } = await supabase.from('task_attachments').insert(attachments); if (attachmentError) {
       console.error('Attachment Insert Error:', attachmentError, attachments);
       // Return a warning to the user if attachments fail
       return {
@@ -155,7 +155,7 @@ export async function acceptTaskRequest(taskId: string): Promise<ActionResult> {
   // Update the task to assign it to this tasker and set status to 'awaiting_payment'
   const { error: updateError } = await supabase
     .from('tasks')
-    .update({ 
+    .update({
       assigned_tasker_id: user.id,
       status: 'awaiting_payment' // Set proper status to indicate payment is required
     })
@@ -184,14 +184,14 @@ export async function acceptTaskRequest(taskId: string): Promise<ActionResult> {
     // Don't fail the operation for this
   }
 
-  revalidatePath('/dashboard'); 
+  revalidatePath('/dashboard');
   revalidatePath('/dashboard/task-requests');
   revalidatePath(`/dashboard/tasks/${taskId}`);
   revalidatePath(`/messages?taskId=${taskId}`);
 
-  return { 
-    success: true, 
-    message: 'Tehtäväpyyntö hyväksytty! Asiakas saa ilmoituksen ja maksulinkin. Chat avataan maksamisen jälkeen.' 
+  return {
+    success: true,
+    message: 'Tehtäväpyyntö hyväksytty! Asiakas saa ilmoituksen ja maksulinkin. Chat avataan maksamisen jälkeen.'
   };
 }
 
@@ -389,7 +389,7 @@ export async function acceptOfferAndFinalizePayment(offerId: string): Promise<Ac
   // 1. Update task: set status to 'paid' and assign the tasker
   const { error: taskUpdateError } = await supabase
     .from('tasks')
-    .update({ 
+    .update({
       status: 'paid', // Directly to paid as payment is "successful"
       assigned_tasker_id: offer.tasker_id
     })
@@ -424,7 +424,7 @@ export async function acceptOfferAndFinalizePayment(offerId: string): Promise<Ac
   if (declineOthersError) {
     console.warn('Could not decline other offers, but main flow succeeded:', declineOthersError);
   }
-  
+
   revalidatePath(`/dashboard/tasks/${offer.task_id}`);
   revalidatePath('/dashboard/user');
   revalidatePath('/dashboard/tasker');
@@ -511,8 +511,8 @@ export async function markTaskCompleted(taskId: string): Promise<ActionResult> {
   }
 
   // Check if task is being completed before scheduled date
-  const isEarlyCompletion = task.scheduled_date && 
-    new Date() < new Date(task.scheduled_date) && 
+  const isEarlyCompletion = task.scheduled_date &&
+    new Date() < new Date(task.scheduled_date) &&
     !isToday(new Date(task.scheduled_date));
 
   // Set appropriate status based on timing
@@ -530,7 +530,7 @@ export async function markTaskCompleted(taskId: string): Promise<ActionResult> {
   }
 
   // Add appropriate system message based on completion type
-  const messageContent = isEarlyCompletion 
+  const messageContent = isEarlyCompletion
     ? '⏰ Tehtävä on merkitty valmiiksi ennen aikataulutettua päivämäärää! Tasker on suorittanut työn aikaisin. Vahvista että tämä on hyväksyttävää.'
     : '🎉 Tehtävä on merkitty valmiiksi! Tasker on suorittanut työn. Voit nyt arvioida työn laadun.';
 
@@ -550,7 +550,7 @@ export async function markTaskCompleted(taskId: string): Promise<ActionResult> {
 
   // Create appropriate notification
   const notificationTitle = isEarlyCompletion ? 'Tehtävä valmistunut aikaisin' : 'Tehtävä valmistunut';
-  const notificationMessage = isEarlyCompletion 
+  const notificationMessage = isEarlyCompletion
     ? 'Tehtävä on merkitty valmiiksi ennen aikataulutettua päivämäärää. Vahvista että tämä on hyväksyttävää.'
     : 'Tehtävä on merkitty valmiiksi. Voit nyt arvostella työn.';
 
@@ -602,7 +602,7 @@ export async function markTaskCompleted(taskId: string): Promise<ActionResult> {
   revalidatePath(`/dashboard/tasks/${taskId}`);
   revalidatePath(`/messages?taskId=${taskId}`);
 
-  const resultMessage = isEarlyCompletion 
+  const resultMessage = isEarlyCompletion
     ? 'Tehtävä merkitty valmiiksi aikaisin! Asiakas saa ilmoituksen ja voi vahvistaa aikaisen valmistumisen.'
     : 'Tehtävä merkitty valmiiksi! Asiakas saa ilmoituksen ja voi nyt arvioida työn.';
 
@@ -924,9 +924,15 @@ export async function createPayment(
     console.error('Error initiating Paytrail payment:', error);
     // Rollback offer status
     await supabase.from('task_offers').update({ status: 'pending' }).eq('id', offerId);
+
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const isDevelopment = process.env.NODE_ENV === 'development';
+
     return {
       success: false,
-      message: 'An error occurred while contacting the payment provider.',
+      message: isDevelopment
+        ? `An error occurred while contacting the payment provider. Details: ${errorMessage}`
+        : 'An error occurred while contacting the payment provider.',
     };
   }
 }
