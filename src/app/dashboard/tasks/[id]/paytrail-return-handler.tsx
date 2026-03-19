@@ -109,6 +109,7 @@ export default function PaytrailReturnHandler({
     const paymentStatus =
       searchParams['payment'] || searchParams['checkout-status'];
     const isMock = searchParams['mock'] === '1' || searchParams['mock'] === 'true';
+    const orderId = searchParams['orderId'];
 
     if (paymentStatus && !isPolling && !fetchedTask) {
       setIsProcessing(true);
@@ -116,6 +117,25 @@ export default function PaytrailReturnHandler({
       window.history.replaceState({}, '', newUrl);
 
       if (paymentStatus === 'success' || paymentStatus === 'ok') {
+        // Show a one-time "payment done" toast per orderId in this browser tab.
+        // This prevents duplicate toasts when the page re-renders during polling/refresh.
+        try {
+          const oid = typeof orderId === 'string' ? orderId : null;
+          const key = oid ? `paytrail_payment_done_toast:${oid}` : null;
+          const alreadyShown = key ? sessionStorage.getItem(key) === '1' : false;
+          if (!alreadyShown) {
+            toast({
+              title: 'Payment is done',
+              description: 'We are updating the task status.',
+              variant: 'default',
+              duration: 6000,
+            });
+            if (key) sessionStorage.setItem(key, '1');
+          }
+        } catch {
+          // Ignore sessionStorage issues (e.g. privacy mode); toast behavior is non-critical.
+        }
+
         // In mock mode we don't have a real webhook updating the task status,
         // so fetch the latest task data once and stop processing.
         if (isMock) {
