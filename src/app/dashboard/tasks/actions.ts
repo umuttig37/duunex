@@ -2,7 +2,8 @@
 
 import { Database } from '@/lib/supabase/database.types';
 import { createClient } from '@/lib/supabase/server';
-import { sendEarlyCompletionRequestedEmail } from '@/services/notifications/email-service';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { sendEarlyCompletionRequestedEmail, sendPaymentSucceededEmail, sendTaskOfferEmail } from '@/services/notifications/email-service';
 import { initiatePayment } from '@/services/payment/paytrail';
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
@@ -275,7 +276,7 @@ export async function createTaskOffer(prevState: any, formData: FormData): Promi
   // Check if task exists and is open
   const { data: task, error: taskError } = await supabase
     .from('tasks')
-    .select('id, status, user_id')
+    .select('id, status, user_id, title')
     .eq('id', taskId)
     .single();
 
@@ -294,7 +295,7 @@ export async function createTaskOffer(prevState: any, formData: FormData): Promi
   // Check if user is a verified tasker
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('role, is_verified')
+    .select('role, is_verified, first_name, last_name')
     .eq('id', user.id)
     .single();
 
@@ -307,7 +308,7 @@ export async function createTaskOffer(prevState: any, formData: FormData): Promi
   }
 
   // Insert the offer
-  const { error: insertError } = await supabase
+  const { data: insertedOffer, error: insertError } = await supabase
     .from('task_offers')
     .insert({
       task_id: taskId,
@@ -316,7 +317,9 @@ export async function createTaskOffer(prevState: any, formData: FormData): Promi
       message: message || null,
       proposed_date: proposedDate || null,
       proposed_time_slot: proposedTimeSlot || null,
-    });
+    })
+    .select('id')
+    .single();
 
   if (insertError) {
     if (insertError.code === '23505') { // Unique constraint violation
@@ -340,6 +343,38 @@ export async function createTaskOffer(prevState: any, formData: FormData): Promi
   } catch (notificationError) {
     console.error('Error creating notification:', notificationError);
     // Don't fail the whole operation for notification error
+  }
+
+  // Send email to task owner (server-side, uses service-role bypass for profiles/email)
+  try {
+    const { data: ownerProfile } = await supabaseAdmin
+      .from('profiles')
+      .select('first_name, email, email_notifications')
+      .eq('id', task.user_id)
+      .single();
+
+    if (ownerProfile?.email && (ownerProfile.email_notifications ?? true)) {
+      const taskerName = `${profile?.first_name || ''} ${profile?.last_name || ''}`.trim() || 'Tekijä';
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+
+      if (insertedOffer?.id) {
+        await sendTaskOfferEmail(
+          {
+            offerId: insertedOffer.id,
+            taskId,
+            taskTitle: task.title || 'Tehtävä',
+            taskerName,
+            ownerFirstName: ownerProfile.first_name || 'Asiakas',
+            offeredPrice,
+            taskUrl: `${appUrl}/dashboard/tasks/${taskId}#offers`,
+          },
+          ownerProfile.email,
+          task.user_id
+        );
+      }
+    }
+  } catch (emailError) {
+    console.warn('Failed to send task offer email:', emailError);
   }
 
   revalidatePath(`/dashboard/tasks/${taskId}`);
@@ -799,7 +834,7 @@ export async function createPayment(
   // 1. Fetch the offer and verify it's valid to accept
   const { data: offer, error: offerError } = await supabase
     .from('task_offers')
-    .select('id, task_id, tasker_id, status, task:tasks!inner(id, user_id, status)')
+    .select('id, task_id, tasker_id, status, task:tasks!inner(id, user_id, status, title)')
     .eq('id', offerId)
     .single();
 
@@ -884,6 +919,69 @@ export async function createPayment(
         assigned_tasker_id: offer.tasker_id,
       })
       .eq('id', taskId);
+
+    // Send payment success emails immediately in mock mode
+    try {
+      const appUrl =
+        process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      const [customerProfile, taskerProfile] = await Promise.all([
+        supabaseAdmin
+          .from('profiles')
+          .select('id, first_name, last_name, email, email_notifications')
+          .eq('id', user.id)
+          .single()
+          .then((r) => r.data),
+        supabaseAdmin
+          .from('profiles')
+          .select('id, first_name, last_name, email, email_notifications')
+          .eq('id', offer.tasker_id)
+          .single()
+          .then((r) => r.data),
+      ]);
+
+      const customerName = `${customerProfile?.first_name || ''} ${customerProfile?.last_name || ''}`.trim() || 'Asiakas';
+      const taskerName = `${taskerProfile?.first_name || ''} ${taskerProfile?.last_name || ''}`.trim() || 'Tekijä';
+      const taskUrl = `${appUrl}/dashboard/tasks/${taskId}`;
+      const taskTitle = offer?.task?.title || 'Tehtävä';
+
+      if (customerProfile?.email && (customerProfile.email_notifications ?? true)) {
+        await sendPaymentSucceededEmail(
+          {
+            paymentId: orderId,
+            taskId,
+            taskTitle,
+            amount,
+            currency: 'EUR',
+            recipientKind: 'customer',
+            recipientFirstName: customerProfile.first_name || 'Asiakas',
+            otherPartyName: taskerName,
+            taskUrl,
+          },
+          customerProfile.email,
+          customerProfile.id
+        );
+      }
+
+      if (taskerProfile?.email && (taskerProfile.email_notifications ?? true)) {
+        await sendPaymentSucceededEmail(
+          {
+            paymentId: orderId,
+            taskId,
+            taskTitle,
+            amount,
+            currency: 'EUR',
+            recipientKind: 'tasker',
+            recipientFirstName: taskerProfile.first_name || 'Tekijä',
+            otherPartyName: customerName,
+            taskUrl,
+          },
+          taskerProfile.email,
+          taskerProfile.id
+        );
+      }
+    } catch (emailError) {
+      console.warn('Mock payment email failed:', emailError);
+    }
 
     // 5c. Return a mock payment URL that immediately returns to the task page
     const appUrl =

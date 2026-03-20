@@ -352,30 +352,27 @@ export function useChat(options: UseChatOptions = {}) {
     }) => {
       if (!user?.id) throw new Error('User not authenticated');
 
-      const messageData: any = {
-        task_id: taskId,
-        sender_profile_id: user.id,
-        receiver_profile_id: receiverId,
-        content: content || (imageUrl ? 'Kuva' : ''),
-        is_read: false,
-      };
+      // Insert message + send email happens server-side
+      const res = await fetch('/api/chat/send-message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          taskId,
+          receiverId,
+          content,
+          imageUrl,
+        }),
+      });
 
-      // Add image fields if provided
-      if (imageUrl) {
-        messageData.image_url = imageUrl;
-        messageData.message_type = 'image';
-      } else {
-        messageData.message_type = 'text';
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json?.error || 'Failed to send message');
       }
 
-      const { data, error } = await supabase.from('messages').insert(messageData).select(`
-        *,
-        sender:profiles!messages_sender_profile_id_fkey(*),
-        receiver:profiles!messages_receiver_profile_id_fkey(*)
-      `).single();
-
-      if (error) throw error;
-      return data;
+      return json.message;
     },
     onSuccess: (newMessage) => {
       // Update messages cache

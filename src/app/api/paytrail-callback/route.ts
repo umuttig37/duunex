@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { validatePaytrailCallback } from '@/services/payment/paytrail';
+import { sendPaymentSucceededEmail } from '@/services/notifications/email-service';
 import { NextRequest, NextResponse } from 'next/server';
 
 type UpdatePaymentFromPaytrailCallbackRpcResult =
@@ -312,6 +313,77 @@ export async function GET(request: NextRequest) {
             } else {
               console.log('Successfully created initial chat message for task:', payment.task_id);
             }
+
+            // Send payment success email to both sides (deduped by email-service).
+            try {
+              const [ownerProfile, taskerProfile, paymentRow] = await Promise.all([
+                supabaseAdmin
+                  .from('profiles')
+                  .select('id, first_name, last_name, email, email_notifications')
+                  .eq('id', updatedTask.user_id)
+                  .single()
+                  .then((r) => r.data),
+                supabaseAdmin
+                  .from('profiles')
+                  .select('id, first_name, last_name, email, email_notifications')
+                  .eq('id', acceptedOffer.tasker_id)
+                  .single()
+                  .then((r) => r.data),
+                supabaseAdmin
+                  .from('payments')
+                  .select('amount, currency')
+                  .eq('id', paymentId)
+                  .single()
+                  .then((r) => r.data),
+              ]);
+
+              const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+              const taskUrl = `${appUrl}/dashboard/tasks/${payment.task_id}`;
+
+              const ownerName = `${ownerProfile?.first_name || ''} ${ownerProfile?.last_name || ''}`.trim() || 'Asiakas';
+              const taskerName = `${taskerProfile?.first_name || ''} ${taskerProfile?.last_name || ''}`.trim() || 'Tekijä';
+
+              const amount = paymentRow?.amount != null ? Number(paymentRow.amount) : 0;
+              const currency = paymentRow?.currency || 'EUR';
+
+              if (ownerProfile?.email && (ownerProfile.email_notifications ?? true)) {
+                await sendPaymentSucceededEmail(
+                  {
+                    paymentId,
+                    taskId: payment.task_id,
+                    taskTitle: updatedTask.title || 'Tehtävä',
+                    amount,
+                    currency,
+                    recipientKind: 'customer',
+                    recipientFirstName: ownerProfile.first_name || 'Asiakas',
+                    otherPartyName: taskerName,
+                    taskUrl,
+                  },
+                  ownerProfile.email,
+                  ownerProfile.id
+                );
+              }
+
+              if (taskerProfile?.email && (taskerProfile.email_notifications ?? true)) {
+                await sendPaymentSucceededEmail(
+                  {
+                    paymentId,
+                    taskId: payment.task_id,
+                    taskTitle: updatedTask.title || 'Tehtävä',
+                    amount,
+                    currency,
+                    recipientKind: 'tasker',
+                    recipientFirstName: taskerProfile.first_name || 'Tekijä',
+                    otherPartyName: ownerName,
+                    taskUrl,
+                  },
+                  taskerProfile.email,
+                  taskerProfile.id
+                );
+              }
+            } catch (emailError) {
+              console.warn('Payment success email failed (GET):', emailError);
+            }
           }
         }
       }
@@ -507,6 +579,79 @@ export async function POST(request: NextRequest) {
               console.warn('Could not create initial chat message:', messageError);
             } else {
               console.log('Successfully created initial chat message for task:', payment.task_id);
+            }
+
+            // Send payment success email to both sides (deduped by email-service).
+            try {
+              const [ownerProfile, taskerProfile, paymentRow] = await Promise.all([
+                supabaseAdmin
+                  .from('profiles')
+                  .select('id, first_name, last_name, email, email_notifications')
+                  .eq('id', updatedTask.user_id)
+                  .single()
+                  .then((r) => r.data),
+                supabaseAdmin
+                  .from('profiles')
+                  .select('id, first_name, last_name, email, email_notifications')
+                  .eq('id', acceptedOffer.tasker_id)
+                  .single()
+                  .then((r) => r.data),
+                supabaseAdmin
+                  .from('payments')
+                  .select('amount, currency')
+                  .eq('id', paymentId)
+                  .single()
+                  .then((r) => r.data),
+              ]);
+
+              const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+              const taskUrl = `${appUrl}/dashboard/tasks/${payment.task_id}`;
+
+              const ownerName =
+                `${ownerProfile?.first_name || ''} ${ownerProfile?.last_name || ''}`.trim() || 'Asiakas';
+              const taskerName =
+                `${taskerProfile?.first_name || ''} ${taskerProfile?.last_name || ''}`.trim() || 'Tekijä';
+
+              const amount = paymentRow?.amount != null ? Number(paymentRow.amount) : 0;
+              const currency = paymentRow?.currency || 'EUR';
+
+              if (ownerProfile?.email && (ownerProfile.email_notifications ?? true)) {
+                await sendPaymentSucceededEmail(
+                  {
+                    paymentId,
+                    taskId: payment.task_id,
+                    taskTitle: updatedTask.title || 'Tehtävä',
+                    amount,
+                    currency,
+                    recipientKind: 'customer',
+                    recipientFirstName: ownerProfile.first_name || 'Asiakas',
+                    otherPartyName: taskerName,
+                    taskUrl,
+                  },
+                  ownerProfile.email,
+                  ownerProfile.id
+                );
+              }
+
+              if (taskerProfile?.email && (taskerProfile.email_notifications ?? true)) {
+                await sendPaymentSucceededEmail(
+                  {
+                    paymentId,
+                    taskId: payment.task_id,
+                    taskTitle: updatedTask.title || 'Tehtävä',
+                    amount,
+                    currency,
+                    recipientKind: 'tasker',
+                    recipientFirstName: taskerProfile.first_name || 'Tekijä',
+                    otherPartyName: ownerName,
+                    taskUrl,
+                  },
+                  taskerProfile.email,
+                  taskerProfile.id
+                );
+              }
+            } catch (emailError) {
+              console.warn('Payment success email failed (POST):', emailError);
             }
           }
         }

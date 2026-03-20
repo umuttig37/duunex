@@ -1,5 +1,8 @@
 'use server'
 
+import { Resend } from 'resend';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+
 // Email service for TaskMVP
 // This module handles all email notifications sent by the application
 
@@ -49,7 +52,7 @@ interface EarlyCompletionAutoAcceptedEmailData {
 // Email templates
 const createTaskApprovedEmail = (data: TaskApprovedEmailData): EmailTemplate => {
   const subject = `✅ Tehtäväsi "${data.taskTitle}" on hyväksytty ja julkaistu!`;
-  
+
   const htmlBody = `
     <!DOCTYPE html>
     <html>
@@ -104,7 +107,7 @@ const createTaskApprovedEmail = (data: TaskApprovedEmailData): EmailTemplate => 
     </body>
     </html>
   `;
-  
+
   const textBody = `
 Hei ${data.userFirstName},
 
@@ -126,13 +129,13 @@ Kiitos, että käytät TaskMVP:tä!
 TaskMVP - Tehtävien markkinapaikka
 https://taskmvp.fi
   `;
-  
+
   return { subject, htmlBody, textBody };
 };
 
 const createTaskRejectedEmail = (data: TaskRejectedEmailData): EmailTemplate => {
   const subject = `❌ Tehtäväsi "${data.taskTitle}" tarvitsee muutoksia`;
-  
+
   const htmlBody = `
     <!DOCTYPE html>
     <html>
@@ -192,7 +195,7 @@ const createTaskRejectedEmail = (data: TaskRejectedEmailData): EmailTemplate => 
     </body>
     </html>
   `;
-  
+
   const textBody = `
 Hei ${data.userFirstName},
 
@@ -216,7 +219,7 @@ Jos sinulla on kysymyksiä, ota yhteyttä asiakaspalveluumme.
 TaskMVP - Tehtävien markkinapaikka
 https://taskmvp.fi
   `;
-  
+
   return { subject, htmlBody, textBody };
 };
 
@@ -230,8 +233,9 @@ export async function sendEmail(
   } = {}
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    // For development - log email instead of sending
-    if (process.env.NODE_ENV === 'development' || !process.env.EMAIL_API_KEY) {
+    // MVP safeguard: if no Resend key (or in dev) - log instead of sending.
+    // This prevents accidental spam and keeps local development usable.
+    if (process.env.NODE_ENV === 'development' || !process.env.RESEND_API_KEY) {
       console.log('\n📧 EMAIL (Development Mode):');
       console.log('From:', options.from || 'no-reply@taskmvp.fi');
       console.log('To:', to);
@@ -239,19 +243,14 @@ export async function sendEmail(
       console.log('---');
       console.log(template.textBody);
       console.log('---\n');
-      
+
       // Simulate email sending delay
       await new Promise(resolve => setTimeout(resolve, 100));
       return { success: true };
     }
 
-    // Production email sending would go here
-    // Example integrations:
-    
-    // RESEND (recommended)
-    /*
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const result = await resend.emails.send({
+    await resend.emails.send({
       from: options.from || 'TaskMVP <no-reply@taskmvp.fi>',
       to,
       subject: template.subject,
@@ -259,36 +258,99 @@ export async function sendEmail(
       text: template.textBody,
       replyTo: options.replyTo,
     });
-    */
-    
-    // SENDGRID
-    /*
-    const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-    await sgMail.send({
-      to,
-      from: options.from || 'no-reply@taskmvp.fi',
-      subject: template.subject,
-      html: template.htmlBody,
-      text: template.textBody,
-    });
-    */
-    
-    // For now, just log in production too until email service is configured
-    console.log('📧 EMAIL (Production - Not Configured):', {
-      to,
-      subject: template.subject,
-      timestamp: new Date().toISOString(),
-    });
-    
+
     return { success: true };
-    
+
   } catch (error) {
     console.error('Email sending error:', error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Unknown email error' 
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown email error'
     };
+  }
+}
+
+type EmailDeliveryLogParams = {
+  eventType: string;
+  eventId: string;
+  recipientId: string;
+  recipientEmail: string;
+  template: EmailTemplate;
+  options?: {
+    from?: string;
+    replyTo?: string;
+  };
+};
+
+async function sendEmailWithDeliveryLog({
+  eventType,
+  eventId,
+  recipientId,
+  recipientEmail,
+  template,
+  options,
+}: EmailDeliveryLogParams): Promise<{ success: boolean; skipped?: boolean; error?: string }> {
+  try {
+    const supabaseAny = supabaseAdmin;
+
+    // Dedup by (eventType, eventId, recipientId)
+    const { data: existing } = await supabaseAny
+      .from('email_delivery_logs')
+      .select('id,status')
+      .eq('event_type', eventType)
+      .eq('event_id', eventId)
+      .eq('recipient_id', recipientId)
+      .limit(1)
+      .maybeSingle();
+
+    if (existing?.id) {
+      return { success: true, skipped: true };
+    }
+
+    const { data: logRow } = await supabaseAny
+      .from('email_delivery_logs')
+      .insert({
+        event_type: eventType,
+        event_id: eventId,
+        recipient_id: recipientId,
+        recipient_email: recipientEmail,
+        status: 'queued',
+      } as any)
+      .select('id')
+      .single();
+
+    const sendResult = await sendEmail(recipientEmail, template, options);
+    const logId: string | undefined = logRow?.id;
+    if (!logId) {
+      // If for some reason the delivery log row wasn't created, we still consider
+      // the email outcome returned by Resend.
+      return sendResult;
+    }
+
+    if (sendResult.success) {
+      await supabaseAny
+        .from('email_delivery_logs')
+        .update({
+          status: 'sent',
+          error: null,
+          sent_at: new Date().toISOString(),
+        })
+        .eq('id', logId);
+    } else {
+      await supabaseAny
+        .from('email_delivery_logs')
+        .update({
+          status: 'failed',
+          error: sendResult.error ?? 'Unknown email error',
+          sent_at: null,
+        })
+        .eq('id', logId);
+    }
+
+    return sendResult;
+  } catch (error) {
+    console.error('Email delivery log error:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown email delivery log error' };
   }
 }
 
@@ -392,11 +454,234 @@ export async function sendEarlyCompletionAutoAcceptedEmail(data: EarlyCompletion
   });
 }
 
+// ============================================================================
+// Chat / Offers / Payments email templates
+// ============================================================================
+
+interface ChatMessageEmailData {
+  messageId: string;
+  taskId: string;
+  taskTitle: string;
+  senderName: string;
+  recipientFirstName: string;
+  messagePreview: string;
+  taskUrl: string;
+}
+
+const createChatMessageEmail = (data: ChatMessageEmailData): EmailTemplate => {
+  const subject = `💬 Uusi viesti: "${data.taskTitle}"`;
+  const safePreview = data.messagePreview || 'Sinulla on uusi viesti.';
+
+  const htmlBody = `
+    <!DOCTYPE html>
+    <html>
+      <head><meta charset="utf-8" /></head>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color:#333;">
+        <div style="max-width:600px;margin:0 auto;padding:20px;">
+          <div style="background:#0ea5e9;color:#fff;padding:20px;text-align:center;border-radius:8px 8px 0 0;">
+            <h1 style="margin:0;font-size:20px;">Uusi viesti TaskMVP:ssä</h1>
+          </div>
+          <div style="background:#f0f9ff;padding:20px;">
+            <p>Hei ${data.recipientFirstName},</p>
+            <p><strong>${data.senderName}</strong> lähetti sinulle viestin tehtävästä <strong>"${data.taskTitle}"</strong>.</p>
+            <div style="background:#e0f2fe;padding:15px;border-left:4px solid #0ea5e9;margin:15px 0;">
+              <p style="margin:0;"><strong>Viesti:</strong><br />${safePreview.replaceAll('\n', '<br/>')}</p>
+            </div>
+            <p style="text-align:center;">
+              <a href="${data.taskUrl}" style="display:inline-block;background:#0ea5e9;color:#fff;padding:12px 24px;text-decoration:none;border-radius:6px;margin:15px 0;">
+                Lue viesti
+              </a>
+            </p>
+            <p style="font-size:14px;color:#475569;">Jos et tunnista lähettäjää, tarkista tehtävän tiedot sovelluksesta.</p>
+          </div>
+          <div style="background:#e5e7eb;padding:15px;text-align:center;border-radius:0 0 8px 8px;font-size:14px;">
+            <p style="margin:0;">TaskMVP – Tehtävien markkinapaikka<br/><a href="https://taskmvp.fi">taskmvp.fi</a></p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  const textBody = `Hei ${data.recipientFirstName},\n\n${data.senderName} lähetti sinulle viestin tehtävästä "${data.taskTitle}".\n\nViesti:\n${safePreview}\n\nLue viesti: ${data.taskUrl}\n\nTaskMVP\nhttps://taskmvp.fi`;
+
+  return { subject, htmlBody, textBody };
+};
+
+interface TaskOfferEmailData {
+  offerId: string;
+  taskId: string;
+  taskTitle: string;
+  taskerName: string;
+  ownerFirstName: string;
+  offeredPrice: number;
+  taskUrl: string;
+}
+
+const createTaskOfferEmail = (data: TaskOfferEmailData): EmailTemplate => {
+  const subject = `📩 Uusi tarjous: "${data.taskTitle}" (${data.offeredPrice}€)`;
+
+  const htmlBody = `
+    <!DOCTYPE html>
+    <html>
+      <head><meta charset="utf-8" /></head>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color:#333;">
+        <div style="max-width:600px;margin:0 auto;padding:20px;">
+          <div style="background:#22c55e;color:#fff;padding:20px;text-align:center;border-radius:8px 8px 0 0;">
+            <h1 style="margin:0;font-size:20px;">Sinulle on tehty tarjous</h1>
+          </div>
+          <div style="background:#f0fdf4;padding:20px;">
+            <p>Hei ${data.ownerFirstName},</p>
+            <p>${data.taskerName} teki sinulle tarjouksen tehtävästä <strong>"${data.taskTitle}"</strong>.</p>
+            <div style="background:#dcfce7;padding:15px;border-left:4px solid #22c55e;margin:15px 0;">
+              <p style="margin:0;"><strong>Tarjoushinta:</strong> ${data.offeredPrice}€</p>
+            </div>
+            <p style="text-align:center;">
+              <a href="${data.taskUrl}" style="display:inline-block;background:#22c55e;color:#fff;padding:12px 24px;text-decoration:none;border-radius:6px;margin:15px 0;">
+                Katso tarjous
+              </a>
+            </p>
+            <p style="font-size:14px;color:#475569;">Voit hyväksyä tai hylätä tarjouksen sovelluksessa.</p>
+          </div>
+          <div style="background:#e5e7eb;padding:15px;text-align:center;border-radius:0 0 8px 8px;font-size:14px;">
+            <p style="margin:0;">TaskMVP – Tehtävien markkinapaikka<br/><a href="https://taskmvp.fi">taskmvp.fi</a></p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  const textBody = `Hei ${data.ownerFirstName},\n\n${data.taskerName} teki sinulle tarjouksen tehtävästä "${data.taskTitle}".\n\nTarjoushinta: ${data.offeredPrice}€\n\nKatso tarjous: ${data.taskUrl}\n\nTaskMVP\nhttps://taskmvp.fi`;
+
+  return { subject, htmlBody, textBody };
+};
+
+type PaymentEmailRecipientKind = 'customer' | 'tasker';
+
+interface PaymentSucceededEmailData {
+  paymentId: string;
+  taskId: string;
+  taskTitle: string;
+  amount: number;
+  currency: string;
+  recipientKind: PaymentEmailRecipientKind;
+  recipientFirstName: string;
+  otherPartyName?: string;
+  taskUrl: string;
+}
+
+const createPaymentSucceededEmail = (data: PaymentSucceededEmailData): EmailTemplate => {
+  const subject =
+    data.recipientKind === 'customer'
+      ? `✅ Maksu onnistui – tehtävä "${data.taskTitle}" on varattu`
+      : `✅ Maksu vastaanotettu – voit aloittaa: "${data.taskTitle}"`;
+
+  const otherPartyLine =
+    data.otherPartyName
+      ? data.recipientKind === 'customer'
+        ? `<p>Työntekijänä toimii nyt <strong>${data.otherPartyName}</strong>.</p>`
+        : `<p>Asiakas on <strong>${data.otherPartyName}</strong>.</p>`
+      : '';
+
+  const headerBg = data.recipientKind === 'customer' ? '#22c55e' : '#4338ca';
+
+  const htmlBody = `
+    <!DOCTYPE html>
+    <html>
+      <head><meta charset="utf-8" /></head>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color:#333;">
+        <div style="max-width:600px;margin:0 auto;padding:20px;">
+          <div style="background:${headerBg};color:#fff;padding:20px;text-align:center;border-radius:8px 8px 0 0;">
+            <h1 style="margin:0;font-size:20px;">Maksu onnistui</h1>
+          </div>
+          <div style="background:#f9fafb;padding:20px;">
+            <p>Hei ${data.recipientFirstName},</p>
+            <p>Tehtävä <strong>"${data.taskTitle}"</strong> on nyt ${data.recipientKind === 'customer' ? 'varattu' : 'sinun aloitettavissa'}.</p>
+            ${otherPartyLine}
+            <div style="background:#eef2ff;padding:15px;border-left:4px solid #6366f1;margin:15px 0;">
+              <p style="margin:0;"><strong>Summa:</strong> ${data.amount} ${data.currency}</p>
+            </div>
+            <p style="text-align:center;">
+              <a href="${data.taskUrl}" style="display:inline-block;background:${headerBg};color:#fff;padding:12px 24px;text-decoration:none;border-radius:6px;margin:15px 0;">
+                Avaa tehtävä
+              </a>
+            </p>
+            <p style="font-size:14px;color:#475569;">Jos sinulla on kysyttävää, avaa viestit tehtävän sivulta.</p>
+          </div>
+          <div style="background:#e5e7eb;padding:15px;text-align:center;border-radius:0 0 8px 8px;font-size:14px;">
+            <p style="margin:0;">TaskMVP – Tehtävien markkinapaikka<br/><a href="https://taskmvp.fi">taskmvp.fi</a></p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  const textBody = `Hei ${data.recipientFirstName},\n\nTehtävä "${data.taskTitle}" on nyt ${data.recipientKind === 'customer' ? 'varattu' : 'sinun aloitettavissa'}.\n\nSumma: ${data.amount} ${data.currency}\n\nAvaa tehtävä: ${data.taskUrl}\n\nTaskMVP\nhttps://taskmvp.fi`;
+
+  return { subject, htmlBody, textBody };
+};
+
+const truncate = (value: string, maxChars: number) => {
+  const v = value || '';
+  if (v.length <= maxChars) return v;
+  return `${v.slice(0, maxChars)}...`;
+};
+
+export async function sendChatMessageEmail(data: ChatMessageEmailData, recipientEmail: string, recipientId: string) {
+  const template = createChatMessageEmail({
+    ...data,
+    messagePreview: truncate(data.messagePreview, 300),
+  });
+  return await sendEmailWithDeliveryLog({
+    eventType: 'chat_message_created',
+    eventId: data.messageId,
+    recipientId,
+    recipientEmail,
+    template,
+    options: {
+      from: 'TaskMVP <no-reply@taskmvp.fi>',
+      replyTo: 'tuki@taskmvp.fi',
+    },
+  });
+}
+
+export async function sendTaskOfferEmail(data: TaskOfferEmailData, recipientEmail: string, recipientId: string) {
+  const template = createTaskOfferEmail(data);
+  return await sendEmailWithDeliveryLog({
+    eventType: 'task_offer_created',
+    eventId: data.offerId,
+    recipientId,
+    recipientEmail,
+    template,
+    options: {
+      from: 'TaskMVP <no-reply@taskmvp.fi>',
+      replyTo: 'tuki@taskmvp.fi',
+    },
+  });
+}
+
+export async function sendPaymentSucceededEmail(
+  data: PaymentSucceededEmailData,
+  recipientEmail: string,
+  recipientId: string,
+) {
+  const template = createPaymentSucceededEmail(data);
+  return await sendEmailWithDeliveryLog({
+    eventType: 'payment_succeeded',
+    eventId: data.paymentId,
+    recipientId,
+    recipientEmail,
+    template,
+    options: {
+      from: 'TaskMVP <no-reply@taskmvp.fi>',
+      replyTo: 'tuki@taskmvp.fi',
+    },
+  });
+}
+
 // Email service configuration check
 export async function isEmailServiceConfigured(): Promise<boolean> {
   return !!(
-    process.env.RESEND_API_KEY || 
-    process.env.SENDGRID_API_KEY || 
-    process.env.EMAIL_API_KEY
+    process.env.RESEND_API_KEY ||
+    process.env.SENDGRID_API_KEY
   );
 }
