@@ -49,7 +49,7 @@ function ConversationListItemComponent({
         w-full p-4 text-left transition-all duration-200 hover:bg-gray-50 border-l-2 
         active:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset
         min-h-[80px] touch-manipulation
-        ${isSelected ? 'bg-primary/5 border-l-emerald-500 border-r-2 border-r-emerald-500' : 'border-l-transparent hover:border-l-gray-200'}
+        ${isSelected ? 'bg-primary/5 border-l-sky-500 border-r-2 border-r-sky-500' : 'border-l-transparent hover:border-l-gray-200'}
       `}
     >
       <div className="flex items-start space-x-3">
@@ -67,8 +67,8 @@ function ConversationListItemComponent({
 
           {/* Online status indicator */}
           {conversation.isOnline && (
-            <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white">
-              <div className="w-full h-full rounded-full animate-pulse bg-green-400"></div>
+            <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-sky-500 rounded-full border-2 border-white">
+              <div className="w-full h-full rounded-full animate-pulse bg-sky-400"></div>
             </div>
           )}
 
@@ -101,7 +101,7 @@ function ConversationListItemComponent({
               {conversation.unreadCount > 0 && (
                 <Badge
                   variant="secondary"
-                  className="bg-primary text-white text-xs px-2 py-1 font-bold border border-emerald-700 shadow-sm min-w-[20px] h-5 flex items-center justify-center"
+                  className="bg-primary text-white text-xs px-2 py-1 font-bold border border-sky-700 shadow-sm min-w-[20px] h-5 flex items-center justify-center"
                 >
                   {conversation.unreadCount > 99 ? '99+' : conversation.unreadCount}
                 </Badge>
@@ -129,10 +129,10 @@ function ConversationListItemComponent({
             {lastMessage && (
               <div className="flex items-center space-x-1 flex-shrink-0">
                 {conversation.unreadCount === 0 && lastMessage.senderId !== participant?.id && (
-                  <CheckCheck className="h-3 w-3 text-green-500" />
+                  <CheckCheck className="h-3 w-3 text-sky-500" />
                 )}
                 {conversation.unreadCount > 0 && (
-                  <Circle className="h-2 w-2 text-emerald-500 fill-current" />
+                  <Circle className="h-2 w-2 text-sky-500 fill-current" />
                 )}
               </div>
             )}
@@ -153,7 +153,7 @@ function ConversationListItemComponent({
                 <MessageCircle className="h-3 w-3 text-blue-500" />
               )}
               {conversation.section === 'completed' && (
-                <CheckCheck className="h-3 w-3 text-green-500" />
+                <CheckCheck className="h-3 w-3 text-sky-500" />
               )}
             </div>
           </div>
@@ -173,7 +173,7 @@ function getTaskStatusStyle(status: string): string {
     case 'in_progress':
       return 'border-primary/20 text-primary bg-primary/5';
     case 'completed':
-      return 'border-green-200 text-green-700 bg-green-50';
+      return 'border-sky-200 text-sky-700 bg-sky-50';
     case 'cancelled':
     case 'disputed':
       return 'border-red-200 text-red-700 bg-red-50';

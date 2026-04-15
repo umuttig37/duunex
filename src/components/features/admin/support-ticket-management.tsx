@@ -155,7 +155,7 @@ export default function SupportTicketManagement({ adminId }: SupportTicketManage
       case 'in_progress':
         return <Badge variant="outline" className="text-yellow-600 border-yellow-600"><Clock className="mr-1 h-3 w-3" />Käsittelyssä</Badge>;
       case 'resolved':
-        return <Badge variant="outline" className="text-green-600 border-green-600"><CheckCircle className="mr-1 h-3 w-3" />Ratkaistu</Badge>;
+        return <Badge variant="outline" className="text-sky-600 border-sky-600"><CheckCircle className="mr-1 h-3 w-3" />Ratkaistu</Badge>;
       case 'closed':
         return <Badge variant="outline" className="text-gray-600 border-gray-600"><CheckCircle className="mr-1 h-3 w-3" />Suljettu</Badge>;
       default:
@@ -191,7 +191,7 @@ export default function SupportTicketManagement({ adminId }: SupportTicketManage
       case 'user':
         return <Badge variant="outline" className="text-blue-600 border-blue-600 text-xs"><User className="mr-1 h-3 w-3" />Asiakas</Badge>;
       case 'tasker':
-        return <Badge variant="outline" className="text-primary border-emerald-600 text-xs"><User className="mr-1 h-3 w-3" />Tekijä</Badge>;
+        return <Badge variant="outline" className="text-primary border-sky-600 text-xs"><User className="mr-1 h-3 w-3" />Tekijä</Badge>;
       case 'admin':
         return <Badge variant="outline" className="text-red-600 border-red-600 text-xs"><User className="mr-1 h-3 w-3" />Admin</Badge>;
       default:
@@ -363,7 +363,7 @@ export default function SupportTicketManagement({ adminId }: SupportTicketManage
               {selectedTicket.admin_response && (
                 <div>
                   <h4 className="font-semibold mb-2">Nykyinen vastaus</h4>
-                  <div className="bg-green-50 p-3 border border-green-200 rounded-lg whitespace-pre-wrap">
+                  <div className="bg-sky-50 p-3 border border-sky-200 rounded-lg whitespace-pre-wrap">
                     {selectedTicket.admin_response}
                   </div>
                 </div>

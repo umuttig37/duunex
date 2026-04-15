@@ -1035,7 +1035,7 @@ export default function TaskDetails({
             htmlFor="addressInput"
             className="flex text-base font-semibold text-gray-800 mb-3 items-center"
           >
-            <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 text-sm">
+            <span className="w-6 h-6 bg-sky-100 rounded-full flex items-center justify-center mr-2 text-sm">
               📍
             </span>
             Missä tehtävä suoritetaan? *
@@ -1046,8 +1046,8 @@ export default function TaskDetails({
             placeholder="Kirjoita osoite tai paikka (esim. Mannerheimintie 1, Helsinki)"
           />
           {formData.latitude && formData.longitude && (
-            <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-xs text-green-700 flex items-center">
+            <div className="mt-3 p-2 bg-sky-50 border border-sky-200 rounded-lg">
+              <p className="text-xs text-sky-700 flex items-center">
                 <span className="mr-1">✅</span>
                 Tarkka sijainti tallennettu ({formData.latitude.toFixed(
                   4

@@ -419,7 +419,7 @@ export default function TaskerSelection({
                   <Button
                     size="sm"
                     className={`${selectedTasker?.id === taskerItem.id
-                      ? 'bg-primary/90 hover:bg-emerald-800'
+                      ? 'bg-primary/90 hover:bg-sky-800'
                       : 'bg-primary hover:bg-primary/90'
                       } text-white`}
                     onClick={() => handleSelectTasker(taskerItem)}

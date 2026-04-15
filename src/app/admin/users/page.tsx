@@ -150,7 +150,7 @@ export default function UsersPage() {
             <CardTitle className="text-sm font-medium">Taskerit</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-sky-600">
               {userStats.taskers}
             </div>
           </CardContent>

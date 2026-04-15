@@ -4,29 +4,7 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const teamMembers = [
-  {
-    id: 'umut',
-    name: 'Umut Ugyr',
-    role: 'Toimitusjohtaja',
-    email: 'umut@taskmvp.fi',
-    avatar: '/images/testmonials/mikael.jpg',
-  },
-  {
-    id: 'riku',
-    name: 'Riku Kaartoaho',
-    role: 'Tekninen asiantuntija',
-    email: 'riku@taskmvp.fi',
-    avatar: '/images/testmonials/lady.jpg',
-  },
-  {
-    id: 'support',
-    name: 'Asiakaspalvelu',
-    role: 'Tuki & apu',
-    email: 'info@taskmvp.fi',
-    avatar: '/images/testmonials/maria.png',
-  },
-];
+import { BrandLogo } from '@/components/shared/brand/brand-logo';
 
 // Fiverr-style footer structure
 const footerSections = {
@@ -58,7 +36,7 @@ const footerSections = {
     { label: 'Tietoja meistä', href: '/about' },
     { label: 'Tuki ja apu', href: '/support' },
     { label: 'Yhteisövastuu', href: '/social-impact' },
-    { label: 'Ura TaskMVP:ssa', href: '/careers' },
+    { label: 'Ura Duunexissa', href: '/careers' },
     { label: 'Käyttöehdot', href: '/terms' },
     { label: 'Tietosuoja', href: '/privacy' },
     { label: 'Evästeasetukset', href: '/cookies' },
@@ -67,10 +45,10 @@ const footerSections = {
 };
 
 const companyInfo = {
-  name: 'TaskMVP Oy',
+  name: 'Duunex Oy',
   address: 'Aleksanterinkatu 15 A 3',
   city: '00100 Helsinki',
-  email: 'info@taskmvp.fi',
+  email: 'info@duunex.fi',
   phone: '+358 9 123 4567',
 };
 
@@ -164,14 +142,17 @@ export function Footer() {
         <div className="border-t border-zinc-700 mt-12 pt-8">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <Link href="/" className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">TM</div>
-                <span className="text-lg font-semibold text-background">TaskMVP</span>
+              <Link href="/" className="flex items-center rounded-md bg-white px-2 py-1 shadow-sm transition-opacity hover:opacity-90">
+                <BrandLogo
+                  variant="wordmark"
+                  className="h-7 w-auto max-w-[150px]"
+                  sizes="150px"
+                />
               </Link>
               <p className="text-sm text-zinc-500">Luotettava kotipalvelujen markkinapaikka</p>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-sm text-zinc-500">
-              <div>© {currentYear} TaskMVP Oy. Kaikki oikeudet pidätetään.</div>
+              <div>© {currentYear} Duunex Oy. Kaikki oikeudet pidätetään.</div>
               <div className="flex items-center gap-4">
                 <button
                   type="button"

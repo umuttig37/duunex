@@ -113,7 +113,7 @@ export default function EarlyCompletionConfirmation({
           <Button
             onClick={handleConfirm}
             disabled={isPending}
-            className="w-full sm:flex-1 bg-green-600 hover:bg-green-700 text-white text-xs sm:text-sm py-2 px-3"
+            className="w-full sm:flex-1 bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm py-2 px-3"
           >
             <CheckCircle className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
             <span className="truncate">Vahvista valmistuminen</span>

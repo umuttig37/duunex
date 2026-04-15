@@ -68,7 +68,7 @@ const getBannerConfig = (type: BannerType) => {
     },
     payment_info: {
       icon: Zap,
-      className: 'border-primary/20 bg-gradient-to-r from-emerald-50 to-blue-50',
+      className: 'border-primary/20 bg-gradient-to-r from-sky-50 to-blue-50',
       iconClassName: 'text-primary',
       titleClassName: 'text-slate-800',
       descriptionClassName: 'text-slate-700'

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function TaskMvpCtaSection() {
+export default function DuunexCtaSection() {
   return (
     <section className="py-16 md:py-24 bg-white">
       <div className="max-w-6xl mx-auto px-4">
@@ -13,10 +13,10 @@ export default function TaskMvpCtaSection() {
           {/* Left Column - Content */}
           <div className="max-w-xl">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
-              Aloita TaskMVPn käyttö jo tänään ja ala tienaa rahaa
+              Aloita Duunexin käyttö jo tänään ja ala tienata rahaa
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-10">
-              Luo tehtäväsi tai ilmoittaudu tekijäksi minuuteissa. TaskMVP auttaa sinua
+              Luo tehtäväsi tai ilmoittaudu tekijäksi minuuteissa. Duunex auttaa sinua
               löytämään oikeat asiakkaat ja aloittamaan tienaamisen nopeasti ja
               turvallisesti.
             </p>

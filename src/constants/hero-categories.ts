@@ -1,4 +1,4 @@
-import { Settings, Brush, Hammer, Truck, Wrench, TreePine, Drill, PaintBucket, GraduationCap } from 'lucide-react';
+import { Settings, Brush, Truck, Wrench, TreePine, Drill, PaintBucket, GraduationCap } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface HeroCategoryData {
@@ -159,7 +159,7 @@ export const heroCategoriesData: HeroCategoryData[] = [
     id: 'puutarha',
     name_fi: 'Puutarha',
     icon: TreePine,
-    description: 'Puutarhanhoitoa, nurmikonleikkausta ja pihatyötä vihreiden asiantuntijoilta.',
+    description: 'Puutarhanhoitoa, nurmikonleikkausta ja pihatyötä pihan asiantuntijoilta.',
     benefits: [
       'Nurmikon leikkaus ja hoito',
       'Pensaiden ja puiden leikkaus',

@@ -97,7 +97,7 @@ export default async function BalanceHistoryPage() {
   const getTransactionBadge = (type: string) => {
     switch (type) {
       case 'earnings':
-        return <Badge variant="outline" className="text-primary border-emerald-600">Ansiot</Badge>;
+        return <Badge variant="outline" className="text-primary border-sky-600">Ansiot</Badge>;
       case 'withdrawal':
         return <Badge variant="outline" className="text-blue-600 border-blue-600">Nosto</Badge>;
       case 'adjustment':
@@ -114,7 +114,7 @@ export default async function BalanceHistoryPage() {
       case 'approved':
         return <Badge variant="outline" className="text-blue-600 border-blue-600">Hyväksytty</Badge>;
       case 'completed':
-        return <Badge variant="outline" className="text-green-600 border-green-600">Maksettu</Badge>;
+        return <Badge variant="outline" className="text-sky-600 border-sky-600">Maksettu</Badge>;
       case 'rejected':
         return <Badge variant="outline" className="text-red-600 border-red-600">Hylätty</Badge>;
       default:

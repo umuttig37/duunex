@@ -11,12 +11,15 @@ import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
 import './globals.css';
-import FeedbackProvider from '@/components/feedback/feedback-provider';
 
 export const metadata: Metadata = {
-  title: 'TaskMVP - Löydä apua tai tarjoa osaamistasi',
+  title: 'Duunex - Löydä apua tai tarjoa osaamistasi',
   description:
-    'TaskMVP yhdistää avun tarvitsijat ja paikalliset tekijät Suomessa.',
+    'Duunex yhdistää avun tarvitsijat ja paikalliset tekijät Suomessa.',
+  icons: {
+    icon: '/images/brand/duunex-icon.png',
+    apple: '/images/brand/duunex-icon.png',
+  },
 };
 
 export const viewport = {

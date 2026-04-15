@@ -496,7 +496,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-600"
                   required
                 />
               </div>
@@ -510,7 +510,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-600"
                   required
                 />
               </div>
@@ -525,7 +525,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-600"
                 required
               />
             </div>
@@ -539,7 +539,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-600"
                 required
               />
             </div>
@@ -553,7 +553,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-600"
                 required
               />
             </div>
@@ -611,7 +611,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                     max={150}
                     value={formData.hourlyRate}
                     onChange={handleNumberInputChange}
-                    className="block w-full rounded-md border-gray-300 pl-9 pr-12 focus:border-green-500 focus:ring-green-500 border py-2 px-3 focus:outline-none focus:ring-2"
+                    className="block w-full rounded-md border-gray-300 pl-9 pr-12 focus:border-sky-500 focus:ring-sky-500 border py-2 px-3 focus:outline-none focus:ring-2"
                     placeholder="0"
                     required
                   />
@@ -630,7 +630,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                     max={200}
                     value={formData.serviceRadius}
                     onChange={(e) => setFormData((prev) => ({ ...prev, serviceRadius: Number(e.target.value) }))}
-                    className="flex-1 h-2 rounded-lg appearance-none bg-gray-200 accent-green-600 cursor-pointer"
+                    className="flex-1 h-2 rounded-lg appearance-none bg-gray-200 accent-sky-600 cursor-pointer"
                   />
                   <span className="text-sm font-medium text-gray-700 tabular-nums min-w-[3rem]">
                     {formData.serviceRadius} km
@@ -641,8 +641,8 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
             <div className="mt-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                    <Euro className="h-6 w-6 text-green-600" />
+                  <div className="w-12 h-12 rounded-full bg-sky-100 flex items-center justify-center">
+                    <Euro className="h-6 w-6 text-sky-600" />
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Kilpailukykyiset hinnat</h3>
@@ -670,7 +670,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                 <strong>Voit valita useita kategorioita!</strong> Mitä enemmän kategorioita valitset, sitä enemmän tehtäviä saat.
               </p>
               <p className="text-xs text-blue-600 mb-2">
-                Klikkaa kategorioita valitaksesi/poistaaksesi niitä. Valitut kategoriat näkyvät vihreällä.
+                Klikkaa kategorioita valitaksesi/poistaaksesi niitä. Valitut kategoriat näkyvät sinisellä.
               </p>
             </div>
 
@@ -701,7 +701,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                   className={`
                     flex items-center p-3 border rounded-md cursor-pointer transition-colors
                     ${formData.categories.includes(category.id)
-                      ? 'border-green-500 bg-green-50'
+                      ? 'border-sky-500 bg-sky-50'
                       : 'border-gray-300 hover:bg-gray-50'
                     }
                   `}
@@ -722,7 +722,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                     })()}
                   </div>
                   <span className="flex-grow">{category.name_fi}</span>
-                  {formData.categories.includes(category.id) && <Check className="h-5 w-5 text-green-600" />}
+                  {formData.categories.includes(category.id) && <Check className="h-5 w-5 text-sky-600" />}
                 </div>
               ))}
             </div>
@@ -750,7 +750,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                   <button
                     type="button"
                     onClick={triggerFileInput}
-                    className="absolute bottom-0 right-0 bg-green-600 text-white p-2 rounded-full shadow-md hover:bg-green-700 transition-colors"
+                    className="absolute bottom-0 right-0 bg-sky-600 text-white p-2 rounded-full shadow-md hover:bg-sky-700 transition-colors"
                   >
                     <Upload className="h-4 w-4" />
                   </button>
@@ -801,7 +801,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
                 rows={5}
                 value={formData.bio}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-600"
                 placeholder="Olen luotettava ammattilainen, jolla on 5 vuoden kokemus kodin korjauksista..."
                 required
               />
@@ -883,7 +883,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
         </div>
         <div className="w-full bg-gray-200/70 rounded-full h-2">
           <div
-            className="bg-green-600 h-2 rounded-full transition-all duration-300 ease-in-out"
+            className="bg-sky-600 h-2 rounded-full transition-all duration-300 ease-in-out"
             style={{ width: `${(currentStep / STEPS.length) * 100}%` }}
           />
         </div>
@@ -899,7 +899,7 @@ export default function TaskerOnboardingForm({ initialCategoryId, initialRegionI
             return (
               <div
                 key={step.id}
-                className={`flex flex-col items-center transition-all duration-200 ${isCompleted ? "text-green-600" : isActive ? "text-green-600" : "text-gray-400"
+                className={`flex flex-col items-center transition-all duration-200 ${isCompleted ? "text-sky-600" : isActive ? "text-sky-600" : "text-gray-400"
                   }`}
                 title={isClickable ? `Klikkaa palataksesi vaiheeseen: ${step.title}` : undefined}
               >

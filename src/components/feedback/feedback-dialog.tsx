@@ -56,7 +56,6 @@ export default function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps)
     watch,
     setValue,
     reset,
-    formState: { errors },
   } = useForm<FeedbackFormData>({
     resolver: zodResolver(feedbackFormSchema),
     defaultValues: {
@@ -108,8 +107,6 @@ export default function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps)
         throw new Error(errorData.error || 'Palautteen lähetys epäonnistui');
       }
 
-      const result = await response.json();
-
       // Show success state
       setHasSubmitted(true);
       toast.success('Kiitos palautteestasi! 🎉');
@@ -160,7 +157,7 @@ export default function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps)
           <>
             <DialogHeader>
               <DialogTitle className="text-lg font-semibold text-gray-900">
-                Anna palautetta TaskMVP:stä
+                Anna palautetta Duunex:stä
               </DialogTitle>
               <DialogDescription className="text-sm text-gray-600">
                 Palautteesi auttaa meitä parantamaan palvelua. Vastaaminen kestää vain hetken.
@@ -171,7 +168,7 @@ export default function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps)
               {/* Question 1: Concept Clarity */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium text-gray-700">
-                  Kuinka ymmärrettäväksi koit TaskMVP konseptin?
+                  Kuinka ymmärrettäväksi koit Duunex-konseptin?
                 </Label>
                 <div className="space-y-2">
                   <Slider
@@ -272,7 +269,7 @@ export default function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps)
               Kiitos palautteestasi! 🎉
             </DialogTitle>
             <DialogDescription className="text-gray-600">
-              Palautteesi on vastaanotettu ja se auttaa meitä kehittämään TaskMVP:tä paremmaksi.
+              Palautteesi on vastaanotettu ja se auttaa meitä kehittämään Duunexia paremmaksi.
             </DialogDescription>
           </div>
         )}

@@ -116,10 +116,10 @@ export default function ActionCenter({ tasks, onFilterChange }: ActionCenterProp
 
           {/* Pending Payments */}
           {tasksPendingPayment.length > 0 && (
-            <Alert className="border-green-200 bg-green-50">
+            <Alert className="border-sky-200 bg-sky-50">
               <CreditCard className="h-4 w-4" />
-              <AlertTitle className="text-green-900">Odottaa maksua</AlertTitle>
-              <AlertDescription className="text-green-800 flex items-center justify-between">
+              <AlertTitle className="text-sky-900">Odottaa maksua</AlertTitle>
+              <AlertDescription className="text-sky-800 flex items-center justify-between">
                 <span>{tasksPendingPayment.length} tehtävä odottaa maksua</span>
                 <Button
                   size="sm"

@@ -91,7 +91,7 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-emerald-50/40 to-white py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-white via-sky-50/40 to-white py-12 px-4">
       <div className="max-w-md mx-auto">
         {/* Back button */}
         <Button variant="ghost" asChild className="mb-6">
@@ -104,7 +104,7 @@ export default function ChangePasswordPage() {
         <Card className="border-primary/10 shadow-lg">
           <CardHeader className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-lg">
+              <div className="p-2 bg-gradient-to-r from-sky-500 to-sky-600 rounded-lg">
                 <Lock className="h-5 w-5 text-white" />
               </div>
               <CardTitle className="text-2xl">Vaihda salasana</CardTitle>
@@ -148,7 +148,7 @@ export default function ChangePasswordPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white"
+                  className="flex-1 bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 text-white"
                 >
                   {isSubmitting ? 'Vaihdetaan...' : 'Vaihda salasana'}
                 </Button>

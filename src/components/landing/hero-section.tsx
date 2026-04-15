@@ -17,10 +17,10 @@ const categories = [
 
 const HeroSection = () => {
   return (
-    <section className="bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50 pt-24 sm:pt-28 pb-12 lg:pb-20 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-sky-50 via-blue-50 to-purple-50 pt-24 sm:pt-28 pb-12 lg:pb-20 relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-emerald-300/30 rounded-full blur-xl animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-32 h-32 bg-sky-300/30 rounded-full blur-xl animate-pulse"></div>
         <div className="absolute top-40 right-20 w-24 h-24 bg-blue-300/25 rounded-full blur-xl animate-pulse delay-1000"></div>
         <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-purple-300/25 rounded-full blur-xl animate-pulse delay-500"></div>
         <div className="absolute top-60 right-1/3 w-16 h-16 bg-orange-300/20 rounded-full blur-xl animate-pulse delay-1500"></div>
@@ -28,7 +28,7 @@ const HeroSection = () => {
       <div className="max-w-7xl mx-auto px-4">
         {/* Trust indicator at top */}
         <div className="text-center mb-8">
-          <p className="text-sm text-primary flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-100 to-emerald-50 border border-primary/20 rounded-full px-4 py-2 mx-auto w-fit shadow-sm">
+          <p className="text-sm text-primary flex items-center justify-center gap-2 bg-gradient-to-r from-sky-100 to-sky-50 border border-primary/20 rounded-full px-4 py-2 mx-auto w-fit shadow-sm">
             <svg className="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
@@ -43,7 +43,7 @@ const HeroSection = () => {
             {/* Main heading */}
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
               Löydä luotettavaa apua{' '}
-              <span className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
                 kotiin, tänään
               </span>
             </h1>
@@ -66,11 +66,11 @@ const HeroSection = () => {
             <div className="flex flex-wrap gap-3 mb-8">
               {categories.map(({ icon: Icon, label }, index) => {
                 const colors = [
-                  'bg-primary/10 text-primary border-primary/20 hover:bg-emerald-200',
+                  'bg-primary/10 text-primary border-primary/20 hover:bg-sky-200',
                   'bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-200', 
                   'bg-purple-100 text-purple-700 border-purple-200 hover:bg-purple-200',
                   'bg-orange-100 text-orange-700 border-orange-200 hover:bg-orange-200',
-                  'bg-teal-100 text-teal-700 border-teal-200 hover:bg-teal-200',
+                  'bg-cyan-100 text-cyan-700 border-cyan-200 hover:bg-cyan-200',
                   'bg-indigo-100 text-indigo-700 border-indigo-200 hover:bg-indigo-200'
                 ];
                 return (
@@ -90,7 +90,7 @@ const HeroSection = () => {
               <Button
                 asChild
                 size="lg"
-                className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white px-8 py-3 rounded-lg font-medium shadow-lg hover:shadow-emerald-200 transition-all"
+                className="bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-700 hover:to-sky-800 text-white px-8 py-3 rounded-lg font-medium shadow-lg hover:shadow-sky-200 transition-all"
               >
                 <Link href="/dashboard/tasks/new">Luo tehtävä</Link>
               </Button>
@@ -126,7 +126,7 @@ const HeroSection = () => {
           <div className="lg:col-span-2 relative z-10">
             <div className="bg-white rounded-2xl shadow-xl border border-white/20 overflow-hidden backdrop-blur-sm relative">
               {/* Decorative gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-200/30 via-blue-100/20 to-purple-100/25 pointer-events-none"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-sky-200/30 via-blue-100/20 to-purple-100/25 pointer-events-none"></div>
               <Image
                 src="/images/hero/hero-home-services.jpg"
                 alt="Home services illustration - people helping with moving, organizing and plant care"

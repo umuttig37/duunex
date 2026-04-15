@@ -438,7 +438,7 @@ export default function SmartTaskDetails({
                 "border-2 border-dashed rounded-xl p-6 text-center transition-colors",
                 imageFiles.length >= 3
                   ? "border-gray-300 bg-gray-50 opacity-50"
-                  : "border-primary/30 bg-white hover:border-emerald-400 cursor-pointer"
+                  : "border-primary/30 bg-white hover:border-sky-400 cursor-pointer"
               )}>
                 <input
                   type="file"

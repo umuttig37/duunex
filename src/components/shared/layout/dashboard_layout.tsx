@@ -17,6 +17,7 @@ import {
 import Link from 'next/link';
 import { useTransition } from 'react';
 
+import { BrandLogo } from '@/components/shared/brand/brand-logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -25,7 +26,6 @@ import { useIsMobile } from '@/hooks/shared/use-mobile';
 import { useUnreadTaskRequests } from '@/hooks/tasks/use-unread-task-requests';
 import { createClient } from '@/lib/supabase/client';
 import type { Database } from '@/lib/supabase/database.types';
-import { useRouter } from 'next/navigation';
 
 type UserProfile = Database['public']['Tables']['profiles']['Row'];
 
@@ -46,7 +46,6 @@ export default function DashboardLayout({
   const [isLoggingOut, startLogoutTransition] = useTransition();
   const { unreadCount } = useUnreadMessages();
   const { unreadCount: unreadTaskRequestsCount } = useUnreadTaskRequests();
-  const router = useRouter();
 
   // If user is not available (e.g., during session re-establishment),
   // you can show a loading state or a restricted view.
@@ -90,13 +89,6 @@ export default function DashboardLayout({
       }
     });
   };
-
-  const profileLabel =
-    passedUser.role === 'user'
-      ? 'Asiakasprofiili'
-      : passedUser.role === 'tasker'
-        ? 'Tekijäprofiili'
-        : 'Oma Profiili';
 
   // Define navigation items based on user role
   const baseNavItems = [
@@ -168,11 +160,14 @@ export default function DashboardLayout({
         <div
           className={`p-4 flex items-center gap-2 h-16 border-b ${theme.borderColor}`}
         >
-          <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-            <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
-              TM
-            </div>
-            <span className="text-lg font-semibold">TaskMVP</span>
+          <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+            <span className="rounded-md bg-white px-2 py-1 shadow-sm">
+              <BrandLogo
+                variant="wordmark"
+                className="h-7 w-auto max-w-[150px]"
+                sizes="150px"
+              />
+            </span>
           </Link>
         </div>
 
@@ -277,11 +272,14 @@ export default function DashboardLayout({
             <div
               className={`p-4 flex items-center gap-2 h-16 border-b ${theme.borderColor}`}
             >
-              <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-                <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
-                  TM
-                </div>
-                <span className="text-lg font-semibold">TaskMVP</span>
+              <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+                <span className="rounded-md bg-white px-2 py-1 shadow-sm">
+                  <BrandLogo
+                    variant="wordmark"
+                    className="h-7 w-auto max-w-[150px]"
+                    sizes="150px"
+                  />
+                </span>
               </Link>
             </div>
 
@@ -384,7 +382,7 @@ export default function DashboardLayout({
             <div className="px-4 md:px-8 py-3">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-sm">
                 <div className="flex items-center gap-4">
-                  <p className="text-muted-foreground">&copy; {new Date().getFullYear()} TaskMVP</p>
+                  <p className="text-muted-foreground">&copy; {new Date().getFullYear()} Duunex</p>
                   <div className="flex gap-3">
                     <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">Käyttöehdot</Link>
                     <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">Tietosuoja</Link>

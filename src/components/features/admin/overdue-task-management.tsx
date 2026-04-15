@@ -276,7 +276,7 @@ export default function OverdueTaskManagement() {
 
   const getOverdueTypeIcon = (type: string) => {
     switch (type) {
-      case 'payment_completion_overdue': return <CreditCard className="h-4 w-4 text-green-600" />;
+      case 'payment_completion_overdue': return <CreditCard className="h-4 w-4 text-sky-600" />;
       case 'completion_overdue': return <CheckCircle2 className="h-4 w-4 text-orange-600" />;
       case 'start_overdue': return <Play className="h-4 w-4 text-blue-600" />;
       case 'response_overdue': return <Mail className="h-4 w-4 text-purple-600" />;
@@ -597,7 +597,7 @@ export default function OverdueTaskManagement() {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <CheckCircle2 className="mx-auto h-12 w-12 text-green-500 mb-4" />
+                  <CheckCircle2 className="mx-auto h-12 w-12 text-sky-500 mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
                     Ei myöhässä olevia tehtäviä
                   </h3>
@@ -631,7 +631,7 @@ export default function OverdueTaskManagement() {
                         <div className="text-right">
                           <div className="font-medium">{result.action_taken}</div>
                           {result.notification_sent && (
-                            <div className="text-sm text-green-600">Ilmoitus lähetetty</div>
+                            <div className="text-sm text-sky-600">Ilmoitus lähetetty</div>
                           )}
                         </div>
                       </div>

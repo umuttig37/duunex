@@ -28,8 +28,8 @@ export default function HomePage() {
       {/* 4. Premium CTA - Gradient hero-style */}
       <PremiumCTASection />
 
-      {/* 5. TaskMVP CTA - Vihreä painike */}
-      {/* <TaskMvpCtaSection /> */}
+      {/* 5. Duunex CTA */}
+      {/* <DuunexCtaSection /> */}
     </div>
   );
 }

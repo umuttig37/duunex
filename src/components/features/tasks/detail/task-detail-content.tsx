@@ -320,7 +320,7 @@ export default function TaskDetailContent({
                     }
                     className={
                       displayTask.status === 'open'
-                        ? 'bg-green-500 text-white'
+                        ? 'bg-sky-500 text-white'
                         : displayTask.status === 'paid'
                           ? 'bg-blue-500 text-white'
                           : displayTask.status === 'completed' ||
@@ -365,7 +365,7 @@ export default function TaskDetailContent({
               {isAssignedTasker &&
                 (displayTask.status === 'paid' ||
                   displayTask.status === 'in_progress') && (
-                  <div className="bg-gradient-to-r from-blue-50 to-emerald-50 border border-blue-200 rounded-lg p-4 mb-3">
+                  <div className="bg-gradient-to-r from-blue-50 to-sky-50 border border-blue-200 rounded-lg p-4 mb-3">
                     <div className="flex items-start space-x-3">
                       <div className="flex-shrink-0">
                         <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
@@ -422,7 +422,7 @@ export default function TaskDetailContent({
                     >
                       <Button
                         size="lg"
-                        className="w-full bg-green-600 hover:bg-green-700 text-white"
+                        className="w-full bg-sky-600 hover:bg-sky-700 text-white"
                       >
                         <CheckCircle className="mr-2 h-4 w-4" /> Merkitse
                         valmiiksi

@@ -318,7 +318,7 @@ export default function EnhancedPaymentDashboard({
       {/* Payment Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-emerald-600/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-sky-600/20"></div>
           <CardHeader className="relative pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium text-primary">
@@ -385,28 +385,28 @@ export default function EnhancedPaymentDashboard({
         </Card>
 
         <Card className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-green-600/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-sky-600/20"></div>
           <CardHeader className="relative pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-green-800">
+              <CardTitle className="text-sm font-medium text-sky-800">
                 Alustan Tulot
               </CardTitle>
-              <DollarSign className="h-5 w-5 text-green-600" />
+              <DollarSign className="h-5 w-5 text-sky-600" />
             </div>
           </CardHeader>
           <CardContent className="relative">
-            <div className="text-2xl font-bold text-green-700 mb-1">
+            <div className="text-2xl font-bold text-sky-700 mb-1">
               {formatCurrency(stats?.platform_revenue || 0)}
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-green-600">palvelumaksuja</span>
+              <span className="text-sky-600">palvelumaksuja</span>
               {stats?.revenue_growth_rate && stats.revenue_growth_rate > 0 ? (
-                <div className="flex items-center text-green-600">
+                <div className="flex items-center text-sky-600">
                   <TrendingUp className="h-4 w-4 mr-1" />
                   <span>+{Math.round(stats.revenue_growth_rate)}%</span>
                 </div>
               ) : (
-                <TrendingUp className="h-4 w-4 text-green-600" />
+                <TrendingUp className="h-4 w-4 text-sky-600" />
               )}
             </div>
           </CardContent>
@@ -433,15 +433,15 @@ export default function EnhancedPaymentDashboard({
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-green-800">
+            <CardTitle className="text-sm font-medium text-sky-800">
               Palvelumaksu %
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-700">
+            <div className="text-2xl font-bold text-sky-700">
               {(stats?.avg_service_fee_percentage || 0).toFixed(1)}%
             </div>
-            <p className="text-xs text-green-600">keskimääräinen palkkio</p>
+            <p className="text-xs text-sky-600">keskimääräinen palkkio</p>
           </CardContent>
         </Card>
 
@@ -477,15 +477,15 @@ export default function EnhancedPaymentDashboard({
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-teal-800">
+                <CardTitle className="text-sm font-medium text-cyan-800">
                   Aktiiviset Tekijät
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-teal-700">
+                <div className="text-2xl font-bold text-cyan-700">
                   {balanceStats.active_taskers}
                 </div>
-                <p className="text-xs text-teal-600">ansainnut rahaa</p>
+                <p className="text-xs text-cyan-600">ansainnut rahaa</p>
               </CardContent>
             </Card>
           </>

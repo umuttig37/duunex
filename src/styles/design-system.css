@@ -1,35 +1,39 @@
-/* Minimalist Design System: black – graphite – white – green (accent) */
+/* Duunex Design System: navy, blue, white, orange */
 /* References: Thumbtack, Apple, Klarna */
 
 /* ================================
    COLOR PALETTE
    ================================ */
 :root {
-  /* Graphite scale (neutral) */
-  --graphite-50: #fafafa;
-  --graphite-100: #f4f4f5;
-  --graphite-200: #e4e4e7;
-  --graphite-300: #d4d4d8;
-  --graphite-400: #a1a1aa;
-  --graphite-500: #71717a;
-  --graphite-600: #52525b;
-  --graphite-700: #3f3f46;
-  --graphite-800: #27272a;
-  --graphite-900: #18181b;
+  /* Navy scale (brand neutral) */
+  --navy-50: #f2f7ff;
+  --navy-100: #e0effe;
+  --navy-200: #b9ddfb;
+  --navy-300: #7ec4f6;
+  --navy-400: #38a7ec;
+  --navy-500: #0ea5e9;
+  --navy-600: #0284c7;
+  --navy-700: #075985;
+  --navy-800: #0b2857;
+  --navy-900: #07133a;
 
-  /* Green accent (single CTA color) */
-  --accent-green: #16a34a;
-  --accent-green-hover: #15803d;
-  --accent-green-muted: #dcfce7;
-  --accent-green-border: #86efac;
+  /* Duunex brand accents */
+  --accent-sky: #0ea5e9;
+  --accent-sky-hover: #0284c7;
+  --accent-sky-muted: #e0f2fe;
+  --accent-sky-border: #7dd3fc;
+  --accent-orange: #f59e0b;
+  --accent-orange-hover: #ea580c;
+  --accent-orange-muted: #fff7ed;
+  --accent-orange-border: #fdba74;
 
   /* Semantic */
-  --success: var(--accent-green);
-  --success-bg: var(--accent-green-muted);
-  --info: var(--graphite-600);
-  --info-bg: var(--graphite-100);
-  --warning: #ca8a04;
-  --warning-bg: #fef9c3;
+  --success: var(--accent-sky);
+  --success-bg: var(--accent-sky-muted);
+  --info: var(--navy-700);
+  --info-bg: var(--navy-50);
+  --warning: var(--accent-orange-hover);
+  --warning-bg: var(--accent-orange-muted);
   --error: #dc2626;
   --error-bg: #fee2e2;
 }
@@ -213,7 +217,7 @@
   @apply inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium;
 }
 
-.badge-emerald,
+.badge-sky,
 .badge-success {
   @apply bg-primary/10 text-primary border border-primary/20;
 }

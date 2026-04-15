@@ -74,7 +74,7 @@ export default function TaskerActions({
           >
             <Button
               size="lg"
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
+              className="w-full bg-sky-600 hover:bg-sky-700 text-white"
             >
               <CheckCircle className="mr-2 h-4 w-4" />
               Merkitse valmiiksi

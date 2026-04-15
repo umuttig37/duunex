@@ -27,7 +27,7 @@ export default function TaskOfferForm({ taskId, taskBudget, onSuccess, hasAlread
     return (
       <Card className="w-full bg-slate-50 border-dashed">
         <CardHeader className="flex flex-row items-center gap-4">
-          <CheckCircle className="h-10 w-10 text-emerald-500" />
+          <CheckCircle className="h-10 w-10 text-sky-500" />
           <div>
             <CardTitle className="text-lg">Olet jo lähettänyt tarjouksen</CardTitle>
             <CardDescription className="text-sm">

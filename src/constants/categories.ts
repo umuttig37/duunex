@@ -25,7 +25,7 @@ export const categories: Category[] = [
     icon: '🏠',
     question: 'Tarvitsetko apua kotitöissä?',
     description: 'Siivous, järjestely ja kodinhoito',
-    gradient: 'from-emerald-50 to-emerald-100 hover:from-emerald-100 hover:to-emerald-200',
+    gradient: 'from-sky-50 to-sky-100 hover:from-sky-100 hover:to-sky-200',
   },
   {
     id: 'muutto',
@@ -33,7 +33,7 @@ export const categories: Category[] = [
     icon: '📦',
     question: 'Tarvitsetko muutto-apua?',
     description: 'Muuttopalvelut ja kuljetukset',
-    gradient: 'from-blue-50 to-emerald-50 hover:from-blue-100 hover:to-emerald-100',
+    gradient: 'from-blue-50 to-sky-50 hover:from-blue-100 hover:to-sky-100',
   },
   {
     id: 'it-apu',
@@ -41,7 +41,7 @@ export const categories: Category[] = [
     icon: '💻',
     question: 'Tarvitsetko teknistä tukea?',
     description: 'Tietotekniikka-apu ja digitaalinen tuki',
-    gradient: 'from-emerald-50 to-green-50 hover:from-emerald-100 hover:to-green-100',
+    gradient: 'from-sky-50 to-sky-50 hover:from-sky-100 hover:to-sky-100',
   },
   {
     id: 'kokoonpano',
@@ -57,6 +57,6 @@ export const categories: Category[] = [
     icon: '🌱',
     question: 'Tarvitsetko puutarha-apua?',
     description: 'Puutarhanhoito ja ulkotyöt',
-    gradient: 'from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100',
+    gradient: 'from-sky-50 to-sky-50 hover:from-sky-100 hover:to-sky-100',
   },
 ];

@@ -45,7 +45,7 @@ export default function YhteystiedotPage() {
       } else {
         throw new Error('Virhe lähettäessä viestiä');
       }
-    } catch (error) {
+    } catch {
       toast({
         title: 'Virhe',
         description: 'Viestin lähettäminen epäonnistui. Yritä uudelleen.',
@@ -57,7 +57,7 @@ export default function YhteystiedotPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-50">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-sky-50">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -132,7 +132,7 @@ export default function YhteystiedotPage() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>TehtäväMestari</CardTitle>
+                  <CardTitle>Duunex</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-gray-600">
                   <p>
@@ -142,7 +142,7 @@ export default function YhteystiedotPage() {
                     <strong>ALV-numero:</strong> FI12345678
                   </p>
                   <p>
-                    TehtäväMestari on Suomessa toimiva palvelu, joka yhdistää
+                    Duunex on Suomessa toimiva palvelu, joka yhdistää
                     tehtävien tilaajat luotettaviin paikallisiin tekijöihin.
                     Tarjoamme turvallisen ja helppokäyttöisen alustan
                     monenlaisten tehtävien hoitamiseen.

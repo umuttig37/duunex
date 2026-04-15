@@ -238,8 +238,8 @@ export default function WithdrawalRequestForm({ userId }: WithdrawalRequestFormP
                 )}
               </div>
               <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-xs text-green-600">Käyttövalmis</span>
+                <div className="w-2 h-2 bg-sky-500 rounded-full"></div>
+                <span className="text-xs text-sky-600">Käyttövalmis</span>
               </div>
             </div>
           </div>

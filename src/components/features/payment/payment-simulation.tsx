@@ -174,7 +174,7 @@ export default function PaymentFlow({
               <Separator />
               <div className="flex justify-between font-semibold text-sm sm:text-lg">
                 <span>Yhteensä:</span>
-                <span className="text-green-600">{totalAmount}€</span>
+                <span className="text-sky-600">{totalAmount}€</span>
               </div>
             </div>
           </div>
@@ -212,7 +212,7 @@ export default function PaymentFlow({
               <Button
                 onClick={handlePaytrailPayment}
                 disabled={isProcessing}
-                className="w-full bg-green-600 hover:bg-green-700"
+                className="w-full bg-sky-600 hover:bg-sky-700"
                 size="lg"
               >
                 {isProcessing ? (

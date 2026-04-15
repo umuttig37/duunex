@@ -10,7 +10,7 @@
   <path d="M190 110L197 117L210 104" stroke="white" stroke-width="3" fill="none"/>
   
   <!-- Success text -->
-  <text x="200" y="145" text-anchor="middle" fill="#059669" font-family="Arial" font-size="14" font-weight="bold">Maksu onnistui!</text>
+  <text x="200" y="145" text-anchor="middle" fill="#0284c7" font-family="Arial" font-size="14" font-weight="bold">Maksu onnistui!</text>
   <text x="200" y="160" text-anchor="middle" fill="#6B7280" font-family="Arial" font-size="10">Työ voidaan aloittaa</text>
   
   <!-- Payment details -->

@@ -146,7 +146,7 @@ export default function MediaGallery({ attachments, taskTitle }: MediaGalleryPro
             onClick={() => openModal(index)}
             className={`relative h-16 md:h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
               index === selectedImageIndex
-                ? 'border-emerald-500 ring-2 ring-primary/20'
+                ? 'border-sky-500 ring-2 ring-primary/20'
                 : 'border-transparent hover:border-slate-300'
             }`}
           >

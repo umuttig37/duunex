@@ -236,7 +236,7 @@ export default function DashboardClientContent({
                 onClick={() => handleTaskerViewChange('tyopoyta')}
                 className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
                   currentView === 'tyopoyta' 
-                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    ? 'bg-gradient-to-r from-sky-500 to-sky-600 text-white shadow-md hover:from-sky-600 hover:to-sky-700' 
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
@@ -260,7 +260,7 @@ export default function DashboardClientContent({
                 onClick={() => handleTaskerViewChange('active')}
                 className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
                   currentView === 'active' 
-                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    ? 'bg-gradient-to-r from-sky-500 to-sky-600 text-white shadow-md hover:from-sky-600 hover:to-sky-700' 
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
@@ -273,7 +273,7 @@ export default function DashboardClientContent({
                 onClick={() => handleTaskerViewChange('events')}
                 className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
                   currentView === 'events' 
-                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    ? 'bg-gradient-to-r from-sky-500 to-sky-600 text-white shadow-md hover:from-sky-600 hover:to-sky-700' 
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
@@ -285,7 +285,7 @@ export default function DashboardClientContent({
                 onClick={() => handleTaskerViewChange('history')}
                 className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
                   currentView === 'history' 
-                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    ? 'bg-gradient-to-r from-sky-500 to-sky-600 text-white shadow-md hover:from-sky-600 hover:to-sky-700' 
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
@@ -307,7 +307,7 @@ export default function DashboardClientContent({
                 onClick={() => handleUserViewChange('tasks')}
                 className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
                   currentView === 'tasks' 
-                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    ? 'bg-gradient-to-r from-sky-500 to-sky-600 text-white shadow-md hover:from-sky-600 hover:to-sky-700' 
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
@@ -319,7 +319,7 @@ export default function DashboardClientContent({
                 onClick={() => handleUserViewChange('events')}
                 className={`flex items-center whitespace-nowrap text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all ${
                   currentView === 'events' 
-                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:from-emerald-600 hover:to-emerald-700' 
+                    ? 'bg-gradient-to-r from-sky-500 to-sky-600 text-white shadow-md hover:from-sky-600 hover:to-sky-700' 
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >

@@ -26,7 +26,7 @@ export default async function AdminFeedbackPage() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Käyttäjäpalautteet</h1>
         <p className="text-gray-600">
-          Hallitse TaskMVP:n käyttäjäpalautteita ja seuraa palvelun kehitystä.
+          Hallitse Duunex:n käyttäjäpalautteita ja seuraa palvelun kehitystä.
         </p>
       </div>
 

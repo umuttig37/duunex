@@ -212,7 +212,7 @@ export function TaskerProfileDialog({
               </h3>
               {loadingReviews ? (
                 <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-600"></div>
                 </div>
               ) : (
                 <div className="space-y-4 max-h-60 overflow-y-auto">

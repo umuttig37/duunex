@@ -12,7 +12,7 @@ function SignUpPageContent({ loginHref }: { loginHref: string }) {
     <div className="container mx-auto flex min-h-[calc(100vh-10rem)] items-center justify-center px-4 py-12">
       <Card className="w-full max-w-lg shadow-lg">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Luo TaskMVP-tili</CardTitle>
+          <CardTitle className="text-2xl font-bold">Luo Duunex-tili</CardTitle>
           <CardDescription>
             Liity yhteisöön ja ala löytämään apua tai tarjoamaan osaamistasi.
           </CardDescription>

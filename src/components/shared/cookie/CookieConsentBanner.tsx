@@ -143,7 +143,7 @@ export default function CookieConsentBanner(): JSX.Element | null {
                 <h2 className="text-base font-semibold text-gray-900 dark:text-white">Evästeet</h2>
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
                   Käytämme välttämättömiä evästeitä sekä suostumuksella analytiikkaa ja markkinointia. Lue lisää{' '}
-                  <Link href="/cookies" className="text-primary underline hover:text-primary dark:text-emerald-400">
+                  <Link href="/cookies" className="text-primary underline hover:text-primary dark:text-sky-400">
                     evästekäytännöistämme
                   </Link>
                   .

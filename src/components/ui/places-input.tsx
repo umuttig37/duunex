@@ -91,7 +91,7 @@ export default function PlacesInput({
           }),
           {
             headers: {
-              'User-Agent': 'TaskMVP/1.0', // Required by Nominatim ToS
+              'User-Agent': 'Duunex/1.0', // Required by Nominatim ToS
             },
           }
         );

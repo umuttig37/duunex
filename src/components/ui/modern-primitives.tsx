@@ -182,7 +182,7 @@ export function TemplateCard({
           <div className="flex items-center justify-between mb-2">
             <h3 className="heading-4 truncate">{title}</h3>
             {popularity && (
-              <span className="badge-emerald text-xs">
+              <span className="badge-sky text-xs">
                 #{popularity}
               </span>
             )}

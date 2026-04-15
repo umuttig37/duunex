@@ -188,9 +188,9 @@ export default function TaskerActiveTasksContent({
             </div>
           )}
           {completedTasks.length > 0 && (
-            <div className="flex items-center gap-2 bg-gradient-to-r from-green-50 to-emerald-50 px-4 py-2 rounded-lg border border-green-200">
-              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 animate-pulse"></div>
-              <span className="text-sm font-medium text-green-700">
+            <div className="flex items-center gap-2 bg-gradient-to-r from-sky-50 to-sky-50 px-4 py-2 rounded-lg border border-sky-200">
+              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-sky-500 to-sky-500 animate-pulse"></div>
+              <span className="text-sm font-medium text-sky-700">
                 {completedTasks.length} valmista
               </span>
             </div>
@@ -264,21 +264,21 @@ export default function TaskerActiveTasksContent({
 
       {/* Completed Tasks */}
       {sortedCompletedTasks.length > 0 && (
-        <Card className="bg-gradient-to-r from-green-50/50 to-emerald-50/50 border-green-200">
+        <Card className="bg-gradient-to-r from-sky-50/50 to-sky-50/50 border-sky-200">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-xl font-bold text-green-900 flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600" />
+              <CardTitle className="text-xl font-bold text-sky-900 flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-sky-600" />
                 Valmiit Tehtävät
               </CardTitle>
               <Badge
                 variant="outline"
-                className="bg-green-100 border-green-300 text-green-700"
+                className="bg-sky-100 border-sky-300 text-sky-700"
               >
                 {sortedCompletedTasks.length} tehtävää
               </Badge>
             </div>
-            <p className="text-sm text-green-700">
+            <p className="text-sm text-sky-700">
               Onnistuneesti suoritetut ja asiakkaan hyväksymät tehtävät
             </p>
           </CardHeader>

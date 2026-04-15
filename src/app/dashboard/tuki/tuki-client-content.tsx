@@ -79,7 +79,7 @@ export default function TukiClientContent() {
             },
             {
                 question: "Kuinka maksujärjestelmä toimii?",
-                answer: "Maksut käsitellään turvallisesti Paytrail-palvelun kautta. Maksu veloitetaan kun tehtävä on merkitty valmiiksi ja hyväksytty. Tekijät voivat nostaa rahansa taskmvp-alustalta.",
+                answer: "Maksut käsitellään turvallisesti Paytrail-palvelun kautta. Maksu veloitetaan kun tehtävä on merkitty valmiiksi ja hyväksytty. Tekijät voivat nostaa rahansa duunex-alustalta.",
                 category: 'yleinen',
                 priority: 9
             },
@@ -141,14 +141,14 @@ export default function TukiClientContent() {
                     <CardContent className="pt-4">
                         <Mail className="h-8 w-8 text-blue-600 mx-auto mb-2" />
                         <h3 className="font-semibold mb-1">Sähköposti</h3>
-                        <p className="text-sm text-gray-600 mb-2">tuki@taskmvp.fi</p>
+                        <p className="text-sm text-gray-600 mb-2">tuki@duunex.fi</p>
                         <Badge variant="outline" className="text-xs">Vastaus 24h sisällä</Badge>
                     </CardContent>
                 </Card>
 
                 <Card className="text-center p-4">
                     <CardContent className="pt-4">
-                        <MessageCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                        <MessageCircle className="h-8 w-8 text-sky-600 mx-auto mb-2" />
                         <h3 className="font-semibold mb-1">Live-chat</h3>
                         <p className="text-sm text-gray-600 mb-2">Ma-Pe 9-17</p>
                         <Badge variant="outline" className="text-xs">Tulossa pian</Badge>

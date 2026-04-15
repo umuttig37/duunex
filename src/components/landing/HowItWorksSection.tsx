@@ -65,7 +65,7 @@ export default function HowItWorksSection() {
                   <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
                     <CheckCircle className="h-4 w-4 text-primary-foreground" />
                   </div>
-                  <span className="font-medium text-foreground">TaskMVP Dashboard</span>
+                  <span className="font-medium text-foreground">Duunex Dashboard</span>
                 </div>
                 <div className="flex gap-1.5">
                   <div className="w-2.5 h-2.5 bg-primary rounded-full" />

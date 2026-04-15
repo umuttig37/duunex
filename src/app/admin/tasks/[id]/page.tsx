@@ -96,7 +96,7 @@ const getStatusIcon = (status: string) => {
     case 'completed':
     case 'paid':
     case 'early_completed':
-      return <CheckCircle className="h-4 w-4 text-green-600" />;
+      return <CheckCircle className="h-4 w-4 text-sky-600" />;
     case 'cancelled':
     case 'disputed':
       return <XCircle className="h-4 w-4 text-red-600" />;

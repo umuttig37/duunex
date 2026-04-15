@@ -14,7 +14,7 @@ const getTaskStatusMeta = (status: string): StatusMeta => {
     open: {
       label: 'Avoin',
       variant: 'default',
-      className: 'bg-green-500 hover:bg-green-600 text-white border-green-500'
+      className: 'bg-sky-500 hover:bg-sky-600 text-white border-sky-500'
     },
     request_sent: {
       label: 'Pyyntö lähetetty',
@@ -49,12 +49,12 @@ const getTaskStatusMeta = (status: string): StatusMeta => {
     completed: {
       label: 'Valmis',
       variant: 'default',
-      className: 'bg-primary hover:bg-primary text-white border-emerald-500'
+      className: 'bg-primary hover:bg-primary text-white border-sky-500'
     },
     early_completed: {
       label: 'Valmis (aikainen)',
       variant: 'default',
-      className: 'bg-primary hover:bg-primary/90 text-white border-emerald-600'
+      className: 'bg-primary hover:bg-primary/90 text-white border-sky-600'
     },
     cancelled: {
       label: 'Peruutettu',

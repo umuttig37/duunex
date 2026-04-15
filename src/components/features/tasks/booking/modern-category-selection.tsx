@@ -265,7 +265,7 @@ export default function ModernCategorySelection({
           <div>
             <div className="flex items-center justify-between mb-6">
               <h2 className="heading-2">Suositut pohjat</h2>
-              <span className="badge-emerald">
+              <span className="badge-sky">
                 {selectedCategory ? `Ehdotukset: ${selectedCategory.name_fi}` : 'Nopea aloitus'}
               </span>
             </div>

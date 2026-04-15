@@ -341,14 +341,14 @@ export default function NearbyTaskersPage() {
       {/* Notification Banner */}
       {notification && (
         <div className={`border-l-4 p-4 mx-4 my-4 rounded-r-md ${
-          notification.type === 'success' ? 'bg-green-50 border-green-400 text-green-700' :
+          notification.type === 'success' ? 'bg-sky-50 border-sky-400 text-sky-700' :
           notification.type === 'error' ? 'bg-red-50 border-red-400 text-red-700' :
           'bg-amber-50 border-amber-400 text-amber-700'
         }`}>
           <div className="flex items-center">
             <div className="flex-shrink-0">
               {notification.type === 'success' && (
-                <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                <svg className="h-5 w-5 text-sky-400" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
               )}
@@ -371,7 +371,7 @@ export default function NearbyTaskersPage() {
                 <button
                   onClick={() => setNotification(null)}
                   className={`inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                    notification.type === 'success' ? 'text-green-500 hover:bg-green-100 focus:ring-green-600' :
+                    notification.type === 'success' ? 'text-sky-500 hover:bg-sky-100 focus:ring-sky-600' :
                     notification.type === 'error' ? 'text-red-500 hover:bg-red-100 focus:ring-red-600' :
                     'text-amber-500 hover:bg-amber-100 focus:ring-amber-600'
                   }`}

@@ -503,7 +503,7 @@ export default function EnhancedOverdueManagement({ adminId }: { adminId: string
                     ) : overdueTasks.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                          <CheckCircle2 className="h-6 w-6 mx-auto mb-2 text-green-600" />
+                          <CheckCircle2 className="h-6 w-6 mx-auto mb-2 text-sky-600" />
                           Ei myöhässä olevia tehtäviä suodattimilla
                         </TableCell>
                       </TableRow>

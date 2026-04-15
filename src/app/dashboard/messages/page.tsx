@@ -372,7 +372,7 @@ function DashboardLayoutWrapper() {
     return (
       <div className="flex flex-1 items-center justify-center min-h-screen">
         <div className="flex items-center space-x-2 text-gray-500">
-          <div className="w-5 h-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-5 h-5 border-2 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
           <span>Ladataan käyttäjätietoja...</span>
         </div>
       </div>
@@ -385,7 +385,7 @@ function DashboardLayoutWrapper() {
         <Suspense fallback={
           <div className="flex flex-1 items-center justify-center">
             <div className="flex items-center space-x-2 text-gray-500">
-              <div className="w-5 h-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-5 h-5 border-2 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
               <span>Ladataan...</span>
             </div>
           </div>

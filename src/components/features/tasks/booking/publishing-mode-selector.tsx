@@ -48,8 +48,6 @@ interface ModeOptionProps {
 }
 
 function ModeOption({ mode, selected, onSelect }: ModeOptionProps) {
-  const isOpen = mode === 'open';
-
   const modeData = {
     open: {
       icon: Users,
@@ -60,7 +58,7 @@ function ModeOption({ mode, selected, onSelect }: ModeOptionProps) {
         'Voit valita parhaan tekijän'
       ],
       timeEstimate: '2-24 tuntia',
-      color: 'emerald'
+      color: 'sky'
     },
     direct: {
       icon: User,
@@ -84,7 +82,7 @@ function ModeOption({ mode, selected, onSelect }: ModeOptionProps) {
       className={cn(
         "transition-all duration-300 cursor-pointer group",
         selected && "ring-2 ring-offset-2",
-        data.color === 'emerald' && selected && "ring-emerald-500",
+        data.color === 'sky' && selected && "ring-sky-500",
         data.color === 'blue' && selected && "ring-blue-500"
       )}
       onClick={onSelect}
@@ -96,7 +94,7 @@ function ModeOption({ mode, selected, onSelect }: ModeOptionProps) {
             <div className={cn(
               "w-12 h-12 rounded-full flex items-center justify-center transition-colors",
               selected
-                ? data.color === 'emerald'
+                ? data.color === 'sky'
                   ? "bg-primary/10 text-primary"
                   : "bg-blue-100 text-blue-600"
                 : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
@@ -113,8 +111,8 @@ function ModeOption({ mode, selected, onSelect }: ModeOptionProps) {
           <div className={cn(
             "w-6 h-6 min-w-6 rounded-full border-2 flex items-center justify-center transition-colors",
             selected
-              ? data.color === 'emerald'
-                ? "bg-primary border-emerald-600"
+              ? data.color === 'sky'
+                ? "bg-primary border-sky-600"
                 : "bg-blue-600 border-blue-600"
               : "border-gray-300 group-hover:border-gray-400"
           )}>
@@ -127,7 +125,7 @@ function ModeOption({ mode, selected, onSelect }: ModeOptionProps) {
           <ul className="space-y-2">
             {data.benefits.map((benefit, index) => (
               <li key={index} className="flex items-start gap-2 text-sm">
-                <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-4 h-4 text-sky-500 mt-0.5 flex-shrink-0" />
                 <span>{benefit}</span>
               </li>
             ))}
@@ -185,7 +183,7 @@ function TaskSummaryCard({ taskSummary, onEdit }: TaskSummaryCardProps) {
     <ModernCard variant="base" className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="heading-3">Tehtävän yhteenveto</h3>
-        <span className="badge-emerald text-xs">Valmis</span>
+        <span className="badge-sky text-xs">Valmis</span>
       </div>
 
       <div className="space-y-4">
@@ -227,7 +225,7 @@ function TaskSummaryCard({ taskSummary, onEdit }: TaskSummaryCardProps) {
         {taskSummary.budget && (
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <Euro className="w-4 h-4 text-green-600" />
+              <Euro className="w-4 h-4 text-sky-600" />
               <span className="text-sm font-medium">{taskSummary.budget}€</span>
             </div>
             {onEdit && (

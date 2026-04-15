@@ -69,14 +69,14 @@ const getStatusConfig = (status: string) => {
     paid: { 
       text: 'Työn alla', 
       icon: Wrench, 
-      color: 'text-green-600', 
-      bgColor: 'bg-green-50' 
+      color: 'text-sky-600', 
+      bgColor: 'bg-sky-50' 
     },
     in_progress: { 
       text: 'Työn alla', 
       icon: Wrench, 
-      color: 'text-green-600', 
-      bgColor: 'bg-green-50' 
+      color: 'text-sky-600', 
+      bgColor: 'bg-sky-50' 
     },
     early_completed: {
       text: 'Odottaa vahvistusta',
@@ -111,8 +111,8 @@ const getStatusConfig = (status: string) => {
     assigned: { 
       text: 'Määritetty', 
       icon: Wrench, 
-      color: 'text-green-600', 
-      bgColor: 'bg-green-50' 
+      color: 'text-sky-600', 
+      bgColor: 'bg-sky-50' 
     },
     awaiting_payment: { 
       text: 'Odottaa maksua', 
@@ -170,7 +170,7 @@ const TaskMobileCard: React.FC<TaskMobileCardProps> = ({
                   {task.status === 'open' && (
                     <Badge 
                       variant="outline" 
-                      className="bg-green-50 text-green-700 border-green-300 text-xs flex-shrink-0"
+                      className="bg-sky-50 text-sky-700 border-sky-300 text-xs flex-shrink-0"
                     >
                       Aktiivinen
                     </Badge>
@@ -209,14 +209,14 @@ const TaskMobileCard: React.FC<TaskMobileCardProps> = ({
                   <span>{task.offers_count || 0}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <MessageSquare className="h-3 w-3 text-green-500" />
+                  <MessageSquare className="h-3 w-3 text-sky-500" />
                   <span>{(task as any).message_count || 0}</span>
                 </div>
               </div>
               {displayPrice && (
                 <div className="flex items-center gap-1">
-                  <Euro className="h-3 w-3 text-green-600" />
-                  <span className="font-semibold text-green-600">
+                  <Euro className="h-3 w-3 text-sky-600" />
+                  <span className="font-semibold text-sky-600">
                     {displayPrice}€
                   </span>
                 </div>
@@ -286,8 +286,8 @@ const TaskMobileCard: React.FC<TaskMobileCardProps> = ({
                   <div className="space-y-1">
                     {displayPrice && (
                       <div className="flex items-center gap-1 text-sm">
-                        <Euro className="h-3 w-3 text-green-600" />
-                        <span className="font-semibold text-green-600">
+                        <Euro className="h-3 w-3 text-sky-600" />
+                        <span className="font-semibold text-sky-600">
                           {displayPrice}€
                         </span>
                         {task.accepted_offer?.offered_price && (

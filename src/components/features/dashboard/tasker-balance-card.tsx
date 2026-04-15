@@ -134,7 +134,7 @@ export default function TaskerBalanceCard({ userId }: TaskerBalanceCardProps) {
         );
       case 'completed':
         return (
-          <span className="px-2 py-1 bg-green-200 text-green-800 text-xs rounded-full font-medium">
+          <span className="px-2 py-1 bg-sky-200 text-sky-800 text-xs rounded-full font-medium">
             Maksettu
           </span>
         );
@@ -191,7 +191,7 @@ export default function TaskerBalanceCard({ userId }: TaskerBalanceCardProps) {
         <CardContent>
           <div className="space-y-3 sm:space-y-4">
             {/* Current Balance */}
-            <div className="text-center p-3 sm:p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-primary/20">
+            <div className="text-center p-3 sm:p-4 bg-gradient-to-r from-sky-50 to-sky-50 rounded-lg border border-primary/20">
               <div className="text-2xl sm:text-3xl font-bold text-primary">
                 {formatCurrency(balance?.current_balance || 0)}
               </div>
@@ -297,7 +297,7 @@ export default function TaskerBalanceCard({ userId }: TaskerBalanceCardProps) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-sky-500 rounded-full"></div>
               Viimeisimmät nostot
             </CardTitle>
             <CardDescription>

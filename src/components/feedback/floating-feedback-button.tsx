@@ -63,7 +63,7 @@ export default function FloatingFeedbackButton({ onOpenDialog }: FloatingFeedbac
           animate-bounce-gentle
           font-medium text-sm
         `}
-        aria-label="Anna palautetta TaskMVP:stä"
+        aria-label="Anna palautetta Duunex:stä"
       >
         {isDashboardPage ? (
           <span className="whitespace-nowrap">Anna palautetta</span>

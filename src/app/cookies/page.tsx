@@ -2,8 +2,8 @@ import ResetConsentButton from '@/components/shared/cookie/ResetConsentButton';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Evästekäytännöt | TaskMVP',
-  description: 'Tietoa TaskMVP:n evästeistä ja suostumusasetuksista.',
+  title: 'Evästekäytännöt | Duunex',
+  description: 'Tietoa Duunex:n evästeistä ja suostumusasetuksista.',
 };
 
 export default function CookiesPage() {

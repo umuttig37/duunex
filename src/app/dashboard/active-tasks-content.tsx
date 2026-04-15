@@ -164,9 +164,9 @@ export default function ActiveTasksContent({
               )}
 
               {completedCount > 0 && (
-                <div className="flex items-center gap-2 bg-gradient-to-r from-green-50 to-emerald-50 px-4 py-2 rounded-lg border border-green-200">
-                  <div className="w-3 h-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 animate-pulse"></div>
-                  <span className="text-sm font-medium text-green-700">
+                <div className="flex items-center gap-2 bg-gradient-to-r from-sky-50 to-sky-50 px-4 py-2 rounded-lg border border-sky-200">
+                  <div className="w-3 h-3 rounded-full bg-gradient-to-r from-sky-500 to-sky-500 animate-pulse"></div>
+                  <span className="text-sm font-medium text-sky-700">
                     {completedCount} valmista
                   </span>
                 </div>

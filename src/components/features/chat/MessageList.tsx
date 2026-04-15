@@ -75,7 +75,7 @@ export function MessageList({ messages, currentUserId, isLoading }: MessageListP
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="flex items-center space-x-2 text-gray-500">
-          <div className="w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-4 h-4 border-2 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
           <span>Ladataan viestejä...</span>
         </div>
       </div>

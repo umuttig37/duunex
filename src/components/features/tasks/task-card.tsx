@@ -24,9 +24,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, showEdit, showStatus, showAct
         assigned: 'bg-yellow-500 text-white',
         request_sent: 'bg-yellow-600 text-white',
         request_declined: 'bg-red-600 text-white',
-        paid: 'bg-green-600 text-white',
+        paid: 'bg-sky-600 text-white',
         in_progress: 'bg-blue-700 text-white',
-        completed: 'bg-green-500 text-white',
+        completed: 'bg-sky-500 text-white',
         early_completed: 'bg-orange-500 text-white',
         cancelled: 'bg-gray-400 text-white',
         disputed: 'bg-red-500 text-white',
@@ -60,7 +60,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, showEdit, showStatus, showAct
                     )}
                     {task.budget && (
                         <div className="flex items-center gap-1">
-                            <span className="text-green-600 font-semibold">{task.budget}€</span>
+                            <span className="text-sky-600 font-semibold">{task.budget}€</span>
                         </div>
                     )}
                 </div>

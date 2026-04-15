@@ -25,7 +25,7 @@ export default function StepIndicator({ currentStep, totalSteps, onStepClick, al
         {hasClickableSteps && (
           <div className="text-center mb-3">
             <p className="text-xs text-gray-500 font-medium">
-              💡 Klikkaa vihreää merkkiä palataksesi aikaisempaan vaiheeseen
+              💡 Klikkaa sinistä merkkiä palataksesi aikaisempaan vaiheeseen
             </p>
           </div>
         )}
@@ -48,7 +48,7 @@ export default function StepIndicator({ currentStep, totalSteps, onStepClick, al
                 <button
                   type="button"
                   className={`w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold border-2 transition-all duration-200
-                    ${isActive ? "border-blue-600 bg-blue-100 text-blue-700" : isCompleted ? "border-green-400 bg-green-50 text-green-700" : "border-gray-300 bg-white text-gray-400"}
+                    ${isActive ? "border-blue-600 bg-blue-100 text-blue-700" : isCompleted ? "border-sky-400 bg-sky-50 text-sky-700" : "border-gray-300 bg-white text-gray-400"}
                     ${isClickable ? "hover:border-indigo-500 hover:bg-indigo-50 cursor-pointer transform hover:scale-105 active:scale-95" : "cursor-default"}
                     ${isClickable ? "focus:outline-none focus:ring-2 focus:ring-indigo-500" : ""}
                   `}
@@ -59,7 +59,7 @@ export default function StepIndicator({ currentStep, totalSteps, onStepClick, al
                 >
                   {step.icon}
                 </button>
-                <span className={`mt-2 text-xs font-medium ${isActive ? "text-blue-700" : isCompleted ? "text-green-700" : "text-gray-400"}`}>
+                <span className={`mt-2 text-xs font-medium ${isActive ? "text-blue-700" : isCompleted ? "text-sky-700" : "text-gray-400"}`}>
                   {step.label}
                 </span>
                 {/* Mobile labels - shorter text */}

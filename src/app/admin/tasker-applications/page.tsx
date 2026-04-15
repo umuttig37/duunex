@@ -54,7 +54,7 @@ const getStatusBadgeVariant = (
     case 'pending':
       return 'outline';
     case 'approved':
-      return 'default'; // Or a success color like green if you have one
+      return 'default'; // Or a success color like sky if you have one
     case 'not_approved':
       return 'destructive';
     default:

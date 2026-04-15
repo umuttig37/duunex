@@ -157,14 +157,14 @@ export default function BankAccountSettings({ userId }: BankAccountSettingsProps
       </CardHeader>
       <CardContent>
         {existingAccount && (
-          <div className="mb-4 p-3 rounded-lg border bg-green-50 border-green-200">
+          <div className="mb-4 p-3 rounded-lg border bg-sky-50 border-sky-200">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-green-600" />
-              <span className="text-sm font-medium text-green-800">
+              <ShieldCheck className="h-4 w-4 text-sky-600" />
+              <span className="text-sm font-medium text-sky-800">
                 Pankkitiedot tallennettu
               </span>
             </div>
-            <p className="text-xs mt-1 text-green-700">
+            <p className="text-xs mt-1 text-sky-700">
               Voit nyt tehdä nostopyyntöjä. Admin ottaa yhteyttä jos rahansiirto epäonnistuu.
             </p>
           </div>

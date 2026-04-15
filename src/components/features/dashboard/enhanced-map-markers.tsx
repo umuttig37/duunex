@@ -35,7 +35,7 @@ export const MARKER_TYPES: Record<string, MapMarkerType> = {
     name: 'Avoin Tehtävä',
     color: '#10B981', // Emerald
     bgColor: '#ECFDF5',
-    borderColor: '#059669',
+    borderColor: '#0284c7',
     icon: '📋',
     priority: 2,
     description: 'Normaalisti avoin tehtävä'

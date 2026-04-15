@@ -101,7 +101,7 @@ async function sendEmailToAdmin({
   // - Nodemailer with SMTP
   
   console.log('📧 Email to admin:', {
-    to: 'admin@taskmvp.fi',
+    to: 'admin@duunex.fi',
     subject: `[${priority.toUpperCase()}] Tukipyyntö #${ticketId}: ${subject}`,
     body: `
       Uusi tukipyyntö saapunut:
@@ -115,7 +115,7 @@ async function sendEmailToAdmin({
       ${message}
       
       ---
-      TaskMVP Tukijärjestelmä
+      Duunex Tukijärjestelmä
     `
   })
   

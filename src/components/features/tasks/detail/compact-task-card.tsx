@@ -124,8 +124,8 @@ const CompactTaskCard: React.FC<CompactTaskCardProps> = ({
         icon: Clock,
         color: 'text-yellow-500',
       },
-      paid: { text: 'Työn alla', icon: Wrench, color: 'text-green-500' },
-      in_progress: { text: 'Työn alla', icon: Wrench, color: 'text-green-500' },
+      paid: { text: 'Työn alla', icon: Wrench, color: 'text-sky-500' },
+      in_progress: { text: 'Työn alla', icon: Wrench, color: 'text-sky-500' },
       early_completed: {
         text: 'Odottaa vahvistusta',
         icon: AlertTriangle,
@@ -151,7 +151,7 @@ const CompactTaskCard: React.FC<CompactTaskCardProps> = ({
         icon: AlertTriangle,
         color: 'text-red-500',
       },
-      assigned: { text: 'Määritetty', icon: Wrench, color: 'text-green-500' },
+      assigned: { text: 'Määritetty', icon: Wrench, color: 'text-sky-500' },
       awaiting_payment: { text: 'Odottaa maksua', icon: Euro, color: 'text-amber-600' },
       request_sent: { text: 'Pyyntö lähetetty', icon: MessageSquare, color: 'text-amber-500' },
       disabled: { text: 'Piilotettu', icon: EyeOff, color: 'text-gray-400' },
@@ -181,7 +181,7 @@ const CompactTaskCard: React.FC<CompactTaskCardProps> = ({
             {task.status === 'open' && (
               <Badge
                 variant="outline"
-                className="bg-green-50 text-green-700 border-green-300 text-xs font-medium flex-shrink-0"
+                className="bg-sky-50 text-sky-700 border-sky-300 text-xs font-medium flex-shrink-0"
               >
                 Aktiivinen
               </Badge>

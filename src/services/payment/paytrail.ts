@@ -14,7 +14,7 @@ const secretKey = process.env.PAYTRAIL_SECRET_KEY || 'SAIPPUAKAUPPIAS';
 export const paytrail = new PaytrailClient({
   merchantId: parseInt(process.env.PAYTRAIL_MERCHANT_ID || '375917', 10),
   secretKey: secretKey,
-  platformName: 'TehtäväMestari', // Add platform name as required by SDK
+  platformName: 'Duunex', // Add platform name as required by SDK
 });
 
 /**
@@ -45,7 +45,7 @@ export interface PaymentRequest {
   /**
    * Optional base URL for redirect/callback URLs.
    * When provided, it should be the exact origin the user is currently on
-   * (e.g. https://taskmvp-wo1w.vercel.app). This prevents cross-domain redirects
+   * (e.g. https://duunex-wo1w.vercel.app). This prevents cross-domain redirects
    * that would otherwise drop auth cookies and "log out" the user.
    */
   appUrl?: string;

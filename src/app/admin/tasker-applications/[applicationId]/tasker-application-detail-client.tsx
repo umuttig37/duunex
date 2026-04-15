@@ -216,7 +216,7 @@ export default function TaskerApplicationDetailClient({
                         </CardHeader>
                         <CardContent>
                             {applicantProfile.is_verified ? (
-                                <div className="flex items-center text-green-600">
+                                <div className="flex items-center text-sky-600">
                                     <CheckCircle className="mr-2 h-5 w-5" />
                                     <span>Käyttäjä ON vahvistettu tekijä.</span>
                                 </div>

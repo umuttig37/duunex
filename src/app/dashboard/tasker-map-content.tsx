@@ -19,7 +19,7 @@ export default function TaskerMapContent({ taskerId, openTasksForMap }: TaskerMa
       {/* Modern Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-xl">
+          <div className="p-2.5 bg-gradient-to-br from-sky-100 to-sky-50 rounded-xl">
             <MapPin className="h-5 w-5 text-primary" />
           </div>
           <div>

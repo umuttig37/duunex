@@ -347,7 +347,7 @@ export default function WithdrawalManagement({
         );
       case 'completed':
         return (
-          <Badge variant="outline" className="text-green-600 border-green-600">
+          <Badge variant="outline" className="text-sky-600 border-sky-600">
             <CheckCircle className="mr-1 h-3 w-3" />
             Maksettu
           </Badge>
@@ -643,7 +643,7 @@ export default function WithdrawalManagement({
                           <div className="grid grid-cols-2 gap-4">
                             <div>
                               <span className="font-medium">Saatavilla:</span>
-                              <span className="ml-1 text-green-600">{balanceError.available_balance.toFixed(2)}€</span>
+                              <span className="ml-1 text-sky-600">{balanceError.available_balance.toFixed(2)}€</span>
                             </div>
                             <div>
                               <span className="font-medium">Pyydetty:</span>

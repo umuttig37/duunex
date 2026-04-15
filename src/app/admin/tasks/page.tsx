@@ -192,7 +192,7 @@ export default function TasksPage() {
             <CardTitle className="text-sm font-medium">Maksetut</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-sky-600">
               {taskStats.paid}
             </div>
           </CardContent>
@@ -248,7 +248,7 @@ export default function TasksPage() {
 
           {loading ? (
             <div className="text-center py-8">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-sky-600"></div>
               <p className="mt-2 text-gray-500">Ladataan tehtäviä...</p>
             </div>
           ) : filteredTasks.length === 0 ? (

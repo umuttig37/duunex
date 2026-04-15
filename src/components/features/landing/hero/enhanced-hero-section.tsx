@@ -1,6 +1,7 @@
 'use client';
 
 import type { DbHeroCategory } from '@/app/api/hero-categories/route';
+import { BrandLogo } from '@/components/shared/brand/brand-logo';
 import { Button } from '@/components/ui/button';
 import type { HeroCategoryData } from '@/constants/hero-categories';
 import { getCategoryBenefits, getCategoryHeroImage, getCategoryIcon, getCategoryTrending } from '@/lib/category-icon-mapping';
@@ -63,18 +64,29 @@ const EnhancedHeroSection = () => {
   }, []);
 
   return (
-    <section className="bg-background pt-16 sm:pt-20 pb-8 lg:pb-12">
+    <section className="bg-gradient-to-b from-background via-sky-50/60 to-background pt-12 sm:pt-16 pb-8 lg:pb-12">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-6">
+          <div className="mb-5 flex justify-center">
+            <BrandLogo
+              variant="stacked"
+              className="h-32 w-auto sm:h-40"
+              priority
+              sizes="(max-width: 640px) 160px, 200px"
+            />
+          </div>
           <h1 className="text-3xl lg:text-4xl font-semibold text-foreground tracking-tight mb-3 leading-tight">
-            Löydä luotettavaa apua <span className="text-primary">kotiin, tänään</span>
+            Löydä luotettavaa apua{' '}
+            <span className="bg-gradient-to-r from-sky-600 to-orange-500 bg-clip-text text-transparent">
+              kotiin, tänään
+            </span>
           </h1>
 
           <p className="text-base text-muted-foreground max-w-xl mx-auto mb-4">
             Siivouspalveluista huonekalujen kokoamiseen, tarkistetut auttajat ovat valmiina kun tarvitset.
           </p>
 
-          <div className="flex items-center justify-center gap-3 py-3 px-4 bg-muted/50 rounded-lg border border-border max-w-sm mx-auto">
+          <div className="flex items-center justify-center gap-3 py-3 px-4 bg-white/90 rounded-lg border border-sky-100 shadow-sm max-w-sm mx-auto">
             <span className="text-sm font-medium text-foreground">Turvalliset maksut Paytraililla!</span>
             <Image
               src="/images/hero/paytrail.png"
@@ -163,12 +175,12 @@ const EnhancedHeroSection = () => {
 
         {/* CTA Buttons - more compact positioning */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6 max-w-md mx-auto">
-          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-md font-medium">
+          <Button asChild size="lg" className="bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-700 hover:to-sky-600 text-white px-8 py-4 rounded-md font-medium shadow-sm">
             <Link href="/dashboard/tasks/new" onClick={() => trackEvent('hero_cta_click', { type: 'create_task' })}>
               Luo tehtävä
             </Link>
           </Button>
-          <Button asChild variant="outline" size="lg" className="border-border text-foreground hover:bg-muted rounded-md px-8 py-4 font-medium">
+          <Button asChild variant="outline" size="lg" className="border-orange-300 text-foreground hover:bg-orange-50 hover:text-foreground rounded-md px-8 py-4 font-medium">
             <Link href="/signup/tasker" onClick={() => trackEvent('hero_cta_click', { type: 'become_tasker' })}>Ryhdy tekijäksi</Link>
           </Button>
         </div>

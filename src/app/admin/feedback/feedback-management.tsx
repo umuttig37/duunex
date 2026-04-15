@@ -210,7 +210,7 @@ export default function FeedbackManagement() {
   const getScoreColor = (score: number) => {
     if (score <= 3) return 'text-red-600';
     if (score <= 6) return 'text-yellow-600';
-    return 'text-green-600';
+    return 'text-sky-600';
   };
 
   const formatUserName = (feedback: FeedbackItem) => {

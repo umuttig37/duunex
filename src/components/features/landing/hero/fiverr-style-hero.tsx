@@ -14,7 +14,7 @@ const FiverrStyleHero = () => {
   // Popular service categories
   const serviceCategories = [
     { name: 'Verkkosivun kehitys', href: '/categories/website-development', color: 'bg-blue-600' },
-    { name: 'Arkkitehtuuri & sisustus', href: '/categories/architecture-interior', color: 'bg-green-600' },
+    { name: 'Arkkitehtuuri & sisustus', href: '/categories/architecture-interior', color: 'bg-sky-600' },
     { name: 'UGC videot', href: '/categories/ugc-videos', color: 'bg-purple-600' },
     { name: 'Video muokkaus', href: '/categories/video-editing', color: 'bg-red-600' },
     { name: 'Video koodaus', href: '/categories/video-coding', color: 'bg-yellow-600' },
@@ -45,7 +45,7 @@ const FiverrStyleHero = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700">
           {/* Simulating the professional background image from Fiverr */}
           <div className="absolute inset-0 opacity-40">
-            <div className="w-full h-full bg-gradient-to-br from-blue-900/30 via-purple-900/30 to-teal-800/30"></div>
+            <div className="w-full h-full bg-gradient-to-br from-blue-900/30 via-purple-900/30 to-cyan-800/30"></div>
           </div>
           {/* Professional overlay pattern */}
           <div className="absolute inset-0 bg-black/40"></div>

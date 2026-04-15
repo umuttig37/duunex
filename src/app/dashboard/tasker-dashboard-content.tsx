@@ -64,7 +64,7 @@ export default function TaskerDashboardContent({ taskerId }: TaskerDashboardCont
         <Card className="hover:shadow-md transition-shadow cursor-pointer">
           <Link href="/dashboard/balance" className="block">
             <CardContent className="p-4 text-center">
-              <Zap className="h-6 w-6 text-green-600 mx-auto mb-2" />
+              <Zap className="h-6 w-6 text-sky-600 mx-auto mb-2" />
               <p className="text-sm font-medium">Saldo</p>
               <p className="text-xs text-muted-foreground">Hallitse tulojasi</p>
             </CardContent>

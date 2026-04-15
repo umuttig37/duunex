@@ -96,7 +96,7 @@ export default function BecomeTaskerCTA() {
                     <CardHeader className="space-y-4">
                         <CardTitle className="text-3xl font-bold text-center">Ryhdy Tekijäksi</CardTitle>
                         <CardDescription className="text-center text-gray-600 text-lg">
-                            Aloita matkasi TaskMVP-tekijänä valitsemalla toiminta-alueesi ja ensimmäinen palvelukategoriasi.
+                            Aloita matkasi Duunex-tekijänä valitsemalla toiminta-alueesi ja ensimmäinen palvelukategoriasi.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-8">
@@ -138,7 +138,7 @@ export default function BecomeTaskerCTA() {
                         </div>
                     </CardContent>
                     <CardFooter className="pt-6">
-                        <Button onClick={handleStart} className="w-full bg-green-600 hover:bg-green-700 text-white py-4 text-lg">
+                        <Button onClick={handleStart} className="w-full bg-sky-600 hover:bg-sky-700 text-white py-4 text-lg">
                             Aloita
                         </Button>
                     </CardFooter>

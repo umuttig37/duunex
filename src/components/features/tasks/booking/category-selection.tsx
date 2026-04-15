@@ -60,7 +60,7 @@ export default function CategorySelection({ selectedCategory, onSelectCategory, 
                 p-4 cursor-pointer transition-all hover:shadow-md 
                 flex flex-col items-center justify-center text-center h-36
                 ${selectedCategory?.id === category.id // Compare by id for robustness
-                  ? "border-2 border-emerald-600 bg-primary/5"
+                  ? "border-2 border-sky-600 bg-primary/5"
                   : "border border-gray-200 hover:border-gray-300"
                 }
               `}

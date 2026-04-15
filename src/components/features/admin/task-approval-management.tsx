@@ -413,7 +413,7 @@ export default function TaskApprovalManagement({ adminId }: TaskApprovalManageme
       case 'pending':
         return <Badge variant="outline" className="text-orange-600 border-orange-600"><Clock className="mr-1 h-3 w-3" />Odottaa</Badge>;
       case 'approved':
-        return <Badge variant="outline" className="text-green-600 border-green-600"><CheckCircle className="mr-1 h-3 w-3" />Hyväksytty</Badge>;
+        return <Badge variant="outline" className="text-sky-600 border-sky-600"><CheckCircle className="mr-1 h-3 w-3" />Hyväksytty</Badge>;
       case 'rejected':
         return <Badge variant="outline" className="text-red-600 border-red-600"><XCircle className="mr-1 h-3 w-3" />Hylätty</Badge>;
       default:

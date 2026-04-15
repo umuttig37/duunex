@@ -157,8 +157,8 @@ export default function DisputeManagement({ disputes }: DisputeManagementProps) 
         <Card>
           <CardContent className="flex items-center p-6">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <CheckCircle className="h-5 w-5 text-green-600" />
+              <div className="p-2 bg-sky-100 rounded-lg">
+                <CheckCircle className="h-5 w-5 text-sky-600" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">{resolvedDisputes.length}</p>

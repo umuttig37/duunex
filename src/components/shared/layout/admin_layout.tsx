@@ -16,6 +16,7 @@ import {
 import Link from 'next/link';
 import { useTransition } from 'react';
 
+import { BrandLogo } from '@/components/shared/brand/brand-logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -80,11 +81,15 @@ export default function AdminLayout({
   return (
     <div className="flex min-h-screen bg-muted/50">
       <aside className="hidden md:flex md:w-64 flex-col fixed inset-y-0 bg-sidebar text-sidebar-foreground">
-        <div className="p-4 flex items-center gap-2 h-16 border-b border-sidebar-border">
-          <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
-            A
-          </div>
-          <span className="text-lg font-semibold">TaskMVP Admin</span>
+        <div className="p-4 flex items-center gap-3 h-16 border-b border-sidebar-border">
+          <span className="rounded-md bg-white px-2 py-1 shadow-sm">
+            <BrandLogo
+              variant="wordmark"
+              className="h-7 w-auto max-w-[142px]"
+              sizes="142px"
+            />
+          </span>
+          <span className="text-xs font-semibold uppercase tracking-wide text-sidebar-foreground/70">Admin</span>
         </div>
 
         <nav className="flex-1 p-4 space-y-1.5">
@@ -138,9 +143,15 @@ export default function AdminLayout({
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="bg-sidebar text-sidebar-foreground p-0 w-64 flex flex-col max-w-[80vw]">
-            <div className="p-4 flex items-center gap-2 h-16 border-b border-sidebar-border">
-              <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">A</div>
-              <span className="text-lg font-semibold">TaskMVP Admin</span>
+            <div className="p-4 flex items-center gap-3 h-16 border-b border-sidebar-border">
+              <span className="rounded-md bg-white px-2 py-1 shadow-sm">
+                <BrandLogo
+                  variant="wordmark"
+                  className="h-7 w-auto max-w-[142px]"
+                  sizes="142px"
+                />
+              </span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-sidebar-foreground/70">Admin</span>
             </div>
             <nav className="flex-1 p-3 space-y-1.5 overflow-y-auto">
               {adminNavLinks.map((link) => (
@@ -181,7 +192,7 @@ export default function AdminLayout({
         <footer className="mt-auto border-t border-border bg-background/80 backdrop-blur-sm">
           <div className="px-4 md:px-8 py-3">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-sm">
-              <p className="text-muted-foreground">&copy; {new Date().getFullYear()} TaskMVP Admin</p>
+              <p className="text-muted-foreground">&copy; {new Date().getFullYear()} Duunex Admin</p>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-primary" />
                 <span className="text-muted-foreground text-xs">Ylläpitäjä</span>

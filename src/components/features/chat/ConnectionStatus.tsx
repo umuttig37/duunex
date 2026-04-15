@@ -13,7 +13,7 @@ interface ConnectionStatusProps {
 export function ConnectionStatus({ status, className = '', onRetry }: ConnectionStatusProps) {
   if (status === 'connected') {
     return (
-      <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
+      <Badge variant="secondary" className="bg-sky-100 text-sky-800 border-sky-200">
         <Wifi className="h-3 w-3 mr-1" />
         Yhdistetty
       </Badge>

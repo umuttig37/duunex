@@ -3,7 +3,7 @@
 import { Resend } from 'resend';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 
-// Email service for TaskMVP
+// Email service for Duunex
 // This module handles all email notifications sent by the application
 
 interface EmailTemplate {
@@ -61,11 +61,11 @@ const createTaskApprovedEmail = (data: TaskApprovedEmailData): EmailTemplate => 
       <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: #22c55e; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+        .header { background: #0ea5e9; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
         .content { background: #f9f9f9; padding: 20px; }
         .footer { background: #e5e7eb; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 14px; }
-        .button { display: inline-block; background: #22c55e; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 15px 0; }
-        .highlight { background: #dcfce7; padding: 10px; border-left: 4px solid #22c55e; margin: 15px 0; }
+        .button { display: inline-block; background: #0ea5e9; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 15px 0; }
+        .highlight { background: #e0f2fe; padding: 10px; border-left: 4px solid #0ea5e9; margin: 15px 0; }
       </style>
     </head>
     <body>
@@ -76,7 +76,7 @@ const createTaskApprovedEmail = (data: TaskApprovedEmailData): EmailTemplate => 
         <div class="content">
           <p>Hei ${data.userFirstName},</p>
           
-          <p>Hienoja uutisia! Tehtäväsi <strong>"${data.taskTitle}"</strong> on hyväksytty ja julkaistu TaskMVP-palvelussa.</p>
+          <p>Hienoja uutisia! Tehtäväsi <strong>"${data.taskTitle}"</strong> on hyväksytty ja julkaistu Duunex-palvelussa.</p>
           
           <div class="highlight">
             <p><strong>Mitä tapahtuu seuraavaksi?</strong></p>
@@ -97,11 +97,11 @@ const createTaskApprovedEmail = (data: TaskApprovedEmailData): EmailTemplate => 
             <a href="${data.taskUrl}" class="button">Katso tehtävääsi</a>
           </p>
           
-          <p>Kiitos, että käytät TaskMVP:tä!</p>
+          <p>Kiitos, että käytät Duunexia!</p>
         </div>
         <div class="footer">
-          <p>TaskMVP - Tehtävien markkinapaikka<br>
-          <a href="https://taskmvp.fi">taskmvp.fi</a></p>
+          <p>Duunex - Tehtävien markkinapaikka<br>
+          <a href="https://duunex.fi">duunex.fi</a></p>
         </div>
       </div>
     </body>
@@ -111,7 +111,7 @@ const createTaskApprovedEmail = (data: TaskApprovedEmailData): EmailTemplate => 
   const textBody = `
 Hei ${data.userFirstName},
 
-Hienoja uutisia! Tehtäväsi "${data.taskTitle}" on hyväksytty ja julkaistu TaskMVP-palvelussa.
+Hienoja uutisia! Tehtäväsi "${data.taskTitle}" on hyväksytty ja julkaistu Duunex-palvelussa.
 
 Mitä tapahtuu seuraavaksi?
 - Tehtäväsi on nyt näkyvissä kaikille taskereillemme
@@ -123,11 +123,11 @@ ${data.adminNotes ? `Admin-kommentti: ${data.adminNotes}` : ''}
 
 Katso tehtävääsi: ${data.taskUrl}
 
-Kiitos, että käytät TaskMVP:tä!
+Kiitos, että käytät Duunexia!
 
 ---
-TaskMVP - Tehtävien markkinapaikka
-https://taskmvp.fi
+Duunex - Tehtävien markkinapaikka
+https://duunex.fi
   `;
 
   return { subject, htmlBody, textBody };
@@ -188,8 +188,8 @@ const createTaskRejectedEmail = (data: TaskRejectedEmailData): EmailTemplate => 
           <p>Jos sinulla on kysymyksiä, ota yhteyttä asiakaspalveluumme.</p>
         </div>
         <div class="footer">
-          <p>TaskMVP - Tehtävien markkinapaikka<br>
-          <a href="https://taskmvp.fi">taskmvp.fi</a></p>
+          <p>Duunex - Tehtävien markkinapaikka<br>
+          <a href="https://duunex.fi">duunex.fi</a></p>
         </div>
       </div>
     </body>
@@ -216,8 +216,8 @@ Muokkaa ja lähetä uudelleen: ${data.resubmitUrl}
 Jos sinulla on kysymyksiä, ota yhteyttä asiakaspalveluumme.
 
 ---
-TaskMVP - Tehtävien markkinapaikka
-https://taskmvp.fi
+Duunex - Tehtävien markkinapaikka
+https://duunex.fi
   `;
 
   return { subject, htmlBody, textBody };
@@ -237,7 +237,7 @@ export async function sendEmail(
     // This prevents accidental spam and keeps local development usable.
     if (process.env.NODE_ENV === 'development' || !process.env.RESEND_API_KEY) {
       console.log('\n📧 EMAIL (Development Mode):');
-      console.log('From:', options.from || 'no-reply@taskmvp.fi');
+      console.log('From:', options.from || 'no-reply@duunex.fi');
       console.log('To:', to);
       console.log('Subject:', template.subject);
       console.log('---');
@@ -251,7 +251,7 @@ export async function sendEmail(
 
     const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
-      from: options.from || 'TaskMVP <no-reply@taskmvp.fi>',
+      from: options.from || 'Duunex <no-reply@duunex.fi>',
       to,
       subject: template.subject,
       html: template.htmlBody,
@@ -358,16 +358,16 @@ async function sendEmailWithDeliveryLog({
 export async function sendTaskApprovedEmail(data: TaskApprovedEmailData, userEmail: string) {
   const template = createTaskApprovedEmail(data);
   return await sendEmail(userEmail, template, {
-    from: 'TaskMVP <no-reply@taskmvp.fi>',
-    replyTo: 'tuki@taskmvp.fi',
+    from: 'Duunex <no-reply@duunex.fi>',
+    replyTo: 'tuki@duunex.fi',
   });
 }
 
 export async function sendTaskRejectedEmail(data: TaskRejectedEmailData, userEmail: string) {
   const template = createTaskRejectedEmail(data);
   return await sendEmail(userEmail, template, {
-    from: 'TaskMVP <no-reply@taskmvp.fi>',
-    replyTo: 'tuki@taskmvp.fi',
+    from: 'Duunex <no-reply@duunex.fi>',
+    replyTo: 'tuki@duunex.fi',
   });
 }
 
@@ -401,10 +401,10 @@ const createEarlyCompletionRequestedEmail = (data: EarlyCompletionRequestedEmail
           <p style="text-align:center"><a class="button" href="${data.taskUrl}">Avaa tehtävä</a></p>
           <p>Jos et reagoi ajoissa, järjestelmä tekee automaattisen päätöksen.</p>
         </div>
-        <div class="footer">TaskMVP – Tehtävien markkinapaikka</div>
+        <div class="footer">Duunex – Tehtävien markkinapaikka</div>
       </div>
     </body></html>`;
-  const textBody = `Hei ${data.userFirstName},\n\nTekijä on merkinnyt tehtävän "${data.taskTitle}" valmiiksi ennen aikataulua.${dateText}\n\nToimi ${deadlineText} kuluessa hyväksyäksesi, hylätäksesi tai riitauttaaksesi valmistumisen.\n\nAvaa tehtävä: ${data.taskUrl}\n\nTaskMVP`;
+  const textBody = `Hei ${data.userFirstName},\n\nTekijä on merkinnyt tehtävän "${data.taskTitle}" valmiiksi ennen aikataulua.${dateText}\n\nToimi ${deadlineText} kuluessa hyväksyäksesi, hylätäksesi tai riitauttaaksesi valmistumisen.\n\nAvaa tehtävä: ${data.taskUrl}\n\nDuunex`;
   return { subject, htmlBody, textBody };
 };
 
@@ -433,24 +433,24 @@ const createEarlyCompletionAutoAcceptedEmail = (data: EarlyCompletionAutoAccepte
 export async function sendEarlyCompletionRequestedEmail(data: EarlyCompletionRequestedEmailData, userEmail: string) {
   const template = createEarlyCompletionRequestedEmail(data);
   return await sendEmail(userEmail, template, {
-    from: 'TaskMVP <no-reply@taskmvp.fi>',
-    replyTo: 'tuki@taskmvp.fi',
+    from: 'Duunex <no-reply@duunex.fi>',
+    replyTo: 'tuki@duunex.fi',
   });
 }
 
 export async function sendEarlyCompletionReminderEmail(data: EarlyCompletionReminderEmailData, userEmail: string) {
   const template = createEarlyCompletionReminderEmail(data);
   return await sendEmail(userEmail, template, {
-    from: 'TaskMVP <no-reply@taskmvp.fi>',
-    replyTo: 'tuki@taskmvp.fi',
+    from: 'Duunex <no-reply@duunex.fi>',
+    replyTo: 'tuki@duunex.fi',
   });
 }
 
 export async function sendEarlyCompletionAutoAcceptedEmail(data: EarlyCompletionAutoAcceptedEmailData, userEmail: string) {
   const template = createEarlyCompletionAutoAcceptedEmail(data);
   return await sendEmail(userEmail, template, {
-    from: 'TaskMVP <no-reply@taskmvp.fi>',
-    replyTo: 'tuki@taskmvp.fi',
+    from: 'Duunex <no-reply@duunex.fi>',
+    replyTo: 'tuki@duunex.fi',
   });
 }
 
@@ -479,7 +479,7 @@ const createChatMessageEmail = (data: ChatMessageEmailData): EmailTemplate => {
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color:#333;">
         <div style="max-width:600px;margin:0 auto;padding:20px;">
           <div style="background:#0ea5e9;color:#fff;padding:20px;text-align:center;border-radius:8px 8px 0 0;">
-            <h1 style="margin:0;font-size:20px;">Uusi viesti TaskMVP:ssä</h1>
+            <h1 style="margin:0;font-size:20px;">Uusi viesti Duunexissa</h1>
           </div>
           <div style="background:#f0f9ff;padding:20px;">
             <p>Hei ${data.recipientFirstName},</p>
@@ -495,14 +495,14 @@ const createChatMessageEmail = (data: ChatMessageEmailData): EmailTemplate => {
             <p style="font-size:14px;color:#475569;">Jos et tunnista lähettäjää, tarkista tehtävän tiedot sovelluksesta.</p>
           </div>
           <div style="background:#e5e7eb;padding:15px;text-align:center;border-radius:0 0 8px 8px;font-size:14px;">
-            <p style="margin:0;">TaskMVP – Tehtävien markkinapaikka<br/><a href="https://taskmvp.fi">taskmvp.fi</a></p>
+            <p style="margin:0;">Duunex – Tehtävien markkinapaikka<br/><a href="https://duunex.fi">duunex.fi</a></p>
           </div>
         </div>
       </body>
     </html>
   `;
 
-  const textBody = `Hei ${data.recipientFirstName},\n\n${data.senderName} lähetti sinulle viestin tehtävästä "${data.taskTitle}".\n\nViesti:\n${safePreview}\n\nLue viesti: ${data.taskUrl}\n\nTaskMVP\nhttps://taskmvp.fi`;
+  const textBody = `Hei ${data.recipientFirstName},\n\n${data.senderName} lähetti sinulle viestin tehtävästä "${data.taskTitle}".\n\nViesti:\n${safePreview}\n\nLue viesti: ${data.taskUrl}\n\nDuunex\nhttps://duunex.fi`;
 
   return { subject, htmlBody, textBody };
 };
@@ -526,31 +526,31 @@ const createTaskOfferEmail = (data: TaskOfferEmailData): EmailTemplate => {
       <head><meta charset="utf-8" /></head>
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color:#333;">
         <div style="max-width:600px;margin:0 auto;padding:20px;">
-          <div style="background:#22c55e;color:#fff;padding:20px;text-align:center;border-radius:8px 8px 0 0;">
+          <div style="background:#0ea5e9;color:#fff;padding:20px;text-align:center;border-radius:8px 8px 0 0;">
             <h1 style="margin:0;font-size:20px;">Sinulle on tehty tarjous</h1>
           </div>
-          <div style="background:#f0fdf4;padding:20px;">
+          <div style="background:#f0f9ff;padding:20px;">
             <p>Hei ${data.ownerFirstName},</p>
             <p>${data.taskerName} teki sinulle tarjouksen tehtävästä <strong>"${data.taskTitle}"</strong>.</p>
-            <div style="background:#dcfce7;padding:15px;border-left:4px solid #22c55e;margin:15px 0;">
+            <div style="background:#e0f2fe;padding:15px;border-left:4px solid #0ea5e9;margin:15px 0;">
               <p style="margin:0;"><strong>Tarjoushinta:</strong> ${data.offeredPrice}€</p>
             </div>
             <p style="text-align:center;">
-              <a href="${data.taskUrl}" style="display:inline-block;background:#22c55e;color:#fff;padding:12px 24px;text-decoration:none;border-radius:6px;margin:15px 0;">
+              <a href="${data.taskUrl}" style="display:inline-block;background:#0ea5e9;color:#fff;padding:12px 24px;text-decoration:none;border-radius:6px;margin:15px 0;">
                 Katso tarjous
               </a>
             </p>
             <p style="font-size:14px;color:#475569;">Voit hyväksyä tai hylätä tarjouksen sovelluksessa.</p>
           </div>
           <div style="background:#e5e7eb;padding:15px;text-align:center;border-radius:0 0 8px 8px;font-size:14px;">
-            <p style="margin:0;">TaskMVP – Tehtävien markkinapaikka<br/><a href="https://taskmvp.fi">taskmvp.fi</a></p>
+            <p style="margin:0;">Duunex – Tehtävien markkinapaikka<br/><a href="https://duunex.fi">duunex.fi</a></p>
           </div>
         </div>
       </body>
     </html>
   `;
 
-  const textBody = `Hei ${data.ownerFirstName},\n\n${data.taskerName} teki sinulle tarjouksen tehtävästä "${data.taskTitle}".\n\nTarjoushinta: ${data.offeredPrice}€\n\nKatso tarjous: ${data.taskUrl}\n\nTaskMVP\nhttps://taskmvp.fi`;
+  const textBody = `Hei ${data.ownerFirstName},\n\n${data.taskerName} teki sinulle tarjouksen tehtävästä "${data.taskTitle}".\n\nTarjoushinta: ${data.offeredPrice}€\n\nKatso tarjous: ${data.taskUrl}\n\nDuunex\nhttps://duunex.fi`;
 
   return { subject, htmlBody, textBody };
 };
@@ -582,7 +582,7 @@ const createPaymentSucceededEmail = (data: PaymentSucceededEmailData): EmailTemp
         : `<p>Asiakas on <strong>${data.otherPartyName}</strong>.</p>`
       : '';
 
-  const headerBg = data.recipientKind === 'customer' ? '#22c55e' : '#4338ca';
+  const headerBg = data.recipientKind === 'customer' ? '#0ea5e9' : '#f59e0b';
 
   const htmlBody = `
     <!DOCTYPE html>
@@ -608,14 +608,14 @@ const createPaymentSucceededEmail = (data: PaymentSucceededEmailData): EmailTemp
             <p style="font-size:14px;color:#475569;">Jos sinulla on kysyttävää, avaa viestit tehtävän sivulta.</p>
           </div>
           <div style="background:#e5e7eb;padding:15px;text-align:center;border-radius:0 0 8px 8px;font-size:14px;">
-            <p style="margin:0;">TaskMVP – Tehtävien markkinapaikka<br/><a href="https://taskmvp.fi">taskmvp.fi</a></p>
+            <p style="margin:0;">Duunex – Tehtävien markkinapaikka<br/><a href="https://duunex.fi">duunex.fi</a></p>
           </div>
         </div>
       </body>
     </html>
   `;
 
-  const textBody = `Hei ${data.recipientFirstName},\n\nTehtävä "${data.taskTitle}" on nyt ${data.recipientKind === 'customer' ? 'varattu' : 'sinun aloitettavissa'}.\n\nSumma: ${data.amount} ${data.currency}\n\nAvaa tehtävä: ${data.taskUrl}\n\nTaskMVP\nhttps://taskmvp.fi`;
+  const textBody = `Hei ${data.recipientFirstName},\n\nTehtävä "${data.taskTitle}" on nyt ${data.recipientKind === 'customer' ? 'varattu' : 'sinun aloitettavissa'}.\n\nSumma: ${data.amount} ${data.currency}\n\nAvaa tehtävä: ${data.taskUrl}\n\nDuunex\nhttps://duunex.fi`;
 
   return { subject, htmlBody, textBody };
 };
@@ -638,8 +638,8 @@ export async function sendChatMessageEmail(data: ChatMessageEmailData, recipient
     recipientEmail,
     template,
     options: {
-      from: 'TaskMVP <no-reply@taskmvp.fi>',
-      replyTo: 'tuki@taskmvp.fi',
+      from: 'Duunex <no-reply@duunex.fi>',
+      replyTo: 'tuki@duunex.fi',
     },
   });
 }
@@ -653,8 +653,8 @@ export async function sendTaskOfferEmail(data: TaskOfferEmailData, recipientEmai
     recipientEmail,
     template,
     options: {
-      from: 'TaskMVP <no-reply@taskmvp.fi>',
-      replyTo: 'tuki@taskmvp.fi',
+      from: 'Duunex <no-reply@duunex.fi>',
+      replyTo: 'tuki@duunex.fi',
     },
   });
 }
@@ -672,8 +672,8 @@ export async function sendPaymentSucceededEmail(
     recipientEmail,
     template,
     options: {
-      from: 'TaskMVP <no-reply@taskmvp.fi>',
-      replyTo: 'tuki@taskmvp.fi',
+      from: 'Duunex <no-reply@duunex.fi>',
+      replyTo: 'tuki@duunex.fi',
     },
   });
 }

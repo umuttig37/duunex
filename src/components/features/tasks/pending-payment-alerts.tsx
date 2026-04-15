@@ -249,7 +249,7 @@ export default function PendingPaymentAlerts({
           className={`relative p-4 rounded-lg border ${
             task.offer_type === 'counter_offer' 
               ? 'border-orange-200 bg-orange-50' 
-              : 'border-green-200 bg-green-50'
+              : 'border-sky-200 bg-sky-50'
           }`}
         >
           {/* Close button */}
@@ -265,7 +265,7 @@ export default function PendingPaymentAlerts({
           <div className="flex items-start gap-3 pr-8">
             <CheckCircle
               className={`h-5 w-5 mt-0.5 flex-shrink-0 ${
-                task.offer_type === 'counter_offer' ? 'text-orange-600' : 'text-green-600'
+                task.offer_type === 'counter_offer' ? 'text-orange-600' : 'text-sky-600'
               }`}
             />
             <div className="flex-1 min-w-0">
@@ -274,7 +274,7 @@ export default function PendingPaymentAlerts({
                   {task.title}
                 </h3>
                 <div className="flex items-center gap-2 ml-3 flex-shrink-0">
-                  <span className="text-lg font-bold text-green-600">
+                  <span className="text-lg font-bold text-sky-600">
                     {task.accepted_offer
                       ? formatCurrency(task.accepted_offer.offered_price)
                       : '–'}
@@ -288,7 +288,7 @@ export default function PendingPaymentAlerts({
               </div>
               
               <p className={`text-sm font-medium ${
-                task.offer_type === 'counter_offer' ? 'text-orange-800' : 'text-green-800'
+                task.offer_type === 'counter_offer' ? 'text-orange-800' : 'text-sky-800'
               }`}>
                 {task.offer_type === 'counter_offer'
                   ? 'Vastaehdotus hyväksytty – odottaa maksua'

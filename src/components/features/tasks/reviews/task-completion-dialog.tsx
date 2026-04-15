@@ -85,7 +85,7 @@ export default function TaskCompletionDialog({
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <CheckCircle className="h-5 w-5 text-green-600" />
+            <CheckCircle className="h-5 w-5 text-sky-600" />
             Merkitse tehtävä valmiiksi
           </DialogTitle>
           <DialogDescription>
@@ -178,7 +178,7 @@ export default function TaskCompletionDialog({
             <Button
               onClick={handleMarkCompleted}
               disabled={isPending || !userConfirmed}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-sky-600 hover:bg-sky-700"
             >
               {isPending ? (
                 <>

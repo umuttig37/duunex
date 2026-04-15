@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     //   to: 'info@tehtavamestari.fi',
     //   subject: `Yhteydenotto: ${subject}`,
     //   html: `
-    //     <h2>Uusi yhteydenotto TehtäväMestari-sivustolta</h2>
+    //     <h2>Uusi yhteydenotto Duunex-sivustolta</h2>
     //     <p><strong>Nimi:</strong> ${name}</p>
     //     <p><strong>Sähköposti:</strong> ${email}</p>
     //     <p><strong>Yritys:</strong> ${company || 'Ei annettu'}</p>

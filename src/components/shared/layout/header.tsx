@@ -1,5 +1,6 @@
 'use client';
 
+import { BrandLogo } from '@/components/shared/brand/brand-logo';
 import { useAuth } from '@/components/shared/providers/query-provider';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -27,17 +28,14 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Added usePathname
-import { useEffect, useState, useTransition } from 'react'; // Import useTransition
+import { useTransition } from 'react'; // Import useTransition
 
 export function Header() {
-  const { user, profile, loading } = useAuth();
+  const { user, profile } = useAuth();
   const [isPending, startTransition] = useTransition(); // Add transition state
   const { toast } = useToast(); // Initialize toast
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const unreadMessages = useUnreadMessages(); // Get unread messages count
-
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   const isAuthenticated = !!user;
   const userName = profile?.first_name ? `${profile.first_name} ${profile.last_name || ''}`.trim() : user?.email || '';
@@ -45,28 +43,8 @@ export function Header() {
   const userId = user?.id;
   const isMobile = useIsMobile();
 
-  // Debug: Show connection status (remove this in production)
-  const [showDebug, setShowDebug] = useState(false);
-
-  useEffect(() => {
-    setShowDebug(process.env.NODE_ENV === 'development');
-  }, []);
-
   // Hide visitor navigation in dashboard
   const isDashboard = pathname.startsWith('/dashboard');
-
-  const isActive = (path: string) => {
-    // Exact match for dashboard, special handling for /tasks/new
-    if (path === '/dashboard') {
-      return pathname.startsWith('/dashboard');
-    }
-    if (
-      path === '/dashboard/tasks/new' &&
-      pathname.startsWith('/dashboard/tasks/new')
-    )
-      return true;
-    return pathname.startsWith(path) && path !== '/dashboard';
-  };
 
   // Base visitor navigation (left side primary links)
   const navItems = [
@@ -242,9 +220,13 @@ export function Header() {
           <div className="h-14 sm:h-16 flex items-center gap-2 sm:gap-4 overflow-hidden">
             {/* Left cluster */}
             <div className="flex items-center gap-2 sm:gap-6 min-w-0 flex-shrink-0">
-              <Link href="/" className="flex items-center gap-1 sm:gap-2 font-semibold text-foreground hover:text-primary transition-colors flex-shrink-0 touch-manipulation">
-                <div className="w-8 h-8 sm:w-8 sm:h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs sm:text-sm">TM</div>
-                <span className="hidden sm:inline text-lg tracking-tight">TaskMVP</span>
+              <Link href="/" className="flex items-center gap-2 font-semibold text-foreground hover:opacity-90 transition-opacity flex-shrink-0 touch-manipulation">
+                <BrandLogo
+                  variant="wordmark"
+                  className="h-7 w-auto max-w-[132px] sm:h-8 sm:max-w-[148px]"
+                  priority
+                  sizes="148px"
+                />
               </Link>
               {!isMobile && (
                 <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-muted-foreground">
@@ -271,11 +253,14 @@ export function Header() {
                     </Button>
                   </SheetTrigger>
                   <SheetContent side="right" className="w-[300px] max-w-[90vw] p-0">
-                    <SheetTitle className="sr-only">TaskMVP Navigaatiovalikko</SheetTitle>
+                    <SheetTitle className="sr-only">Duunex Navigaatiovalikko</SheetTitle>
                     <div className="p-6 border-b border-border bg-muted/30">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">TM</div>
-                        <span className="font-semibold text-foreground">TaskMVP</span>
+                        <BrandLogo
+                          variant="wordmark"
+                          className="h-8 w-auto max-w-[150px]"
+                          sizes="150px"
+                        />
                       </div>
                     </div>
                     <nav className="p-4 flex flex-col gap-1">

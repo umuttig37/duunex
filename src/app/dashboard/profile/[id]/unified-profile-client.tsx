@@ -836,7 +836,7 @@ export default function UnifiedProfileClient({
                   <h4 className="text-sm font-medium text-gray-900 mb-2">Tilin tila</h4>
                   <div className="flex items-center gap-2">
                     <span className={`px-2 py-1 text-xs rounded-full ${viewedProfile.is_verified
-                        ? 'bg-green-100 text-green-800'
+                        ? 'bg-sky-100 text-sky-800'
                         : 'bg-yellow-100 text-yellow-800'
                       }`}>
                       {viewedProfile.is_verified ? 'Vahvistettu' : 'Vahvistamaton'}

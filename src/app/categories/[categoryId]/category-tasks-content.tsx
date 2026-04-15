@@ -143,12 +143,12 @@ export default function CategoryTasksContent({ category, tasks }: CategoryTasksC
                       {task.title}
                     </Link>
                   </CardTitle>
-                  <Badge variant="secondary" className="ml-2 bg-green-100 text-green-800 border-green-200">
+                  <Badge variant="secondary" className="ml-2 bg-sky-100 text-sky-800 border-sky-200">
                     Avoin
                   </Badge>
                 </div>
                 {task.budget && (
-                  <div className="flex items-center gap-1 text-lg font-bold text-green-600">
+                  <div className="flex items-center gap-1 text-lg font-bold text-sky-600">
                     <Euro className="w-4 h-4" />
                     {formatBudget(task.budget)}
                   </div>
