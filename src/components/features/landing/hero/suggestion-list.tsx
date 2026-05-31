@@ -52,7 +52,7 @@ export default function SuggestionList({
   const getCategoryIcon = (result: SearchResult) => {
     if (result.type === 'category' || result.type === 'subcategory') {
       // Try to find icon from categoryIconMap first
-      const slug = result.name.toLowerCase().replace(/\s+/g, '');
+      const slug = result.category_slug || result.name.toLowerCase().replace(/\s+/g, '');
       if (categoryIconMap[slug]) {
         return categoryIconMap[slug];
       }
@@ -141,8 +141,8 @@ export default function SuggestionList({
         <div className="bg-gray-50 rounded-lg p-4">
           <p className="text-xs font-medium text-gray-600 mb-2">Suosittuja hakuja:</p>
           <div className="flex flex-wrap gap-2 justify-center">
-            <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">Lastenhoito</span>
-            <span className="bg-sky-100 text-sky-700 px-3 py-1 rounded-full text-xs font-medium">Siivous</span>
+            <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">Muuttosiivous</span>
+            <span className="bg-sky-100 text-sky-700 px-3 py-1 rounded-full text-xs font-medium">Valaisimen asennus</span>
             <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-medium">Muuttoapu</span>
             <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-medium">Koiran ulkoilutus</span>
           </div>

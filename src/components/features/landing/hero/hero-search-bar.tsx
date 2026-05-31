@@ -147,15 +147,48 @@ export default function HeroSearchBar({
     if (onSelect) {
       onSelect(result);
     } else {
-      // Default behavior: navigate to task creation with template/category
-      let targetUrl = '/dashboard/tasks/new';
+      const params = new URLSearchParams();
 
       if (result.type === 'template') {
-        targetUrl += `?template=${result.id}`;
-      } else if (result.type === 'category' || result.type === 'subcategory') {
-        // Use the category ID instead of name to ensure accurate matching
-        targetUrl += `?categoryId=${result.id}`;
+        params.set('template', result.id);
+        params.set('templateName', result.name);
+
+        if (result.category_slug) {
+          params.set('category', result.category_slug);
+
+          try {
+            const existing = JSON.parse(localStorage.getItem('modern-task-booking-data') || '{}');
+            localStorage.setItem(
+              'modern-task-booking-data',
+              JSON.stringify({
+                ...existing,
+                selectedCategory: {
+                  id: result.category_slug,
+                  slug: result.category_slug,
+                  name_fi: result.category_name || result.category_slug,
+                },
+                selectedTemplate: {
+                  id: result.id,
+                  name_fi: result.name,
+                  description_fi: result.description || '',
+                  questions: Array.isArray(result.questions) ? result.questions : [],
+                },
+                currentStep: 'details',
+                origin: 'hero_search_select',
+                persistedAt: Date.now(),
+              })
+            );
+          } catch (error) {
+            console.error('Error preparing template selection:', error);
+          }
+        }
+      } else if (result.category_slug) {
+        params.set('category', result.category_slug);
+      } else {
+        params.set('categoryId', result.id);
       }
+
+      const targetUrl = `/dashboard/tasks/new${params.toString() ? `?${params.toString()}` : ''}`;
 
       // If user is not authenticated, they'll go through visitor flow
       if (user) {

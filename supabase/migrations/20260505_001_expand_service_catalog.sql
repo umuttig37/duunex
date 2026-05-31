@@ -1,5 +1,4 @@
--- Duunex service catalog seed
--- Idempotent category and subcategory seed for local/dev environments.
+-- Expand Duunex service catalog with production-ready categories and subcategories.
 
 DO $$
 DECLARE

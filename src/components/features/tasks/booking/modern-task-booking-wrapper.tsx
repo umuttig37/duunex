@@ -44,6 +44,10 @@ export default function ModernTaskBookingWrapper() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState<'user' | 'tasker' | 'admin' | null>(null);
   const supabase = createClient();
+  const isUuid = (value: string) =>
+    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/.test(
+      value
+    );
 
   // Check authentication status on mount
   useEffect(() => {
@@ -71,7 +75,7 @@ export default function ModernTaskBookingWrapper() {
       }
 
       // Handle template parameter
-      if (templateId) {
+      if (templateId && isUuid(templateId)) {
         const fetchAndApplyTemplate = async () => {
           try {
             const { data: template, error } = await supabase

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Käyttöehdot | Duunex',
-  description: 'Duunex:n palvelun käyttöehdot.',
+  description: 'Duunex-palvelun yleiset käyttöehdot.',
 };
 
 export default function TermsPage() {
@@ -10,27 +10,33 @@ export default function TermsPage() {
     <div className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="mb-6 text-3xl font-bold tracking-tight">Käyttöehdot</h1>
       <p className="mb-4 text-gray-700">
-        Tämä sivu kuvaa Duunex-palvelun käyttöehdot. Päivitämme ehtoja tarpeen mukaan.
+        Duunex on alusta, jossa työn tilaaja voi julkaista tehtävän ja tekijä voi tarjota
+        omaa osaamistaan sen toteuttamiseen. Alla on tiivistetty palvelun yleiset periaatteet.
       </p>
-      <h2 className="mt-8 mb-2 text-xl font-semibold">1. Palvelun kuvaus</h2>
+
+      <h2 className="mb-2 mt-8 text-xl font-semibold">1. Palvelun käyttö</h2>
       <p className="text-gray-700">
-        Duunex on markkinapaikka, jossa asiakkaat voivat julkaista tehtäviä ja tekijät tarjota palveluitaan.
+        Käyttäjä sitoutuu antamaan olennaiset tiedot oikein, käyttämään palvelua asiallisesti
+        ja noudattamaan soveltuvaa lainsäädäntöä sekä hyvää toimintatapaa.
       </p>
-      <h2 className="mt-8 mb-2 text-xl font-semibold">2. Käyttäjän vastuut</h2>
+
+      <h2 className="mb-2 mt-8 text-xl font-semibold">2. Tehtävät ja tarjoukset</h2>
       <p className="text-gray-700">
-        Käyttäjä sitoutuu antamaan oikeat tiedot, noudattamaan lakia ja hyvää tapaa sekä kunnioittamaan muita käyttäjiä.
+        Tehtävän tilaaja vastaa tehtävän kuvauksen oikeellisuudesta. Tekijä vastaa siitä,
+        että hänen antamansa tiedot, osaaminen ja tarjouksen ehdot pitävät paikkansa.
       </p>
-      <h2 className="mt-8 mb-2 text-xl font-semibold">3. Maksut ja peruutukset</h2>
+
+      <h2 className="mb-2 mt-8 text-xl font-semibold">3. Maksaminen</h2>
       <p className="text-gray-700">
-        Maksut välitetään maksupalveluntarjoajan kautta. Peruutusehdot kuvataan tarkemmin tilausvaiheessa.
+        Maksamiseen liittyvät ehdot ja mahdolliset kulut esitetään käyttäjälle siinä vaiheessa,
+        kun työ etenee vahvistukseen ja maksuprosessiin.
       </p>
-      <h2 className="mt-8 mb-2 text-xl font-semibold">4. Vastuunrajoitus</h2>
+
+      <h2 className="mb-2 mt-8 text-xl font-semibold">4. Vastuut</h2>
       <p className="text-gray-700">
-        Palvelu tarjotaan sellaisena kuin se on. Emme vastaa välillisistä vahingoista sovellettavan lain sallimissa rajoissa.
+        Alusta välittää tehtäviä ja viestintää osapuolten välillä. Käyttäjien tulee varmistaa
+        työn sisältö, aikataulu, hinta ja mahdolliset ehdot ennen lopullisia sitoumuksia.
       </p>
-      <p className="mt-8 text-sm text-gray-500">Viimeksi päivitetty: {new Date().toLocaleDateString('fi-FI')}</p>
     </div>
   );
 }
-
-

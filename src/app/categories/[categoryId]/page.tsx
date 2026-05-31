@@ -6,30 +6,46 @@ interface CategoryTasksPageProps {
   params: Promise<{ categoryId: string }>;
 }
 
+const isUuid = (value: string) =>
+  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/.test(
+    value
+  );
+
 export default async function CategoryTasksPage({ params }: CategoryTasksPageProps) {
   const supabase = await createClient();
   const resolvedParams = await params;
-  const categoryId = resolvedParams.categoryId;
+  const categoryParam = resolvedParams.categoryId;
 
-  // Fetch category details
-  const { data: category, error: categoryError } = await supabase
+  const { data: categoryBySlug } = await supabase
     .from('categories')
     .select('*')
-    .eq('id', categoryId)
-    .single();
+    .eq('slug', categoryParam)
+    .maybeSingle();
 
-  if (categoryError || !category) {
+  let category = categoryBySlug;
+
+  if (!category && isUuid(categoryParam)) {
+    const { data: categoryById } = await supabase
+      .from('categories')
+      .select('*')
+      .eq('id', categoryParam)
+      .maybeSingle();
+    category = categoryById;
+  }
+
+  if (!category) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Kategoriaa ei löytynyt</h1>
-          <p className="text-gray-600">Yritä myöhemmin uudelleen tai palaa etusivulle.</p>
+          <h1 className="mb-2 text-2xl font-bold text-gray-900">Kategoriaa ei löytynyt</h1>
+          <p className="text-gray-600">
+            Tarkista linkki tai palaa etusivulle valitsemaan palvelu uudelleen.
+          </p>
         </div>
       </div>
     );
   }
 
-  // Fetch open tasks in this category
   const { data: tasks, error: tasksError } = await supabase
     .from('tasks')
     .select(`
@@ -42,7 +58,7 @@ export default async function CategoryTasksPage({ params }: CategoryTasksPagePro
       ),
       task_attachments (id, file_url, file_type)
     `)
-    .eq('category_id', categoryId)
+    .eq('category_id', category.id)
     .eq('status', 'open')
     .order('created_at', { ascending: false });
 
@@ -51,16 +67,15 @@ export default async function CategoryTasksPage({ params }: CategoryTasksPagePro
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Suspense fallback={
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-gray-600">Ladataan tehtäviä...</div>
-        </div>
-      }>
-        <CategoryTasksContent 
-          category={category}
-          tasks={tasks || []}
-        />
+    <div className="min-h-screen bg-slate-50">
+      <Suspense
+        fallback={
+          <div className="flex min-h-screen items-center justify-center">
+            <div className="text-gray-600">Ladataan tehtäviä...</div>
+          </div>
+        }
+      >
+        <CategoryTasksContent category={category} tasks={tasks || []} />
       </Suspense>
     </div>
   );

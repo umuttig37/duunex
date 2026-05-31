@@ -148,16 +148,21 @@ export function searchFAQ(query: string): CategoryFAQItem[] {
 // Category display names mapping
 export const categoryDisplayNames: Record<string, string> = {
   'kokoonpano': 'Kokoonpano',
+  'asennus': 'Asennus',
   'kotitalous': 'Kotitalous', 
   'it-apu': 'IT-apu',
   'siivous': 'Siivous',
   'korjaukset': 'Korjaukset',
+  'maalaus': 'Maalaus',
   'muutto': 'Muutto',
+  'kuljetus': 'Kuljetus',
   'puutarha': 'Puutarha',
   'lemmikinhoito': 'Lemmikinhoito',
   'lastenhoito': 'Lastenhoito',
   'opetus': 'Opetus',
   'valokuvaus': 'Valokuvaus',
   'suunnittelu': 'Suunnittelu',
+  'asiointiapu': 'Asiointiapu',
+  'juhlat': 'Juhlat ja tapahtumat',
   'muu': 'Muu'
 };

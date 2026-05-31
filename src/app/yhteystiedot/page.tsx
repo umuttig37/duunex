@@ -6,19 +6,26 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/shared/use-toast';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { ClipboardList, Mail, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
+
+const supportTopics = [
+  'Tilin käyttö ja kirjautuminen',
+  'Tehtävän julkaiseminen ja muokkaus',
+  'Tekijäksi hakeminen',
+  'Maksuihin tai viestintään liittyvät kysymykset',
+];
 
 export default function YhteystiedotPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setIsSubmitting(true);
 
-    const formData = new FormData(e.currentTarget);
-    const data = {
+    const formData = new FormData(event.currentTarget);
+    const payload = {
       name: formData.get('name') as string,
       email: formData.get('email') as string,
       company: formData.get('company') as string,
@@ -30,25 +37,23 @@ export default function YhteystiedotPage() {
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
-      if (response.ok) {
-        toast({
-          title: 'Kiitos yhteydenotosta!',
-          description: 'Otamme yhteyttä mahdollisimman pian.',
-        });
-        (e.target as HTMLFormElement).reset();
-      } else {
-        throw new Error('Virhe lähettäessä viestiä');
+      if (!response.ok) {
+        throw new Error('Viestin lähettäminen epäonnistui');
       }
+
+      toast({
+        title: 'Kiitos yhteydenotosta',
+        description: 'Viesti vastaanotettiin. Voit jatkaa palvelun käyttöä normaalisti.',
+      });
+      event.currentTarget.reset();
     } catch {
       toast({
-        title: 'Virhe',
-        description: 'Viestin lähettäminen epäonnistui. Yritä uudelleen.',
+        title: 'Viestiä ei voitu lähettää',
+        description: 'Yritä hetken kuluttua uudelleen.',
         variant: 'destructive',
       });
     } finally {
@@ -57,160 +62,99 @@ export default function YhteystiedotPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-sky-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Yhteystiedot
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Olemme täällä auttamassa sinua. Ota yhteyttä tai jätä viesti, niin
-              otamme yhteyttä mahdollisimman pian.
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-orange-50/40">
+      <div className="container mx-auto px-4 py-10">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 max-w-3xl">
+            <div className="mb-3 inline-flex rounded-full border border-sky-200 bg-white px-3 py-1 text-sm font-medium text-sky-800">
+              Yhteystiedot ja tuki
+            </div>
+            <h1 className="mb-4 text-4xl font-semibold tracking-tight text-gray-900">Ota yhteyttä Duunexiin</h1>
+            <p className="text-lg leading-relaxed text-gray-600">
+              Käytä lomaketta, kun tarvitset apua palvelun käyttöön, tehtävän julkaisuun
+              tai tekijäksi hakemiseen. Yhteydenotto kulkee tällä sivulla suoraan lomakkeen
+              kautta, jotta tukipyynnöt päätyvät samaan käsittelyvirtaan.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Contact Information */}
+          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
             <div className="space-y-6">
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Mail className="h-5 w-5" />
-                    Ota Yhteyttä
+                    <Mail className="h-5 w-5 text-sky-700" />
+                    Missä asioissa autamme?
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Mail className="h-5 w-5 text-primary" />
-                    <div>
-                      <p className="font-medium">Sähköposti</p>
-                      <p className="text-gray-600">info@tehtavamestari.fi</p>
+                <CardContent className="space-y-3 text-sm text-gray-600">
+                  {supportTopics.map((topic) => (
+                    <div key={topic} className="flex items-start gap-3">
+                      <div className="mt-1 h-2 w-2 rounded-full bg-orange-400" />
+                      <span>{topic}</span>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Phone className="h-5 w-5 text-primary" />
-                    <div>
-                      <p className="font-medium">Puhelin</p>
-                      <p className="text-gray-600">+358 40 123 4567</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <MapPin className="h-5 w-5 text-primary" />
-                    <div>
-                      <p className="font-medium">Osoite</p>
-                      <p className="text-gray-600">
-                        Tehtäväkatu 1<br />
-                        00100 Helsinki
-                      </p>
-                    </div>
-                  </div>
+                  ))}
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Aukioloajat</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span>Maanantai - Perjantai:</span>
-                      <span>9:00 - 17:00</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Lauantai:</span>
-                      <span>10:00 - 15:00</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Sunnuntai:</span>
-                      <span>Suljettu</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Duunex</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <ClipboardList className="h-5 w-5 text-sky-700" />
+                    Mitä nopeammin saat vastauksen?
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-gray-600">
-                  <p>
-                    <strong>Y-tunnus:</strong> 1234567-8
-                  </p>
-                  <p>
-                    <strong>ALV-numero:</strong> FI12345678
-                  </p>
-                  <p>
-                    Duunex on Suomessa toimiva palvelu, joka yhdistää
-                    tehtävien tilaajat luotettaviin paikallisiin tekijöihin.
-                    Tarjoamme turvallisen ja helppokäyttöisen alustan
-                    monenlaisten tehtävien hoitamiseen.
-                  </p>
+                  <p>Kerro tehtävän tai tilanteen tausta mahdollisimman tarkasti.</p>
+                  <p>Lisää mahdollinen tehtävä-ID, jos asiasi liittyy olemassa olevaan toimeksiantoon.</p>
+                  <p>Mainitse myös, koskeeko kysymys käyttäjätiliä vai tekijäprofiilia.</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ShieldCheck className="h-5 w-5 text-sky-700" />
+                    Mitä tietoja kannattaa välttää?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-sm text-gray-600">
+                  <p>Älä lähetä lomakkeella maksukortin tietoja, henkilötunnusta tai muuta arkaluonteista aineistoa.</p>
+                  <p>Kuvaa ongelma sanallisesti ja lähetä tarvittaessa vain olennaiset tiedot.</p>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Contact Form */}
             <Card>
               <CardHeader>
-                <CardTitle>Lähetä Viesti</CardTitle>
+                <CardTitle>Lähetä viesti</CardTitle>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <div>
                       <Label htmlFor="name">Nimi *</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        type="text"
-                        required
-                        placeholder="Etunimi Sukunimi"
-                      />
+                      <Input id="name" name="name" type="text" required placeholder="Etunimi Sukunimi" />
                     </div>
                     <div>
                       <Label htmlFor="email">Sähköposti *</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        required
-                        placeholder="nimi@esimerkki.fi"
-                      />
+                      <Input id="email" name="email" type="email" required placeholder="nimi@esimerkki.fi" />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <Label htmlFor="company">Yritys (vapaaehtoinen)</Label>
-                      <Input
-                        id="company"
-                        name="company"
-                        type="text"
-                        placeholder="Yrityksen nimi"
-                      />
+                      <Label htmlFor="company">Yritys (valinnainen)</Label>
+                      <Input id="company" name="company" type="text" placeholder="Yrityksen nimi" />
                     </div>
                     <div>
-                      <Label htmlFor="phone">Puhelin (vapaaehtoinen)</Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        placeholder="+358 40 123 4567"
-                      />
+                      <Label htmlFor="phone">Puhelin (valinnainen)</Label>
+                      <Input id="phone" name="phone" type="tel" placeholder="+358 40 123 4567" />
                     </div>
                   </div>
 
                   <div>
                     <Label htmlFor="subject">Aihe *</Label>
-                    <Input
-                      id="subject"
-                      name="subject"
-                      type="text"
-                      required
-                      placeholder="Miten voimme auttaa?"
-                    />
+                    <Input id="subject" name="subject" type="text" required placeholder="Mitä asia koskee?" />
                   </div>
 
                   <div>
@@ -219,18 +163,14 @@ export default function YhteystiedotPage() {
                       id="message"
                       name="message"
                       required
-                      rows={6}
-                      placeholder="Kerro tarkemmin..."
+                      rows={7}
+                      placeholder="Kuvaa tilanteesi mahdollisimman selkeästi."
                       className="resize-none"
                     />
                   </div>
 
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-primary hover:bg-primary/90"
-                  >
-                    {isSubmitting ? 'Lähetetään...' : 'Lähetä Viesti'}
+                  <Button type="submit" disabled={isSubmitting} className="w-full bg-primary hover:bg-primary/90">
+                    {isSubmitting ? 'Lähetetään...' : 'Lähetä viesti'}
                   </Button>
                 </form>
               </CardContent>

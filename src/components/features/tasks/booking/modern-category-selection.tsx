@@ -60,7 +60,7 @@ export default function ModernCategorySelection({
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
   const [filteredCategories, setFilteredCategories] = useState(categories);
   const [filteredTemplates, setFilteredTemplates] = useState(templates);
-  const [showAllCategories, setShowAllCategories] = useState(true);
+  const [showAllCategories, setShowAllCategories] = useState(false);
 
   // Filter categories and templates based on search and selected category
   useEffect(() => {
@@ -172,7 +172,7 @@ export default function ModernCategorySelection({
       {/* Search Bar */}
       <div className="max-w-2xl mx-auto mb-8">
         <SearchBar
-          placeholder="Esim. siivous, kokoonpano, IT-apu..."
+          placeholder="Esim. muuttosiivous, valaisimen asennus tai koiran ulkoilutus..."
           value={localSearchQuery}
           onChange={handleSearchChange}
           className="w-full"

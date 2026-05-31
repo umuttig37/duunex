@@ -36,28 +36,35 @@ interface CategoryTasksContentProps {
 
 export default function CategoryTasksContent({ category, tasks }: CategoryTasksContentProps) {
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'budget'>('newest');
-  
-  // Find the icon component for this category from the categoriesWithIcons array
-  const categoryWithIcon = categoriesWithIcons.find(cat => cat.slug === category.slug);
+
+  const categoryWithIcon = categoriesWithIcons.find((item) => item.slug === category.slug);
   const IconComponent = categoryWithIcon?.icon || HelpCircle;
-  
+
   const sortedTasks = [...tasks].sort((a, b) => {
     switch (sortBy) {
       case 'newest':
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        return (
+          (b.created_at ? new Date(b.created_at).getTime() : 0) -
+          (a.created_at ? new Date(a.created_at).getTime() : 0)
+        );
       case 'oldest':
-        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        return (
+          (a.created_at ? new Date(a.created_at).getTime() : 0) -
+          (b.created_at ? new Date(b.created_at).getTime() : 0)
+        );
       case 'budget':
-        const budgetA = a.budget ? Number(a.budget) : 0;
-        const budgetB = b.budget ? Number(b.budget) : 0;
-        return budgetB - budgetA;
+        return (Number(b.budget) || 0) - (Number(a.budget) || 0);
       default:
         return 0;
     }
   });
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fi-FI', {
+  const formatDate = (value: string | null) => {
+    if (!value) {
+      return 'Ei määritelty';
+    }
+
+    return new Date(value).toLocaleDateString('fi-FI', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
@@ -66,44 +73,39 @@ export default function CategoryTasksContent({ category, tasks }: CategoryTasksC
 
   const formatBudget = (budget: number | string | null) => {
     if (!budget) return 'Ei määritelty';
-    const numBudget = typeof budget === 'string' ? parseFloat(budget) : budget;
-    return `${numBudget.toFixed(0)} €`;
+    const amount = typeof budget === 'string' ? parseFloat(budget) : budget;
+    return `${amount.toFixed(0)} €`;
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Header Section */}
       <div className="mb-8">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 rounded-xl text-white">
-            <IconComponent className="w-8 h-8" />
+        <div className="mb-4 flex items-center gap-4">
+          <div className="rounded-xl bg-gradient-to-br from-sky-600 to-orange-500 p-4 text-white">
+            <IconComponent className="h-8 w-8" />
           </div>
           <div>
             <h1 className="text-3xl font-bold text-gray-900">{category.name_fi}</h1>
-            <p className="text-gray-600">{category.description}</p>
+            <p className="text-gray-600">{category.description_fi || category.description}</p>
           </div>
         </div>
-        
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="flex items-center gap-6">
-            <Badge variant="outline" className="text-sm">
-              {tasks.length} avointa tehtävää
-            </Badge>
-          </div>
-          
-          <div className="flex items-center gap-4">
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <Badge variant="outline" className="w-fit text-sm">
+            {tasks.length} avointa tehtävää
+          </Badge>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button asChild>
-              <Link href={`/dashboard/tasks/new?category=${category.id}`}>
-                Luo uusi tehtävä
-              </Link>
+              <Link href={`/dashboard/tasks/new?category=${category.slug}`}>Luo uusi tehtävä</Link>
             </Button>
-            
+
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600">Järjestä:</span>
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as 'newest' | 'oldest' | 'budget')}
-                className="text-sm border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(event) => setSortBy(event.target.value as 'newest' | 'oldest' | 'budget')}
+                className="rounded-md border border-gray-300 px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
               >
                 <option value="newest">Uusimmat ensin</option>
                 <option value="oldest">Vanhimmat ensin</option>
@@ -114,103 +116,91 @@ export default function CategoryTasksContent({ category, tasks }: CategoryTasksC
         </div>
       </div>
 
-      {/* Tasks Grid */}
       {sortedTasks.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-            <IconComponent className="w-8 h-8 text-gray-400" />
+        <div className="py-14 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+            <IconComponent className="h-8 w-8 text-gray-400" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <h3 className="mb-2 text-lg font-semibold text-gray-900">
             Ei avoimia tehtäviä tässä kategoriassa
           </h3>
-          <p className="text-gray-600 mb-6">
-            Ole ensimmäinen joka luo tehtävän tähän kategoriaan!
+          <p className="mb-6 text-gray-600">
+            Ole ensimmäinen, joka luo tehtävän tähän kategoriaan.
           </p>
           <Button asChild>
-            <Link href={`/dashboard/tasks/new?category=${category.id}`}>
-              Luo ensimmäinen tehtävä
-            </Link>
+            <Link href={`/dashboard/tasks/new?category=${category.slug}`}>Luo ensimmäinen tehtävä</Link>
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {sortedTasks.map((task) => (
-            <Card key={task.id} className="hover:shadow-lg transition-shadow duration-200">
+            <Card key={task.id} className="transition-shadow duration-200 hover:shadow-lg">
               <CardHeader className="pb-3">
-                <div className="flex justify-between items-start">
-                  <CardTitle className="text-lg font-semibold line-clamp-2 hover:text-blue-600 transition-colors">
-                    <Link href={`/dashboard/tasks/${task.id}`}>
-                      {task.title}
-                    </Link>
+                <div className="flex items-start justify-between gap-3">
+                  <CardTitle className="line-clamp-2 text-lg font-semibold transition-colors hover:text-sky-600">
+                    <Link href={`/dashboard/tasks/${task.id}`}>{task.title}</Link>
                   </CardTitle>
-                  <Badge variant="secondary" className="ml-2 bg-sky-100 text-sky-800 border-sky-200">
+                  <Badge variant="secondary" className="bg-sky-100 text-sky-800 border-sky-200">
                     Avoin
                   </Badge>
                 </div>
                 {task.budget && (
                   <div className="flex items-center gap-1 text-lg font-bold text-sky-600">
-                    <Euro className="w-4 h-4" />
+                    <Euro className="h-4 w-4" />
                     {formatBudget(task.budget)}
                   </div>
                 )}
               </CardHeader>
-              
+
               <CardContent className="space-y-4">
-                <CardDescription className="text-gray-700 line-clamp-3">
+                <CardDescription className="line-clamp-3 text-gray-700">
                   {task.description}
                 </CardDescription>
 
-                {/* Task Details */}
                 <div className="space-y-2 text-sm text-gray-600">
                   {task.location_text && (
                     <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4" />
+                      <MapPin className="h-4 w-4" />
                       <span className="truncate">{task.location_text}</span>
                     </div>
                   )}
-                  
+
                   {task.scheduled_date && (
                     <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
+                      <Calendar className="h-4 w-4" />
                       <span>{formatDate(task.scheduled_date)}</span>
                     </div>
                   )}
-                  
+
                   <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4" />
+                    <Clock className="h-4 w-4" />
                     <span>Luotu {formatDate(task.created_at)}</span>
                   </div>
                 </div>
 
-                {/* Publisher Info */}
                 {task.publisher && (
-                  <div className="flex items-center gap-3 pt-3 border-t border-gray-100">
-                    <div className="flex items-center gap-2">
-                      {task.publisher.avatar_url ? (
-                        <Image
-                          src={task.publisher.avatar_url}
-                          alt=""
-                          width={24}
-                          height={24}
-                          className="rounded-full"
-                        />
-                      ) : (
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
-                          <User className="w-3 h-3 text-gray-600" />
-                        </div>
-                      )}
-                      <span className="text-sm text-gray-700">
-                        {task.publisher.first_name} {task.publisher.last_name}
-                      </span>
-                    </div>
+                  <div className="flex items-center gap-3 border-t border-gray-100 pt-3">
+                    {task.publisher.avatar_url ? (
+                      <Image
+                        src={task.publisher.avatar_url}
+                        alt=""
+                        width={24}
+                        height={24}
+                        className="rounded-full"
+                      />
+                    ) : (
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-300">
+                        <User className="h-3 w-3 text-gray-600" />
+                      </div>
+                    )}
+                    <span className="text-sm text-gray-700">
+                      {task.publisher.first_name} {task.publisher.last_name}
+                    </span>
                   </div>
                 )}
 
-                {/* View Task Button */}
                 <Button asChild className="w-full">
-                  <Link href={`/dashboard/tasks/${task.id}`}>
-                    Näytä tehtävä
-                  </Link>
+                  <Link href={`/dashboard/tasks/${task.id}`}>Näytä tehtävä</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -218,12 +208,9 @@ export default function CategoryTasksContent({ category, tasks }: CategoryTasksC
         </div>
       )}
 
-      {/* Back to Categories */}
       <div className="mt-12 text-center">
         <Button variant="outline" asChild>
-          <Link href="/">
-            Takaisin etusivulle
-          </Link>
+          <Link href="/">Takaisin etusivulle</Link>
         </Button>
       </div>
     </div>

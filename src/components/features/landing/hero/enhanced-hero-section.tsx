@@ -3,57 +3,66 @@
 import type { DbHeroCategory } from '@/app/api/hero-categories/route';
 import { BrandLogo } from '@/components/shared/brand/brand-logo';
 import { Button } from '@/components/ui/button';
+import { serviceCatalog } from '@/constants/service-catalog';
 import type { HeroCategoryData } from '@/constants/hero-categories';
-import { getCategoryBenefits, getCategoryHeroImage, getCategoryIcon, getCategoryTrending } from '@/lib/category-icon-mapping';
+import {
+  getCategoryBenefits,
+  getCategoryHeroImage,
+  getCategoryIcon,
+  getCategoryTrending,
+} from '@/lib/category-icon-mapping';
 import { trackEvent } from '@/services/notifications/analytics';
-import Image from 'next/image';
+import { CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CategoryBadgeGrid } from './category-badge-grid';
 import { CategoryInfoPanel } from './category-info-panel';
 import HeroSearchBar from './hero-search-bar';
 import { TemplateBadgesSection } from './template-badges-section';
 import { useCategorySelection } from './use-category-selection';
 
-const EnhancedHeroSection = () => {
+const INITIAL_CATEGORY_LIMIT = 8;
+
+export default function EnhancedHeroSection() {
   const [heroCategories, setHeroCategories] = useState<HeroCategoryData[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAllCategories, setShowAllCategories] = useState(false);
 
-  const INITIAL_CATEGORY_LIMIT = 7; // Show 7 categories initially to align with search bar
+  const categoryOrder = useMemo(
+    () => new Map(serviceCatalog.map((category, index) => [category.slug, index])),
+    []
+  );
 
-  const {
-    activeCategory,
-    isTransitioning,
-    selectCategory,
-    selectTemplate
-  } = useCategorySelection(heroCategories);
+  const { activeCategory, isTransitioning, selectCategory, selectTemplate } =
+    useCategorySelection(heroCategories);
 
-  // Fetch real categories from database
   useEffect(() => {
     fetch('/api/hero-categories')
-      .then(response => response.json())
-      .then(data => {
-        const dbCats = data.categories || [];
+      .then((response) => response.json())
+      .then((data) => {
+        const dbCategories = (data.categories || []) as DbHeroCategory[];
 
-        // Convert database categories to HeroCategoryData format
-        const heroFormatted: HeroCategoryData[] = dbCats.map((dbCat: DbHeroCategory) => ({
-          id: dbCat.slug,
-          name_fi: dbCat.name_fi,
-          icon: getCategoryIcon(dbCat.slug),
-          description: dbCat.description_fi || `${dbCat.name_fi} palvelut`,
-          benefits: getCategoryBenefits(dbCat.slug),
-          heroImage: getCategoryHeroImage(dbCat.slug),
-          trending: getCategoryTrending(dbCat.slug),
-          templates: [] // Will be populated dynamically from API
-        }));
+        const formatted: HeroCategoryData[] = dbCategories
+          .map((category) => ({
+            id: category.slug,
+            name_fi: category.name_fi,
+            icon: getCategoryIcon(category.slug),
+            description: category.description_fi || `${category.name_fi} -palvelut`,
+            benefits: getCategoryBenefits(category.slug),
+            heroImage: getCategoryHeroImage(category.slug),
+            trending: getCategoryTrending(category.slug),
+            templates: [],
+          }))
+          .sort(
+            (a, b) =>
+              (categoryOrder.get(a.id) ?? Number.MAX_SAFE_INTEGER) -
+              (categoryOrder.get(b.id) ?? Number.MAX_SAFE_INTEGER)
+          );
 
-        console.log(`Loaded ${heroFormatted.length} categories from database:`, heroFormatted.map(c => c.name_fi));
-        setHeroCategories(heroFormatted);
+        setHeroCategories(formatted);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching categories:', error);
-        // Fallback to hardcoded categories if API fails
         import('@/constants/hero-categories').then(({ heroCategoriesData }) => {
           setHeroCategories(heroCategoriesData);
         });
@@ -61,87 +70,96 @@ const EnhancedHeroSection = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [categoryOrder]);
 
   return (
-    <section className="bg-gradient-to-b from-background via-sky-50/60 to-background pt-12 sm:pt-16 pb-8 lg:pb-12">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-6">
-          <div className="mb-5 flex justify-center">
+    <section className="bg-gradient-to-b from-background via-sky-50/70 to-background pt-10 sm:pt-14 pb-10 lg:pb-14">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="text-center">
+          <div className="mb-6 flex justify-center">
             <BrandLogo
               variant="stacked"
-              className="h-32 w-auto sm:h-40"
+              className="h-28 w-auto sm:h-36"
               priority
-              sizes="(max-width: 640px) 160px, 200px"
+              sizes="(max-width: 640px) 160px, 210px"
             />
           </div>
-          <h1 className="text-3xl lg:text-4xl font-semibold text-foreground tracking-tight mb-3 leading-tight">
-            Löydä luotettavaa apua{' '}
+
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white/90 px-3 py-1.5 text-sm font-medium text-sky-800 shadow-sm">
+            <Sparkles className="h-4 w-4" />
+            Paikalliset tekijät arjen töihin ja pieniin projekteihin
+          </div>
+
+          <h1 className="mx-auto mb-4 max-w-4xl text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            Duunex auttaa löytämään tekijän{' '}
             <span className="bg-gradient-to-r from-sky-600 to-orange-500 bg-clip-text text-transparent">
-              kotiin, tänään
+              oikeaan työhön ilman säätöä
             </span>
           </h1>
 
-          <p className="text-base text-muted-foreground max-w-xl mx-auto mb-4">
-            Siivouspalveluista huonekalujen kokoamiseen, tarkistetut auttajat ovat valmiina kun tarvitset.
+          <p className="mx-auto mb-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            Julkaise työ, selaa valmiita palvelupohjia tai aloita kategoriasta.
+            Siivous, muutto, asennukset, digituki ja kymmenet muut palvelut löytyvät
+            samasta paikasta.
           </p>
 
-          <div className="flex items-center justify-center gap-3 py-3 px-4 bg-white/90 rounded-lg border border-sky-100 shadow-sm max-w-sm mx-auto">
-            <span className="text-sm font-medium text-foreground">Turvalliset maksut Paytraililla!</span>
-            <Image
-              src="/images/hero/paytrail.png"
-              alt="Paytrail - Turvallinen maksukumppani"
-              width={160}
-              height={80}
-              className="h-16 w-auto"
-              sizes="160px"
-              priority={true}
-            />
+          <div className="mx-auto mb-6 flex max-w-3xl flex-wrap items-center justify-center gap-2 text-sm text-muted-foreground">
+            <span className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-white px-3 py-1.5">
+              <CheckCircle2 className="h-4 w-4 text-sky-600" />
+              Julkaise tehtävä minuuteissa
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-white px-3 py-1.5">
+              <ShieldCheck className="h-4 w-4 text-orange-500" />
+              Tarjoukset, viestit ja eteneminen yhdessä paikassa
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-white px-3 py-1.5">
+              <Sparkles className="h-4 w-4 text-sky-600" />
+              Kategoriat valmiina yleisimpiin kotipalveluihin
+            </span>
           </div>
         </div>
 
-        {/* Search bar - more compact */}
-        <div className="max-w-2xl mx-auto mb-6">
+        <div className="mx-auto mb-6 max-w-2xl">
           <HeroSearchBar
             variant="clean"
-            placeholder="Hae palvelua tai kirjoita mitä tarvitset..."
+            placeholder="Hae esimerkiksi muuttosiivous, valaisimen asennus tai koiran ulkoilutus"
           />
         </div>
 
-        {/* Category badges grid - more compact */}
-        <div className="flex justify-center mb-4">
-          <div className="max-w-3xl w-full">
+        <div className="mb-6 flex justify-center">
+          <div className="w-full max-w-4xl">
             {loading ? (
-              <div className="flex overflow-x-auto gap-2 sm:gap-3 sm:grid sm:grid-cols-6 lg:grid-cols-7 sm:overflow-x-visible scrollbar-hide pb-2 sm:pb-0">
-                {[...Array(INITIAL_CATEGORY_LIMIT)].map((_, i) => (
-                  <div key={i} className="flex flex-col items-center justify-center p-2 min-h-[75px] min-w-[75px] bg-gray-100 animate-pulse rounded-lg">
-                    <div className="w-6 h-6 bg-gray-300 rounded mb-1"></div>
-                    <div className="w-12 h-3 bg-gray-300 rounded"></div>
-                  </div>
+              <div className="flex overflow-x-auto gap-2 pb-2 sm:grid sm:grid-cols-6 sm:overflow-x-visible sm:pb-0 lg:grid-cols-8">
+                {[...Array(INITIAL_CATEGORY_LIMIT)].map((_, index) => (
+                  <div
+                    key={index}
+                    className="min-h-[78px] min-w-[82px] animate-pulse rounded-lg bg-white/80"
+                  />
                 ))}
               </div>
             ) : (
               <>
                 <CategoryBadgeGrid
-                  categories={showAllCategories ? heroCategories : heroCategories.slice(0, INITIAL_CATEGORY_LIMIT)}
+                  categories={
+                    showAllCategories
+                      ? heroCategories
+                      : heroCategories.slice(0, INITIAL_CATEGORY_LIMIT)
+                  }
                   activeCategory={activeCategory}
                   onCategorySelect={selectCategory}
                 />
 
-                {/* Show All / Show Less button */}
                 {heroCategories.length > INITIAL_CATEGORY_LIMIT && (
-                  <div className="flex justify-center mt-3">
+                  <div className="mt-3 flex justify-center">
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => setShowAllCategories(!showAllCategories)}
-                      className="text-primary hover:bg-primary/10 font-medium"
+                      onClick={() => setShowAllCategories((value) => !value)}
+                      className="font-medium text-primary hover:bg-primary/10"
                     >
-                      {showAllCategories ? (
-                        <>Näytä vähemmän</>
-                      ) : (
-                        <>Näytä kaikki ({heroCategories.length})</>
-                      )}
+                      {showAllCategories
+                        ? 'Näytä vähemmän'
+                        : `Näytä kaikki kategoriat (${heroCategories.length})`}
                     </Button>
                   </div>
                 )}
@@ -150,51 +168,47 @@ const EnhancedHeroSection = () => {
           </div>
         </div>
 
-        {/* Only show expanded content if category is selected - keeps above fold clean */}
         {activeCategory && (
-          <>
-            {/* divider */}
-            <div className="h-px bg-border w-full my-6" />
-
-            {/* Compact layout for selected category */}
-            <div className="max-w-5xl mx-auto">
-              <TemplateBadgesSection
+          <div className="mx-auto mt-8 max-w-5xl">
+            <div className="mb-5 h-px w-full bg-border" />
+            <TemplateBadgesSection category={activeCategory} onTemplateSelect={selectTemplate} />
+            <div className="mt-4">
+              <CategoryInfoPanel
                 category={activeCategory}
-                onTemplateSelect={selectTemplate}
+                className={isTransitioning ? 'scale-95 opacity-75' : 'scale-100 opacity-100'}
               />
-
-              <div className="mt-4">
-                <CategoryInfoPanel
-                  category={activeCategory}
-                  className={isTransitioning ? 'opacity-75 scale-95' : 'opacity-100 scale-100'}
-                />
-              </div>
             </div>
-          </>
+          </div>
         )}
 
-        {/* CTA Buttons - more compact positioning */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6 max-w-md mx-auto">
-          <Button asChild size="lg" className="bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-700 hover:to-sky-600 text-white px-8 py-4 rounded-md font-medium shadow-sm">
-            <Link href="/dashboard/tasks/new" onClick={() => trackEvent('hero_cta_click', { type: 'create_task' })}>
+        <div className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row">
+          <Button
+            asChild
+            size="lg"
+            className="flex-1 rounded-md bg-gradient-to-r from-sky-600 to-sky-500 px-8 py-4 font-medium text-white shadow-sm hover:from-sky-700 hover:to-sky-600"
+          >
+            <Link
+              href="/dashboard/tasks/new"
+              onClick={() => trackEvent('hero_cta_click', { type: 'create_task' })}
+            >
               Luo tehtävä
             </Link>
           </Button>
-          <Button asChild variant="outline" size="lg" className="border-orange-300 text-foreground hover:bg-orange-50 hover:text-foreground rounded-md px-8 py-4 font-medium">
-            <Link href="/signup/tasker" onClick={() => trackEvent('hero_cta_click', { type: 'become_tasker' })}>Ryhdy tekijäksi</Link>
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="flex-1 rounded-md border-orange-300 px-8 py-4 font-medium text-foreground hover:bg-orange-50 hover:text-foreground"
+          >
+            <Link
+              href="/signup/tasker"
+              onClick={() => trackEvent('hero_cta_click', { type: 'become_tasker' })}
+            >
+              Ryhdy tekijäksi
+            </Link>
           </Button>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 pt-4 border-t border-border">
-          <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-muted-foreground">
-            <span>✓ Rahasi palautetaan, jos työ ei onnistu</span>
-            <span className="hidden sm:inline">•</span>
-            <span>Luottaa yli 10 000 kotitaloutta</span>
-          </div>
         </div>
       </div>
     </section>
   );
-};
-
-export default EnhancedHeroSection;
+}
